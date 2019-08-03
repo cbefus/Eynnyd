@@ -1,13 +1,13 @@
 import unittest
 import re
 
-from src.utils import rfc
+from src.utils.cookies import rfc
 
 
 class TestGeneral(unittest.TestCase):
 
     def test_control_chars_inclusive(self):
-        expression = re.compile(r"["+rfc._CONTROL_CHARS+"]")
+        expression = re.compile(r"[" + rfc._CONTROL_CHARS + "]")
         control_character_ordinals = frozenset([127]+[x for x in range(0,32)])
         for control_character_ordinal in control_character_ordinals:
             value_to_test = chr(control_character_ordinal)

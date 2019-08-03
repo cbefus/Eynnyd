@@ -1,3 +1,4 @@
+import re
 """
 These are constants and expressions that match RFC guidelines laid out in the following docs
 General: https://www.ietf.org/rfc/rfc2616.txt  (sec 2.2)
@@ -51,16 +52,23 @@ _IPV6_IP_REGEX = r"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:)
 _IP_REGEX = r"(" + _IPV4_IP_REGEX + "|" + _IPV6_IP_REGEX + "){1}"
 
 _DOMAIN_REGEX = r"(" + _SUBDOMAIN_REGEX + "|" + _IP_REGEX + "){1}"
+VALID_RFC_DOMAIN = re.compile(_DOMAIN_REGEX)
 
 ### Cookies
 
 _COOKIE_NAME_REGEX = _TOKEN_REGEX
+VALID_RFC_COOKIE_NAME = re.compile(_COOKIE_NAME_REGEX)
 _COOKIE_OCTET_REGEX = r"([\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]){1}"
 _COOKIE_VALUE_REGEX = r"((" + _COOKIE_OCTET_REGEX + ")+|(\"(" + _COOKIE_OCTET_REGEX + ")+\")){1}"
+VALID_RFC_COOKIE_VALUE = re.compile(_COOKIE_VALUE_REGEX)
 _EXPIRES_AV_REGEX = r"(Expires=" + _HTTP_DATE_REGEX + "){1}"
-_MAX_AGE_AV_REGEX = r"(Max-Age=([1-9])+){1}"
+_MAX_AGE_REGEX = r"([1-9])+"
+VALID_RFC_MAX_AGE = re.compile(_MAX_AGE_REGEX)
+_MAX_AGE_AV_REGEX = r"(Max-Age=" + _MAX_AGE_REGEX + "){1}"
 _DOMAIN_AV_REGEX = r"(Domain=" + _DOMAIN_REGEX + "){1}"
-_PATH_AV_REGEX = r"(Path=([^" + _CONTROL_CHARS + ";])+){1}"
+_PATH_REGEX = r"([^" + _CONTROL_CHARS + ";])+"
+VALID_RFC_PATH = re.compile(_PATH_REGEX)
+_PATH_AV_REGEX = r"(Path=" + _PATH_REGEX + "){1}"
 _SECURE_AV_REGEX = r"(Secure){1}"
 _HTTP_ONLY_AV_REGEX = r"(HttpOnly){1}"
 _EXTENTION_AV_REGEX = r"(([^" + _CONTROL_CHARS + ";])+){1}"
