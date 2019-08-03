@@ -381,5 +381,283 @@ class TestDates(unittest.TestCase):
                 msg="Bad HTTP Date format '{d}' matched by regex".format(d=bad_date))
 
 
+class TestDomains(unittest.TestCase):
+
+    def test_letters_inclusive(self):
+        expression = re.compile(rfc._LETTERS_REGEX)
+        good_examples = [
+            "a",
+            "A"
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good letter '{l}' didnt match regex".format(l=good_example))
+
+    def test_letters_exclusive(self):
+        expression = re.compile(rfc._LETTERS_REGEX)
+        bad_examples = [
+            "7",
+            "",
+            "-",
+            ";"
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad letter '{l}' matched regex".format(l=bad_example))
+
+    def test_letters_digits_inclusive(self):
+        expression = re.compile(rfc._LETTERS_DIGITS_REGEX)
+        good_examples = [
+            "a",
+            "A",
+            "7"
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good letter or digit '{l}' didnt match regex".format(l=good_example))
+
+    def test_letters_digits_exclusive(self):
+        expression = re.compile(rfc._LETTERS_DIGITS_REGEX)
+        bad_examples = [
+            "",
+            "-",
+            ";"
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad letter or digit '{l}' matched regex".format(l=bad_example))
+
+    def test_letters_digits_hyphens_inclusive(self):
+        expression = re.compile(rfc._LETTER_DIGITS_HYPHENS_REGEX)
+        good_examples = [
+            "a",
+            "A",
+            "7",
+            "-"
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good letter or digit or hyphen '{l}' didnt match regex".format(l=good_example))
+
+    def test_letters_digits_hyphens_exclusive(self):
+        expression = re.compile(rfc._LETTER_DIGITS_HYPHENS_REGEX)
+        bad_examples = [
+            "",
+            ";"
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad letter or digit or hyphen '{l}' matched regex".format(l=bad_example))
+
+    def test_label_inclusive(self):
+        expression = re.compile(rfc._LABEL_REGEX)
+        good_examples = [
+            "a",
+            "a-7",
+            "a77",
+            "a7A",
+            "foo-77"
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good Label '{l}' didn't match regex".format(l=good_example))
+
+    def test_label_exclusive(self):
+        expression = re.compile(rfc._LABEL_REGEX)
+        bad_examples = [
+            "7",
+            "-",
+            "-aa",
+            "7aa",
+            "a-",
+            ""
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad Label '{l}' matched regex".format(l=bad_example))
+
+    def test_subdomain_inclusive(self):
+        expression = re.compile(rfc._SUBDOMAIN_REGEX)
+        good_examples = [
+            "a",
+            "a-7",
+            "foo-77.a-7.aa",
+            "localhost",
+            "foo.bar.com",
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good subdomain '{l}' didn't match regex".format(l=good_example))
+
+    def test_subdomain_exclusive(self):
+        expression = re.compile(rfc._SUBDOMAIN_REGEX)
+        bad_examples = [
+            "7",
+            "-",
+            "a.-aa",
+            "a.7aa",
+            "a-",
+            "a.",
+            ".a",
+            ""
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad subdomain '{l}' matched regex".format(l=bad_example))
+
+    def test_ipv4_inclusive(self):
+        expression = re.compile(rfc._IPV4_IP_REGEX)
+        good_examples = [
+            "0.0.0.0",
+            "127.0.0.1",
+            "250.250.250.250",
+            "255.255.255.255",
+            "249.249.249.249",
+            "200.200.200.200",
+            "199.199.199.199",
+            "100.100.100.100",
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good ipv4 address '{l}' didn't match regex".format(l=good_example))
+
+    def test_ipv4_exclusive(self):
+        expression = re.compile(rfc._SUBDOMAIN_REGEX)
+        bad_examples = [
+            "127.1.1",
+            "127.a.1.1",
+            "123:145a::1",
+            "::1",
+            ""
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad ipv4 '{l}' matched regex".format(l=bad_example))
+
+    def test_ipv6_inclusive(self):
+        expression = re.compile(rfc._IPV6_IP_REGEX)
+        good_examples = [
+            "2001:0db8:0000:0000:0000:ff00:0042:8329",
+            "2001:db8:0:0:0:ff00:42:8329",
+            "2001:db8::ff00:42:8329",
+            "0000:0000:0000:0000:0000:0000:0000:0001",
+            "::1"
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good ipv6 address '{l}' didn't match regex".format(l=good_example))
+
+    def test_ipv6_exclusive(self):
+        expression = re.compile(rfc._SUBDOMAIN_REGEX)
+        bad_examples = [
+            "127.0.0.1",
+            "2001:0dg8:0000:0000:0000:ff00:0042:8329",
+            "2",
+            ""
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad ipv4 '{l}' matched regex".format(l=bad_example))
+
+    def test_ip_inclusive(self):
+        expression = re.compile(rfc._IP_REGEX)
+        good_examples = [
+            "0.0.0.0",
+            "127.0.0.1",
+            "250.250.250.250",
+            "255.255.255.255",
+            "249.249.249.249",
+            "200.200.200.200",
+            "199.199.199.199",
+            "100.100.100.100",
+            "2001:0db8:0000:0000:0000:ff00:0042:8329",
+            "2001:db8:0:0:0:ff00:42:8329",
+            "2001:db8::ff00:42:8329",
+            "0000:0000:0000:0000:0000:0000:0000:0001",
+            "::1"
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good ip address '{l}' didn't match regex".format(l=good_example))
+
+    def test_ip_exclusive(self):
+        expression = re.compile(rfc._IP_REGEX)
+        bad_examples = [
+            "127.1.1",
+            "127.a.1.1",
+            "2001:0dg8:0000:0000:0000:ff00:0042:8329",
+            "2",
+            ""
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad ip '{l}' matched regex".format(l=bad_example))
+
+    def test_domain_inclusive(self):
+        expression = re.compile(rfc._DOMAIN_REGEX)
+        good_examples = [
+            "a",
+            "a-7",
+            "foo-77.a-7.aa",
+            "localhost",
+            "foo.bar.com",
+            "0.0.0.0",
+            "127.0.0.1",
+            "250.250.250.250",
+            "255.255.255.255",
+            "249.249.249.249",
+            "200.200.200.200",
+            "199.199.199.199",
+            "100.100.100.100",
+            "2001:0db8:0000:0000:0000:ff00:0042:8329",
+            "2001:db8:0:0:0:ff00:42:8329",
+            "2001:db8::ff00:42:8329",
+            "0000:0000:0000:0000:0000:0000:0000:0001",
+            "::1"
+        ]
+        for good_example in good_examples:
+            self.assertTrue(
+                bool(expression.fullmatch(good_example)),
+                msg="Good domain '{l}' didn't match regex".format(l=good_example))
+
+    def test_domain_exclusive(self):
+        expression = re.compile(rfc._DOMAIN_REGEX)
+        bad_examples = [
+            "127.1.1",
+            "127.a.1.1",
+            "2001:0dg8:0000:0000:0000:ff00:0042:8329",
+            "7",
+            "-",
+            "a.-aa",
+            "a.7aa",
+            "a-",
+            "a.",
+            ".a",
+            ""
+        ]
+        for bad_example in bad_examples:
+            self.assertFalse(
+                bool(expression.fullmatch(bad_example)),
+                msg="Bad domain '{l}' matched regex".format(l=bad_example))
+
+
+
+
 
 
