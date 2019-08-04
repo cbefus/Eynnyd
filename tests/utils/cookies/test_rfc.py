@@ -40,7 +40,7 @@ class TestGeneral(unittest.TestCase):
                 bool(expression.fullmatch(separator)),
                 msg="Separator '{s}' was not found".format(s=separator))
 
-    def test_token_inclsive(self):
+    def test_token_inclusive(self):
         expression = re.compile(rfc._TOKEN_REGEX)
         valid_tokens = [
             "a",
