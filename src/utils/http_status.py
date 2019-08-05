@@ -22,6 +22,9 @@ class HTTPStatus:
 
     @property
     def wsgi_format(self):
+        return str(self)
+
+    def __str__(self):
         return "{c} {p}".format(c=self._code, p=self._phrase)
 
 

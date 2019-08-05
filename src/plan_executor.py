@@ -9,7 +9,7 @@ class PlanExecutor:
         response = \
             PlanExecutor._get_response_from_handler(execution_plan.handler, new_request)
         return PlanExecutor\
-            ._update_response_via_response_interceptors(execution_plan.response_interceptors, response, new_request)
+            ._update_response_via_response_interceptors(execution_plan.response_interceptors, new_request, response)
 
     @staticmethod
     def _update_request_via_request_interceptors(request_interceptors, request):
@@ -26,7 +26,7 @@ class PlanExecutor:
         return response
 
     @staticmethod
-    def _update_response_via_response_interceptors(response_interceptors, response, request):
+    def _update_response_via_response_interceptors(response_interceptors, request, response):
         new_response = response
         for response_interceptor in reversed(response_interceptors):
             new_response = response_interceptor(request, new_response)

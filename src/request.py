@@ -80,3 +80,5 @@ class Request:
     def utf8_body(self):
         return str(self.byte_body.decode("utf-8"))
 
+    def __str__(self):
+        return "<{m} {p}>".format(m=self.http_method, p=self.request_uri)

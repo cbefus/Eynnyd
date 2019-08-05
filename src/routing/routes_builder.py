@@ -9,7 +9,9 @@ class RoutesBuilder:
         self._root_node_builder = RouteTreeNodeBuilder()
 
     def add_request_interceptor(self, uri_path, interceptor):
-        #  TODO: validate interceptor is runnable and takes a request
+        # TODO: validate interceptor is runnable
+        # TODO: validate interceptor runs given a fake request
+        # TODO: validate interceptor returns something matching a request
         components = URIComponentsConverter.from_uri(uri_path)
         RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
         self._root_node_builder.add_request_interceptor(components, interceptor)
@@ -17,7 +19,9 @@ class RoutesBuilder:
 
     def add_handler(self, http_method, uri_path, handler):
         # TODO: validate http_method (One of GET/POST/etc)
-        # TODO: validate handler is runnable and takes a request
+        # TODO: validate handler is runnable
+        # TODO: validate handler runs given a fake request
+        # TODO: validate handler returns something matching a response
         components = URIComponentsConverter.from_uri(uri_path)
         RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
         try:
@@ -29,7 +33,9 @@ class RoutesBuilder:
         return self
 
     def add_response_interceptor(self, uri_path, interceptor):
-        # TODO: validate interceptor is runnable and takes a request
+        # TODO: validate interceptor is runnable
+        # TODO: validate interceptor runs given a fake request and fake response
+        # TODO: validate interceptor returns something matching a response
         components = URIComponentsConverter.from_uri(uri_path)
         RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
         self._root_node_builder.add_response_interceptor(components, interceptor)

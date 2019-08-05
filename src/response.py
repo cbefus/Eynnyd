@@ -28,6 +28,9 @@ class Response(AbstractResponse):
     def cookies(self):
         return self._cookies
 
+    def __str__(self):
+        return "<{c}>".format(c=self.status)
+
 
 class ResponseBuilder:
 
