@@ -1,7 +1,7 @@
 
-# Eynnyd WebServer
+# Eynnyd Web Framework
 Eynnyd (pronounced [Ey-nahyd]) is an acronym for **Everything You Need, Nothing
-You Don't**. It is a light-weight WSGI compliant python 3 web server framework.
+You Don't**. It is a light-weight WSGI compliant python 3 web framework.
 Eynnyd was designed with the primary goal to not impose bad engineering decisions
 on it's users. It is also designed to not overstep or assume the wants of it's user.
 
