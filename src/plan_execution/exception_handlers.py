@@ -70,8 +70,6 @@ class ExceptionHandlersRegistry:
         if not self._is_registered_already(RouteNotFoundException):
             self.register(RouteNotFoundException, default_route_not_found_exception_handler)
 
-        # TODO: Any other defaults?
-
         if not self._is_registered_already(Exception):
             self.register(Exception, default_internal_server_error_exception_handler)
 

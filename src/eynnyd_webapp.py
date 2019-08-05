@@ -2,7 +2,7 @@ from optional import Optional
 import logging
 
 from src.exceptions import EynnydWebappBuildException
-from src.request import Request
+from src.request import WSGILoadedRequest
 from src.routing.route_tree_traverser import RouteTreeTraverser
 from src.plan_execution.plan_executor import PlanExecutor
 from src.wsgi.wsgi_response import RawWSGIServerError
@@ -39,7 +39,7 @@ class EynnydWebapp:
 
     def _process_to_response(self, wsgi_environment):
         try:
-            request = Request(wsgi_environment)
+            request = WSGILoadedRequest(wsgi_environment)
         except Exception as e:
             return self._exception_handlers.handle_request_parsing(e, wsgi_environment)
 
@@ -52,7 +52,7 @@ class EynnydWebapp:
         except Exception as e:
             return self._exception_handlers.handle_route_finding(e, request)
 
-        updated_request = Request.copy_and_set_path_parameters(request, execution_plan.path_parameters)
+        updated_request = WSGILoadedRequest.copy_and_set_path_parameters(request, execution_plan.path_parameters)
 
         try:
             return PlanExecutor.execute(execution_plan, updated_request)

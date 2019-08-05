@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import logging
 import functools
 import urllib.parse
@@ -8,7 +9,70 @@ from src.utils.request_uri import RequestURI
 LOG = logging.getLogger("request")
 
 
-class Request:
+class AbstractRequest(ABC):
+
+    @staticmethod
+    @abstractmethod
+    def copy_and_set_path_parameters(other_request, path_parameters):
+        pass
+
+    @property
+    @abstractmethod
+    def wsgi_environment(self):
+        pass
+
+    @property
+    @abstractmethod
+    def http_method(self):
+        pass
+
+    @property
+    @abstractmethod
+    def request_uri(self):
+        pass
+
+    @property
+    @abstractmethod
+    def forwarded_request_uri(self):
+        pass
+
+    @property
+    @abstractmethod
+    def headers(self):
+        pass
+
+    @property
+    @abstractmethod
+    def client_ip_address(self):
+        pass
+
+    @property
+    @abstractmethod
+    def cookies(self):
+        pass
+
+    @property
+    @abstractmethod
+    def query_parameters(self):
+        pass
+
+    @property
+    @abstractmethod
+    def path_parameters(self):
+        pass
+
+    @property
+    @abstractmethod
+    def byte_body(self):
+        pass
+
+    @property
+    @abstractmethod
+    def utf8_body(self):
+        pass
+
+
+class WSGILoadedRequest(AbstractRequest):
 
     def __init__(self, wsgi_environment, path_parameters=None):
         self._wsgi_environment = wsgi_environment
@@ -16,7 +80,7 @@ class Request:
 
     @staticmethod
     def copy_and_set_path_parameters(other_request, path_parameters):
-        return Request(other_request.wsgi_environment, path_parameters)
+        return WSGILoadedRequest(other_request.wsgi_environment, path_parameters)
 
     @property
     def wsgi_environment(self):
