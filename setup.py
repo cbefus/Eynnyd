@@ -13,6 +13,10 @@ setup(
     author_email='crbefus@gmail.com',
     url='https://github.com/cbefus/Eynnyd.py',
     license='MIT License',
+    install_requies=[
+        'arrow==0.14.4',
+        'optional.py==1.0.0'
+    ],
     packages=find_packages(exclude=('test')),
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
