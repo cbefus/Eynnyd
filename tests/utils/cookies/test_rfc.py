@@ -659,6 +659,10 @@ class TestDomains(unittest.TestCase):
 
 class TestRFCCookie(unittest.TestCase):
 
+    def test_cookie_name_inclusive(self):
+        expression = rfc.VALID_RFC_COOKIE_NAME
+        self.assertTrue(bool(expression.fullmatch("Cookie_1")))
+
     def test_cookie_octet_inclusive(self):
         expression = re.compile(rfc._COOKIE_OCTET_REGEX)
         allowed_values = [

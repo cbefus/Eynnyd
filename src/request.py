@@ -1,8 +1,11 @@
+import logging
 import functools
 import urllib.parse
 
 from src.utils.cookies.header_converter import CookieHeaderConverter
 from src.utils.request_uri import RequestURI
+
+LOG = logging.getLogger("request")
 
 
 class Request:
@@ -59,7 +62,7 @@ class Request:
     def query_parameters(self):
         parsed_params = urllib.parse.parse_qs(self._wsgi_environment.get("QUERY_STRING"))
         unquoted_parsed_params = {}
-        for param_name, param_values in parsed_params:
+        for param_name, param_values in parsed_params.items():
             unquoted_name = urllib.parse.unquote(param_name)
             unquoted_parsed_params[unquoted_name] = []
             for param_value in param_values:
@@ -73,7 +76,11 @@ class Request:
     @property
     @functools.lru_cache()
     def byte_body(self):
-        return self._wsgi_environment.get("wsgi.input").read(self._wsgi_environment.get("CONTENT_LENGTH", 0))
+        try:
+            length = int(self._wsgi_environment.get("CONTENT_LENGTH", 0))
+        except ValueError as e:
+            length = 0
+        return self._wsgi_environment.get("wsgi.input").read(length)
 
     @property
     @functools.lru_cache()

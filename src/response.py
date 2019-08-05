@@ -71,6 +71,8 @@ class ResponseBuilder:
         return self
 
     def build(self):
+        if "Content-Length" not in self._headers:
+            self._headers["Content-Length"] = str(len(self._body))
         return Response(
             self._status,
             self._body,

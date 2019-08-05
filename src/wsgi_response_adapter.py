@@ -6,7 +6,7 @@ class WSGIResponseAdapter:
 
     @staticmethod
     def adapt(response):
-        headers = list(response.headers.items())
+        headers = [(str(k), str(v)) for k, v in response.headers.items()]
 
         for cookie in response.cookies:
             headers.append(CookieHeaderConverter.from_cookie(cookie))
