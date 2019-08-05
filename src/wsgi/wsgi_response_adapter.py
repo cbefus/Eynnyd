@@ -1,4 +1,4 @@
-from src.wsgi_response import WSGIResponse
+from src.wsgi.wsgi_response import WSGIResponse
 from src.utils.cookies.header_converter import CookieHeaderConverter
 
 

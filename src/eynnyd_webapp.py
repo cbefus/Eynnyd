@@ -3,9 +3,9 @@ import logging
 
 from src.request import Request
 from src.routing.route_tree_traverser import RouteTreeTraverser
-from src.plan_executor import PlanExecutor
-from src.wsgi_response import RawWSGIServerError
-from src.wsgi_response_adapter import WSGIResponseAdapter
+from src.plan_execution.plan_executor import PlanExecutor
+from src.wsgi.wsgi_response import RawWSGIServerError
+from src.wsgi.wsgi_response_adapter import WSGIResponseAdapter
 from src.exception_handlers import ExceptionHandlersRegistry
 
 LOG = logging.getLogger("eynnyd_webapp")

@@ -1,7 +1,7 @@
 
 from src.utils.uri_components_converter import URIComponentsConverter
 from src.routing.route_tree import HandlerNotFoundException
-from src.execution_plan import ExecutionPlanBuilder
+from src.plan_execution.execution_plan import ExecutionPlanBuilder
 
 
 class RouteTreeTraverser:

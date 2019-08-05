@@ -1,9 +1,33 @@
 from http import HTTPStatus
+from abc import ABC, abstractmethod
 
 from src.utils.http_status import HTTPStatusFactory
-from src.abstract_response import AbstractResponse
-
 from src.utils.cookies.cookie import ResponseCookie
+
+
+class AbstractResponse(ABC):
+
+    @property
+    @abstractmethod
+    def status(self):
+        pass
+
+    @property
+    @abstractmethod
+    def body(self):
+        pass
+
+    #  TODO: Add byte body and streaming body options
+
+    @property
+    @abstractmethod
+    def headers(self):
+        pass
+
+    @property
+    @abstractmethod
+    def cookies(self):
+        pass
 
 
 class Response(AbstractResponse):
