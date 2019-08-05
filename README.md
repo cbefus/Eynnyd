@@ -1,3 +1,11 @@
+.. raw:: html
+
+    <img
+        src="https://raw.githubusercontent.com/cbefus/eynnyd/master/logo/banner.png"
+        alt="Eynnyd web framework logo"
+        style="width:100%"
+    >
+
 
 # Eynnyd Web Framework (Pre-Alpha)
 Eynnyd (pronounced [Ey-nahyd]) is an acronym for **Everything You Need, Nothing
