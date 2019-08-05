@@ -3,6 +3,8 @@ from http import HTTPStatus
 from src.utils.http_status import HTTPStatusFactory
 from src.abstract_response import AbstractResponse
 
+from src.utils.cookies.cookie import ResponseCookie
+
 
 class Response(AbstractResponse):
 
@@ -68,6 +70,11 @@ class ResponseBuilder:
     def add_cookie(self, cookie):
         #  TODO: Validation
         self._cookies.append(cookie)
+        return self
+
+    def add_basic_cookie(self,  name, value):
+        #  TODO: Validation
+        self._cookies.append(ResponseCookie.build_basic(name, value))
         return self
 
     def build(self):
