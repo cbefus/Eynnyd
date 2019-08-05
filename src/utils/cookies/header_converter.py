@@ -24,14 +24,14 @@ class CookieHeaderConverter:
 
     @staticmethod
     def from_cookie(cookie):
-        header = "Set-Cookie: {n}={v}".format(n=cookie.name, v=cookie.value)
+        header = "{n}={v}".format(n=cookie.name, v=cookie.value)
         header += cookie.expires.map(CookieHeaderConverter._format_expires).get_or_default("")
         header += cookie.max_age.map(CookieHeaderConverter._format_max_age).get_or_default("")
         header += cookie.domain.map(CookieHeaderConverter._format_domain).get_or_default("")
         header += cookie.path.map(CookieHeaderConverter._format_path).get_or_default("")
         header += CookieHeaderConverter._format_secure(cookie.secure)
         header += CookieHeaderConverter._format_http_only(cookie.http_only)
-        return header
+        return ("Set-Cookie: ", header)
 
     @staticmethod
     def _format_expires(expires):
