@@ -1,10 +1,10 @@
-<p align="center">
+<div align="center" style="margin-top: -32px!important;margin-bottom: -70px!important;">
     <img
         src="https://raw.githubusercontent.com/cbefus/eynnyd/master/logo/banner.png"
         alt="Eynnyd web framework logo"
         style="width:100%"
     >
-</p>
+</div>
 
 
 # Eynnyd Web Framework (Pre-Alpha)
