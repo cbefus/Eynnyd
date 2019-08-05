@@ -17,6 +17,7 @@ class EynnydWebapp:
         self._route_tree = route_tree
         self._exception_handlers = exception_handlers
 
+    # TODO: pull the error handler off of the wsgi environment and use it to log errors through to wsgi server
     def __call__(self, wsgi_environment, wsgi_start_response):
         LOG.info("Running Call Against WebApp...")
         try:

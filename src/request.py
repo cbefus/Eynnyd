@@ -27,6 +27,9 @@ class Request:
     def request_uri(self):
         return RequestURI.from_wsgi_environment(self._wsgi_environment)
 
+    # TODO: Make sure these lru_caches are per request and not per app
+    # TODO:     create a request, put stuff in cache, sleep 500
+    # TODO:     create a different request, pull and see if its from first cache
     @property
     @functools.lru_cache()
     def forwarded_request_uri(self):
