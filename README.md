@@ -1,5 +1,5 @@
 
-# Eynnyd Web Framework
+# Eynnyd Web Framework (Pre-Alpha)
 Eynnyd (pronounced [Ey-nahyd]) is an acronym for **Everything You Need, Nothing
 You Don't**. It is a light-weight WSGI compliant python 3 web framework.
 Eynnyd was designed with the primary goal to not impose bad engineering decisions
@@ -7,17 +7,15 @@ on it's users. It is also designed to not overstep or assume the wants of it's u
 
 #### Simplicity and Freedom is the Design
 This is the framework for you if the following sound good:
-* A `request interceptor` takes a `request` and returns a `request`.
-* A `request handler` takes a `request` and returns a `response`.
-* A `response interceptor` takes a `response` and returns a `response`.
-* You can have any number of request interceptors.
-* You can have any number of request handlers.
-* You can have any number of response interceptors.
 * You are permitted but not coerced into following REST.
+* A `request handler` takes a `request` and returns a `response`.
+* A `request interceptor` takes a `request` and returns a `request`.
+* A `response interceptor` takes a `response` and returns a `response`.
+* You can have any number of `request interceptors`, `resuest handlers`, or `response interceptors`.
 * We do not provide extraneous dependencies or opinions (like database connection libraries or templating engine)
 * There is no _Eynnyd way_ to do things.
 * There is nothing _clever_ or _magic_. (like global singletons or special decorators)
-* You can see your entire routing layout in your main.
+* You can see your entire routing layout, succinctly, in your main.
 
 If this at all sounds we recommend you keep reading and see what else Eynnyd
 can provide for you.
