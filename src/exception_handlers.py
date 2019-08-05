@@ -63,6 +63,7 @@ class ExceptionHandlersRegistry:
             raise ExceptionHandlingRegisterException(
                 "Cannot register exc: {e} to more than one handler.".format(e=str(exc)))
         self._handlers_by_exception.append((exc, handler))
+        return self
 
     def create(self):
         if not self._is_registered_already(RouteNotFoundException):
