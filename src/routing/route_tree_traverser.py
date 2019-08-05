@@ -11,7 +11,7 @@ class RouteTreeTraverser:
         try:
             return route_tree_root.create_execution_plan(
                 ExecutionPlanBuilder(),
-                URIComponentsConverter.from_uri(uri_path),
+                [""] + URIComponentsConverter.from_uri(uri_path),  # add an element for the root node.
                 http_method)
         except HandlerNotFoundException as e:
             raise RouteNotFoundException(

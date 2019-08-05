@@ -1,5 +1,9 @@
+import logging
+
 from abc import ABC, abstractmethod
 from optional import Optional
+
+LOG = logging.getLogger("route_tree")
 
 
 class AbstractRouteTreeNode(ABC):
@@ -39,12 +43,12 @@ class AbstractRouteTreeNode(ABC):
     def _get_plan_from_sub_route(self, execution_plan_builder, uri_components, http_method):
         return self._sub_routes \
             .get(uri_components[0]) \
-            .create_execution_plan(execution_plan_builder, uri_components[1:], http_method)
+            .create_execution_plan(execution_plan_builder, uri_components, http_method)
 
     def _get_plan_from_pattern_route(self, execution_plan_builder, uri_components, http_method):
         return self._pattern_route \
             .get() \
-            .create_execution_plan(execution_plan_builder, uri_components[1:], http_method)
+            .create_execution_plan(execution_plan_builder, uri_components, http_method)
 
 
 class PatternRouteTreeNode(AbstractRouteTreeNode):
@@ -59,7 +63,7 @@ class PatternRouteTreeNode(AbstractRouteTreeNode):
             .add_response_interceptors(self._response_interceptors)\
             .add_path_parameter(self._parameter_name, uri_components[0])
 
-        return self._get_plan_from_handlers_or_recursing(execution_plan_builder, uri_components, http_method)
+        return self._get_plan_from_handlers_or_recursing(execution_plan_builder, uri_components[1:], http_method)
 
 
 class RouteTreeNode(AbstractRouteTreeNode):
@@ -69,7 +73,7 @@ class RouteTreeNode(AbstractRouteTreeNode):
             .add_request_interceptors(self._request_interceptors)\
             .add_response_interceptors(self._response_interceptors)
 
-        return self._get_plan_from_handlers_or_recursing(execution_plan_builder, uri_components, http_method)
+        return self._get_plan_from_handlers_or_recursing(execution_plan_builder, uri_components[1:], http_method)
 
 
 class BaseRouteTeeNodeBuilder(ABC):
@@ -121,7 +125,7 @@ class BaseRouteTeeNodeBuilder(ABC):
         next_component = uri_components[0]
         if BaseRouteTeeNodeBuilder._is_pattern_component(next_component):
             self._pattern_route_builder = self._get_or_build_and_get_pattern_route_builder(next_component)
-            return self._pattern_route_builder.add_handler(http_method, uri_components[1:], handler)
+            return self._pattern_route_builder.get().add_handler(http_method, uri_components[1:], handler)
 
         self._sub_routes_builders[next_component] = self._get_or_build_and_get_sub_route_builder(next_component)
         return self._sub_routes_builders[next_component].add_handler(http_method, uri_components[1:], handler)
