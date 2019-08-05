@@ -105,5 +105,15 @@ def build_application():
 application = build_application()
 ```
 
-## Notes
-Must use python >3.2 (functools.lru_cache())
+## FAQ
+#### Another WSGI web framework? Why not just fix (or add on to) an existing one?
+We tried that first.  Our contribution was deemed "too big" to merge. We decided
+to go the more direct route and build our own.
+
+#### What about speed? How fast are you compared to other frameworks?
+We are first prioritizing code quality and correctness. Once we nail those we
+will worry about speed.
+
+#### What python versions do you support and why?
+We use functools.lru_cache() which limits us to python >3.2 but since python 2
+is about to be deprecated we feel this isn't a limiting constraint.
