@@ -1,6 +1,7 @@
 from optional import Optional
 import logging
 
+from src.exceptions import EynnydWebappBuildException
 from src.request import Request
 from src.routing.route_tree_traverser import RouteTreeTraverser
 from src.plan_execution.plan_executor import PlanExecutor
@@ -78,8 +79,3 @@ class EynnydWebappBuilder:
             self._routes.get_or_raise(EynnydWebappBuildException(
                 "You must set routes for the webapp to route requests too.")),
             self._exception_handlers)
-
-
-class EynnydWebappBuildException(Exception):
-    pass
-

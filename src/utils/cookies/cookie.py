@@ -2,6 +2,7 @@ import arrow
 from arrow.parser import ParserError
 from optional import Optional
 
+from src.exceptions import InvalidCookieBuildException
 from src.utils.cookies import rfc
 
 
@@ -142,5 +143,3 @@ class ResponseCookieBuilder:
             self._http_only)
 
 
-class InvalidCookieBuildException(Exception):
-    pass

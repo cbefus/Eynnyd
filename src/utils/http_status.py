@@ -1,5 +1,7 @@
 from http import HTTPStatus as HTTPLibHTTPStatus
 
+from src.exceptions import InvalidHTTPStatusException
+
 
 class HTTPStatus:
 
@@ -105,9 +107,3 @@ class HTTPStatusFactory:
             return HTTPStatus(status, "Custom Status")
 
         raise InvalidHTTPStatusException("No status could be created from value: {s}".format(s=status))
-
-
-class InvalidHTTPStatusException(Exception):
-    pass
-
-

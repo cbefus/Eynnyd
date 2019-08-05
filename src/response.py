@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from abc import ABC, abstractmethod
 
+from src.exceptions import ResponseBuildException
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.cookies.cookie import ResponseCookie
 
@@ -111,5 +112,3 @@ class ResponseBuilder:
             self._cookies)
 
 
-class ResponseBuildException(Exception):
-    pass

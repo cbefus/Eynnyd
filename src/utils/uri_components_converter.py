@@ -1,3 +1,4 @@
+from src.exceptions import InvalidURIException
 
 
 class URIComponentsConverter:
@@ -17,8 +18,4 @@ class URIComponentsConverter:
         if uri_path.endswith("/"):
             adjusted_uri = adjusted_uri[:-1]
         return adjusted_uri.split("/")
-
-
-class InvalidURIException(Exception):
-    pass
 

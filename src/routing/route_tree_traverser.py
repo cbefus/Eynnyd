@@ -1,6 +1,6 @@
 
 from src.utils.uri_components_converter import URIComponentsConverter
-from src.routing.route_tree import HandlerNotFoundException
+from src.exceptions import HandlerNotFoundException, RouteNotFoundException
 from src.plan_execution.execution_plan import ExecutionPlanBuilder
 
 
@@ -17,8 +17,4 @@ class RouteTreeTraverser:
             raise RouteNotFoundException(
                 "No route found for path {p} and method {m}".format(p=uri_path, m=http_method),
                 e)
-
-
-class RouteNotFoundException(Exception):
-    pass
 

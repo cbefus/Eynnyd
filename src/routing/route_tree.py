@@ -3,6 +3,8 @@ import logging
 from abc import ABC, abstractmethod
 from optional import Optional
 
+from src.exceptions import HandlerNotFoundException, DuplicateHandlerRoutesException
+
 LOG = logging.getLogger("route_tree")
 
 
@@ -166,14 +168,6 @@ class RouteTreeNodeBuilder(BaseRouteTeeNodeBuilder):
             self._handlers,
             self._response_interceptors,
             self._pattern_route_builder.map(lambda rb: rb.build()))
-
-
-class DuplicateHandlerRoutesException(Exception):
-    pass
-
-
-class HandlerNotFoundException(Exception):
-    pass
 
 
 

@@ -1,3 +1,4 @@
+from src.exceptions import InvalidCookieHeaderException
 from src.utils.cookies.cookie import RequestCookie
 from src.utils.cookies import rfc
 
@@ -58,5 +59,3 @@ class CookieHeaderConverter:
         return "; HttpOnly" if http_only else ""
 
 
-class InvalidCookieHeaderException(Exception):
-    pass

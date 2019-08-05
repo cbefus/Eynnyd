@@ -1,6 +1,6 @@
-from src.routing.route_tree import RouteTreeNodeBuilder, DuplicateHandlerRoutesException
+from src.routing.route_tree import RouteTreeNodeBuilder
+from src.exceptions import DuplicateHandlerRoutesException, RouteBuildException
 from src.utils.uri_components_converter import URIComponentsConverter
-from src.utils.http_status import HTTPStatusFactory
 
 
 class RoutesBuilder:
@@ -49,11 +49,9 @@ class RoutesBuilder:
         path_parameter_names = set()
         for path_component in uri_components:
             if path_component in path_parameter_names:
-                raise RouteBuildException("Multiple uses of same path parameter name in uri: {u}".format(u="/"+"/".join(uri_components)))
+                raise RouteBuildException("Multiple uses of same path parameter name in uri: {u}".format(u="/" + "/".join(uri_components)))
 
             if path_component.startswith("{") and path_component.endswith("}"):
                 path_parameter_names.add(path_component)
 
 
-class RouteBuildException(Exception):
-    pass

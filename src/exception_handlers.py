@@ -2,7 +2,8 @@ import logging
 from http import HTTPStatus
 from optional import Optional
 
-from src.routing.route_tree_traverser import RouteNotFoundException
+from src.exceptions import ExceptionHandlingRegisterException, NoGenericExceptionHandlerRegistered, \
+    RouteNotFoundException
 from src.response import ResponseBuilder
 
 LOG = logging.getLogger("exception_handlers")
@@ -81,13 +82,4 @@ class ExceptionHandlersRegistry:
             if k == exc:
                 return True
         return False
-
-
-class ExceptionHandlingRegisterException(Exception):
-    pass
-
-
-class NoGenericExceptionHandlerRegistered(Exception):
-    pass
-
 
