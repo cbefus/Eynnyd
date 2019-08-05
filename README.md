@@ -1,10 +1,10 @@
-.. raw:: html
-
+<p align="center">
     <img
         src="https://raw.githubusercontent.com/cbefus/eynnyd/master/logo/banner.png"
         alt="Eynnyd web framework logo"
         style="width:100%"
     >
+</p>
 
 
 # Eynnyd Web Framework (Pre-Alpha)
