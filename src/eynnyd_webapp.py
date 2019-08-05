@@ -19,14 +19,12 @@ class EynnydWebapp:
 
     # TODO: pull the error handler off of the wsgi environment and use it to log errors through to wsgi server
     def __call__(self, wsgi_environment, wsgi_start_response):
-        LOG.info("Running Call Against WebApp...")
         try:
             wsgi_response = self._wsgi_input_to_wsgi_output(wsgi_environment)
         except Exception as e:
-            LOG.critical("Unexpected error thrown", e)
+            LOG.exception("Unexpected error thrown")
             wsgi_response = RawWSGIServerError()  # TODO: Add context here from environment
 
-        LOG.info("Response Collected. Passing to WSGI.")
         wsgi_start_response(wsgi_response.status, wsgi_response.headers)
         return wsgi_response.body
 
@@ -35,7 +33,6 @@ class EynnydWebapp:
         try:
             return WSGIResponseAdapter.adapt(response)
         except Exception as e:
-            LOG.error("Error thrown while adapting response to wsgi format.", e)
             error_response = self._exception_handlers.handle_response_adaption(e, response)
             return WSGIResponseAdapter.adapt(error_response)
 
@@ -43,7 +40,6 @@ class EynnydWebapp:
         try:
             request = Request(wsgi_environment)
         except Exception as e:
-            LOG.error("Error thrown while decoding Request", e)
             return self._exception_handlers.handle_request_parsing(e, wsgi_environment)
 
         try:
@@ -53,7 +49,6 @@ class EynnydWebapp:
                     request.http_method,
                     request.request_uri.path)
         except Exception as e:
-            LOG.error("Error thrown while building execution plan", e)
             return self._exception_handlers.handle_route_finding(e, request)
 
         updated_request = Request.copy_and_set_path_parameters(request, execution_plan.path_parameters)
@@ -61,7 +56,6 @@ class EynnydWebapp:
         try:
             return PlanExecutor.execute(execution_plan, updated_request)
         except Exception as e:
-            LOG.error("Error thrown while executing plan.", e)
             return self._exception_handlers.handle_plan_execution(e, updated_request)
 
 
