@@ -22,7 +22,7 @@ This is the framework for you if the following sound good:
 * You can have any number of `request interceptors`, `request handlers`, or `response interceptors`.
 * You can name your handler methods anything you want.
 * You can limit the scope (paths it applies to) of any interceptor.
-* We do not provide extraneous dependencies or opinions (like database connection libraries or templating engine)
+* We do not provide extraneous dependencies or opinions (like database connection libraries or templating engines)
 * There is no _Eynnyd way_ to do things.
 * There is nothing _clever_ or _magic_. (like global singletons or special decorators)
 * You can see your entire routing layout, succinctly, in your main.

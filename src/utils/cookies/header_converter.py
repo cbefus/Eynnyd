@@ -12,16 +12,17 @@ class CookieHeaderConverter:
             name, value = token.split("=")
 
             name = name.strip()
-            if not name or rfc.VALID_RFC_COOKIE_NAME.fullmatch(name):
+            if not name or not rfc.VALID_RFC_COOKIE_NAME.fullmatch(name):
                 raise InvalidCookieHeaderException("Cookie named: '{n}' doesn't comply with RFC specs.".format(n=name))
 
             value = value.strip()
-            if not value or rfc.VALID_RFC_COOKIE_VALUE.fullmatch(value):
+            if not value or not rfc.VALID_RFC_COOKIE_VALUE.fullmatch(value):
                 raise InvalidCookieHeaderException("Cookie value: '{v}' doesn't comply with RFC specs.".format(v=value))
 
             if name not in cookies:
                 cookies[name] = []
             cookies[name].append(RequestCookie(name, value))
+        return cookies
 
     @staticmethod
     def from_cookie(cookie):

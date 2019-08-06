@@ -4,7 +4,8 @@ from http import HTTPStatus
 from optional import Optional
 
 from src.exceptions import ExceptionHandlingRegisterException, NoGenericExceptionHandlerRegistered, \
-    RouteNotFoundException, CallbackIncorrectNumberOfParametersException, NonCallableExceptionHandlerException
+    RouteNotFoundException, CallbackIncorrectNumberOfParametersException, NonCallableExceptionHandlerException, \
+    InvalidCookieHeaderException
 from src.response import ResponseBuilder
 
 LOG = logging.getLogger("exception_handlers")
@@ -47,6 +48,17 @@ def default_route_not_found_exception_handler(exc, request, response):
         .build()
 
 
+def default_invalid_cookie_header_exception_handler(exc, request, response):
+    LOG.warning(
+        "Request attempted with invalid cookie header: {rc}".format(rc=str(request.get().headers.get("COOKIE"))))
+    return ResponseBuilder()\
+        .set_status(HTTPStatus.BAD_REQUEST)\
+        .set_body(
+            "Invalid cookies sent (Did you forget to URLEncode them?). "
+            "Check your formatting against RFC6265 standards.")\
+        .build()
+
+
 def default_internal_server_error_exception_handler(exc, request, response):
     LOG.exception("Unexpected exception occured.", exc_info=exc)
     return ResponseBuilder()\
@@ -78,6 +90,9 @@ class ExceptionHandlersRegistry:
     def create(self):
         if not self._is_registered_already(RouteNotFoundException):
             self.register(RouteNotFoundException, default_route_not_found_exception_handler)
+
+        if not self._is_registered_already(InvalidCookieHeaderException):
+            self.register(InvalidCookieHeaderException, default_invalid_cookie_header_exception_handler)
 
         if not self._is_registered_already(Exception):
             self.register(Exception, default_internal_server_error_exception_handler)
