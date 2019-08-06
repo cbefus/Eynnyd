@@ -1,3 +1,5 @@
+from src.exceptions import RequestInterceptorReturnedNonRequestException, HandlerReturnedNonResponseException, \
+    ResponseInterceptorReturnedNonResponseException
 from src.request import AbstractRequest
 from src.response import AbstractResponse
 
@@ -40,16 +42,4 @@ class PlanExecutor:
                 raise ResponseInterceptorReturnedNonResponseException(
                     "Response Interceptor {n} did not return a resposne.".format(n=response_interceptor.__name__))
         return new_response
-
-
-class RequestInterceptorReturnedNonRequestException(Exception):
-    pass
-
-
-class HandlerReturnedNonResponseException(Exception):
-    pass
-
-
-class ResponseInterceptorReturnedNonResponseException(Exception):
-    pass
 

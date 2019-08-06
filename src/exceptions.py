@@ -46,3 +46,31 @@ class InvalidCookieBuildException(Exception):
 
 class InvalidCookieHeaderException(Exception):
     pass
+
+
+class RequestInterceptorReturnedNonRequestException(Exception):
+    pass
+
+
+class HandlerReturnedNonResponseException(Exception):
+    pass
+
+
+class ResponseInterceptorReturnedNonResponseException(Exception):
+    pass
+
+
+class NonCallableInterceptor(Exception):
+    pass
+
+
+class NonCallableHandler(Exception):
+    pass
+
+
+class CallbackIncorrectNumberOfParametersException(Exception):
+    pass
+
+
+class NonCallableExceptionHandlerException(Exception):
+    pass

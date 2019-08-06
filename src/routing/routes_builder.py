@@ -1,5 +1,8 @@
+import inspect
+
 from src.routing.route_tree import RouteTreeNodeBuilder
-from src.exceptions import DuplicateHandlerRoutesException, RouteBuildException
+from src.exceptions import DuplicateHandlerRoutesException, RouteBuildException, NonCallableInterceptor, \
+    NonCallableHandler, CallbackIncorrectNumberOfParametersException
 from src.utils.uri_components_converter import URIComponentsConverter
 
 
@@ -9,19 +12,27 @@ class RoutesBuilder:
         self._root_node_builder = RouteTreeNodeBuilder()
 
     def add_request_interceptor(self, uri_path, interceptor):
-        # TODO: validate interceptor is runnable
-        # TODO: validate interceptor runs given a fake request
-        # TODO: validate interceptor returns something matching a request
+        if not hasattr(interceptor, '__call__'):
+            raise NonCallableInterceptor(
+                "Request Interceptor for path {u} is not callable.".format(u=uri_path))
+        if 1 != len(inspect.signature(interceptor).parameters):
+            raise CallbackIncorrectNumberOfParametersException(
+                "Request Interceptor {n} for path {u} does not take exactly 1 argument (the request)"
+                    .format(u=uri_path, n=interceptor.__name__))
+
         components = URIComponentsConverter.from_uri(uri_path)
         RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
         self._root_node_builder.add_request_interceptor(components, interceptor)
         return self
 
     def add_handler(self, http_method, uri_path, handler):
-        # TODO: validate http_method (One of GET/POST/etc)
-        # TODO: validate handler is runnable
-        # TODO: validate handler runs given a fake request
-        # TODO: validate handler returns something matching a response
+        if not hasattr(handler, '__call__'):
+            raise NonCallableHandler(
+                "Handler for method {m} on path {u} is not callable.".format(m=http_method, u=uri_path))
+        if 1 != len(inspect.signature(handler).parameters):
+            raise CallbackIncorrectNumberOfParametersException(
+                "Handler {n} for method {m} on path {u} does not take exactly 1 argument (the request)"
+                    .format(u=uri_path, n=handler.__name__, m=http_method))
         components = URIComponentsConverter.from_uri(uri_path)
         RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
         try:
@@ -33,9 +44,14 @@ class RoutesBuilder:
         return self
 
     def add_response_interceptor(self, uri_path, interceptor):
-        # TODO: validate interceptor is runnable
-        # TODO: validate interceptor runs given a fake request and fake response
-        # TODO: validate interceptor returns something matching a response
+        if not hasattr(interceptor, '__call__'):
+            raise NonCallableInterceptor(
+                "Response Interceptor for path {u} is not callable.".format(u=uri_path))
+        if 2 != len(inspect.signature(interceptor).parameters):
+            raise CallbackIncorrectNumberOfParametersException(
+                "Response Interceptor {n} for path {u} does not take exactly 2 argument (the request and response)"
+                    .format(u=uri_path, n=interceptor.__name__))
+
         components = URIComponentsConverter.from_uri(uri_path)
         RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
         self._root_node_builder.add_response_interceptor(components, interceptor)

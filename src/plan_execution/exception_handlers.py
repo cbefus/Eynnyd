@@ -1,9 +1,10 @@
+import inspect
 import logging
 from http import HTTPStatus
 from optional import Optional
 
 from src.exceptions import ExceptionHandlingRegisterException, NoGenericExceptionHandlerRegistered, \
-    RouteNotFoundException
+    RouteNotFoundException, CallbackIncorrectNumberOfParametersException, NonCallableExceptionHandlerException
 from src.response import ResponseBuilder
 
 LOG = logging.getLogger("exception_handlers")
@@ -60,6 +61,14 @@ class ExceptionHandlersRegistry:
         self._handlers_by_exception = []
 
     def register(self, exc, handler):
+        if not hasattr(handler, '__call__'):
+            raise NonCallableExceptionHandlerException(
+                "Exception Handler for exception {e} is not callable.".format(e=str(exc)))
+        if 3 != len(inspect.signature(handler).parameters):
+            raise CallbackIncorrectNumberOfParametersException(
+                "Exception Handler for exception {e} does not take exactly 3 argument "
+                "(the exception, optional request, optional response)".format(e=str(exc)))
+
         if self._is_registered_already(exc):
             raise ExceptionHandlingRegisterException(
                 "Cannot register exc: {e} to more than one handler.".format(e=str(exc)))
