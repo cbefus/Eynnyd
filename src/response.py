@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from abc import ABC, abstractmethod
 
-from src.exceptions import ResponseBuildException
+from src.exceptions import ResponseBuildException, InvalidResponseCookieException
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.cookies.cookie import ResponseCookie
 
@@ -88,17 +88,19 @@ class ResponseBuilder:
         return self
 
     def set_cookies(self, cookies):
-        #  TODO: Validation
+        for cookie in cookies:
+            if not isinstance(cookie, ResponseCookie):
+                raise InvalidResponseCookieException("Cookie {c} is not a valid response cookie.".format(c=str(cookie)))
         self._cookies = cookies
         return self
 
     def add_cookie(self, cookie):
-        #  TODO: Validation
+        if not isinstance(cookie, ResponseCookie):
+            raise InvalidResponseCookieException("Cookie {c} is not a valid response cookie.".format(c=str(cookie)))
         self._cookies.append(cookie)
         return self
 
     def add_basic_cookie(self,  name, value):
-        #  TODO: Validation
         self._cookies.append(ResponseCookie.build_basic(name, value))
         return self
 
@@ -110,5 +112,3 @@ class ResponseBuilder:
             self._body,
             self._headers,
             self._cookies)
-
-

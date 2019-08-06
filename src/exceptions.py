@@ -74,3 +74,7 @@ class CallbackIncorrectNumberOfParametersException(Exception):
 
 class NonCallableExceptionHandlerException(Exception):
     pass
+
+
+class InvalidResponseCookieException(Exception):
+    pass
