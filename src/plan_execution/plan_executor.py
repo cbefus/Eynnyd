@@ -1,3 +1,5 @@
+from src.request import AbstractRequest
+from src.response import AbstractResponse
 
 
 class PlanExecutor:
@@ -16,13 +18,17 @@ class PlanExecutor:
         new_request = request
         for request_interceptor in request_interceptors:
             new_request = request_interceptor(new_request)
-            #  TODO: We should validate that this new request is still a request right?
+            if not isinstance(new_request, AbstractRequest):
+                raise RequestInterceptorReturnedNonRequestException(
+                    "Request Interceptor {n} did not return a request.".format(n=request_interceptor.__name__))
         return new_request
 
     @staticmethod
     def _get_response_from_handler(handler, request):
         response = handler(request)
-        # TODO: We should validate that this response is a response right?
+        if not isinstance(response, AbstractResponse):
+            raise HandlerReturnedNonResponseException(
+                "Request Handler {n} did not return a response.".format(n=handler.__name__))
         return response
 
     @staticmethod
@@ -30,5 +36,20 @@ class PlanExecutor:
         new_response = response
         for response_interceptor in reversed(response_interceptors):
             new_response = response_interceptor(request, new_response)
-            # TODO: We should validate that this response is still a response right?
+            if not isinstance(new_response, AbstractResponse):
+                raise ResponseInterceptorReturnedNonResponseException(
+                    "Response Interceptor {n} did not return a resposne.".format(n=response_interceptor.__name__))
         return new_response
+
+
+class RequestInterceptorReturnedNonRequestException(Exception):
+    pass
+
+
+class HandlerReturnedNonResponseException(Exception):
+    pass
+
+
+class ResponseInterceptorReturnedNonResponseException(Exception):
+    pass
+
