@@ -30,19 +30,19 @@ class EynnydWebapp:
         return wsgi_response.body
 
     def _wsgi_input_to_wsgi_output(self, wsgi_environment):
-        response = self._process_to_response(wsgi_environment)
+        try:
+            request = WSGILoadedRequest(wsgi_environment)
+        except Exception as e:
+            return self._exception_handlers.handle_request_parsing(e, wsgi_environment)
+
+        response = self.process_request_to_response(request)
         try:
             return WSGIResponseAdapter.adapt(response)
         except Exception as e:
             error_response = self._exception_handlers.handle_response_adaption(e, response)
             return WSGIResponseAdapter.adapt(error_response)
 
-    def _process_to_response(self, wsgi_environment):
-        try:
-            request = WSGILoadedRequest(wsgi_environment)
-        except Exception as e:
-            return self._exception_handlers.handle_request_parsing(e, wsgi_environment)
-
+    def process_request_to_response(self, request):
         try:
             execution_plan = \
                 RouteTreeTraverser.traverse(
@@ -52,7 +52,7 @@ class EynnydWebapp:
         except Exception as e:
             return self._exception_handlers.handle_route_finding(e, request)
 
-        updated_request = WSGILoadedRequest.copy_and_set_path_parameters(request, execution_plan.path_parameters)
+        updated_request = request.copy_and_set_path_parameters(execution_plan.path_parameters)
 
         try:
             return PlanExecutor.execute(execution_plan, updated_request)
