@@ -83,28 +83,62 @@ class TestEynnydWebapp(unittest.TestCase):
         def utf8_body(self):
             return self._utf8_body
 
+    class SpyHandler:
+
+        def __init__(self):
+            self._handler_call_count = 0
+
+        @property
+        def handler_call_count(self):
+            return self._handler_call_count
+
+        def test_handler(self, request):
+            self._handler_call_count += 1
+            return ResponseBuilder().set_body("PANTS!").build()
+
     def test_base_level_handler(self):
 
-        class SpyHandler:
-
-            def __init__(self):
-                self._handler_call_count = 0
-
-            @property
-            def handler_call_count(self):
-                return self._handler_call_count
-
-            def test_handler(self, request):
-                self._handler_call_count += 1
-                return ResponseBuilder().set_body("PANTS!").build()
-
-        spy_handler = SpyHandler()
-
+        spy_handler = TestEynnydWebapp.SpyHandler()
         routes = RoutesBuilder().add_handler("GET", "/", spy_handler.test_handler).build()
         test_app = EynnydWebappBuilder().set_routes(routes).build()
-        response = test_app.process_request_to_response(TestEynnydWebapp.StubRequest())
+        request = TestEynnydWebapp.StubRequest(method="GET", request_uri="/")
+        response = test_app.process_request_to_response(request)
+
         self.assertEqual(1, spy_handler.handler_call_count)
         self.assertEqual("PANTS!", response.body)
+
+    def test_base_handler_selection_by_method(self):
+        pass
+
+    def test_simple_pathed_handler(self):
+        pass
+
+    def test_simple_pathed_handler_selection(self):
+        pass
+
+    def test_simple_pathed_handler_selection_by_method(self):
+        pass
+
+    def test_pattern_pathed_handler(self):
+        pass
+
+    def test_pattern_pathed_handler_selection_follows_direct_match(self):
+        pass
+
+    def test_pattern_pathed_handler_selection_by_method(self):
+        pass
+
+    def test_request_interceptors_called_in_order(self):
+        pass
+
+    def test_response_interceptors_called_in_order(self):
+        pass
+
+    def test_error_handlers_called(self):
+        pass
+
+    def test_error_handlers_called_in_order(self):
+        pass
 
 
 
