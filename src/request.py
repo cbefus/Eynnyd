@@ -11,9 +11,8 @@ LOG = logging.getLogger("request")
 
 class AbstractRequest(ABC):
 
-    @staticmethod
     @abstractmethod
-    def copy_and_set_path_parameters(other_request, path_parameters):
+    def copy_and_set_path_parameters(self, path_parameters):
         pass
 
     @property
@@ -73,9 +72,8 @@ class WSGILoadedRequest(AbstractRequest):
         self._wsgi_environment = wsgi_environment
         self._path_parameters = path_parameters if path_parameters else {}
 
-    @staticmethod
-    def copy_and_set_path_parameters(other_request, path_parameters):
-        return WSGILoadedRequest(other_request.wsgi_environment, path_parameters)
+    def copy_and_set_path_parameters(self, path_parameters):
+        return WSGILoadedRequest(self._wsgi_environment, path_parameters)
 
     @property
     def http_method(self):
