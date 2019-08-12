@@ -18,11 +18,6 @@ class AbstractRequest(ABC):
 
     @property
     @abstractmethod
-    def wsgi_environment(self):
-        pass
-
-    @property
-    @abstractmethod
     def http_method(self):
         pass
 
@@ -81,10 +76,6 @@ class WSGILoadedRequest(AbstractRequest):
     @staticmethod
     def copy_and_set_path_parameters(other_request, path_parameters):
         return WSGILoadedRequest(other_request.wsgi_environment, path_parameters)
-
-    @property
-    def wsgi_environment(self):
-        return self._wsgi_environment
 
     @property
     def http_method(self):
