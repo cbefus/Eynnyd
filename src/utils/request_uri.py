@@ -62,7 +62,7 @@ class RequestURI:
         return self._query
 
     def __str__(self):
-        return self.scheme + "://" + self.host + ":" + self.port + self.path + "?" + self.query
+        return self.scheme + "://" + self.host + ":" + str(self.port) + self.path + "?" + self.query
 
     def __repr__(self):
         return str(self)

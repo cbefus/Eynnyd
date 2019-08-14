@@ -29,6 +29,9 @@ class HTTPStatus:
     def __str__(self):
         return "{c} {p}".format(c=self._code, p=self._phrase)
 
+    def __eq__(self, other):
+        return self._code == other.code
+
 
 class HTTPStatusFactory:
 
