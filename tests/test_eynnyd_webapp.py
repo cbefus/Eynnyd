@@ -97,7 +97,6 @@ class TestEynnydWebapp(unittest.TestCase):
             return ResponseBuilder().set_body("PANTS!").build()
 
     def test_base_level_handler(self):
-
         spy_handler = TestEynnydWebapp.SpyHandler()
         routes = RoutesBuilder().add_handler("GET", "/", spy_handler.test_handler).build()
         test_app = EynnydWebappBuilder().set_routes(routes).build()
@@ -108,6 +107,21 @@ class TestEynnydWebapp(unittest.TestCase):
         self.assertEqual("PANTS!", response.body)
 
     def test_base_handler_selection_by_method(self):
+        spy_get_handler = TestEynnydWebapp.SpyHandler()
+        spy_post_handler = TestEynnydWebapp.SpyHandler()
+        routes = \
+            RoutesBuilder()\
+                .add_handler("GET", "/", spy_get_handler.test_handler)\
+                .add_handler("POST", "/", spy_post_handler.test_handler)\
+                .build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="POST", request_uri="/")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(1, spy_post_handler.handler_call_count)
+        self.assertEqual(0, spy_get_handler.handler_call_count)
+
+    def test_base_handler_404s_by_method(self):
         pass
 
     def test_simple_pathed_handler(self):
@@ -119,6 +133,12 @@ class TestEynnydWebapp(unittest.TestCase):
     def test_simple_pathed_handler_selection_by_method(self):
         pass
 
+    def test_simple_pathed_handler_404s_by_path(self):
+        pass
+
+    def test_simple_pathed_handler_404s_by_method(self):
+        pass
+
     def test_pattern_pathed_handler(self):
         pass
 
@@ -126,6 +146,12 @@ class TestEynnydWebapp(unittest.TestCase):
         pass
 
     def test_pattern_pathed_handler_selection_by_method(self):
+        pass
+
+    def test_pattern_pathed_handler_404s_by_path(self):
+        pass
+
+    def test_pattern_pathed_handler_404s_by_method(self):
         pass
 
     def test_request_interceptors_called_in_order(self):
