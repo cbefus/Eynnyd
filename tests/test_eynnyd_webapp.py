@@ -89,14 +89,20 @@ class TestEynnydWebapp(unittest.TestCase):
 
         def __init__(self, body="PANTS!"):
             self._handler_call_count = 0
+            self._request_path_params = {}
             self._body = body
 
         @property
         def handler_call_count(self):
             return self._handler_call_count
 
+        @property
+        def request_path_parameters(self):
+            return self._request_path_params
+
         def test_handler(self, request):
             self._handler_call_count += 1
+            self._request_path_params = request.path_parameters
             return ResponseBuilder().set_body(self._body).build()
 
     def test_base_level_handler(self):
@@ -217,19 +223,81 @@ class TestEynnydWebapp(unittest.TestCase):
         self.assertEqual(HTTPStatusFactory.create(HTTPStatus.NOT_FOUND), response.status)
 
     def test_pattern_pathed_handler(self):
-        pass
+        spy_handler = TestEynnydWebapp.SpyHandler()
+        routes = RoutesBuilder().add_handler("GET", "/foo/{fid}", spy_handler.test_handler).build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="GET", request_uri="/foo/1234")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(1, spy_handler.handler_call_count)
+        self.assertEqual("PANTS!", response.body)
+        self.assertEqual(1, len(spy_handler.request_path_parameters))
+        self.assertTrue("fid" in spy_handler.request_path_parameters)
+        self.assertEqual("1234", spy_handler.request_path_parameters.get("fid"))
+
+    def test_pattern_pathed_handler_nested(self):
+        spy_handler = TestEynnydWebapp.SpyHandler()
+        routes = RoutesBuilder().add_handler("GET", "/foo/{fid}/fizz", spy_handler.test_handler).build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="GET", request_uri="/foo/1234/fizz")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(1, spy_handler.handler_call_count)
+        self.assertEqual("PANTS!", response.body)
+        self.assertEqual(1, len(spy_handler.request_path_parameters))
+        self.assertTrue("fid" in spy_handler.request_path_parameters)
+        self.assertEqual("1234", spy_handler.request_path_parameters.get("fid"))
+
+    def test_pattern_pathed_handler_multiple(self):
+        spy_handler = TestEynnydWebapp.SpyHandler()
+        routes = RoutesBuilder().add_handler("GET", "/foo/{fid}/bar/{bid}", spy_handler.test_handler).build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="GET", request_uri="/foo/1234/bar/987")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(1, spy_handler.handler_call_count)
+        self.assertEqual("PANTS!", response.body)
+        self.assertEqual(2, len(spy_handler.request_path_parameters))
+        self.assertTrue("fid" in spy_handler.request_path_parameters)
+        self.assertTrue("bid" in spy_handler.request_path_parameters)
+        self.assertEqual("1234", spy_handler.request_path_parameters.get("fid"))
+        self.assertEqual("987", spy_handler.request_path_parameters.get("bid"))
 
     def test_pattern_pathed_handler_selection_follows_direct_match(self):
-        pass
+        spy_direct_match_handler = TestEynnydWebapp.SpyHandler("YEP")
+        spy_pattern_handler = TestEynnydWebapp.SpyHandler("NOPE")
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/foo/bar", spy_direct_match_handler.test_handler) \
+                .add_handler("GET", "/foo/{fid}", spy_pattern_handler.test_handler) \
+                .build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="GET", request_uri="/foo/bar")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(0, spy_pattern_handler.handler_call_count)
+        self.assertEqual(1, spy_direct_match_handler.handler_call_count)
+        self.assertEqual("YEP", response.body)
 
     def test_pattern_pathed_handler_selection_by_method(self):
-        pass
+        spy_get_handler = TestEynnydWebapp.SpyHandler("NOPE")
+        spy_post_handler = TestEynnydWebapp.SpyHandler("YEP")
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/foo/{fid}", spy_get_handler.test_handler) \
+                .add_handler("POST", "/foo/{fid}", spy_post_handler.test_handler) \
+                .build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="POST", request_uri="/foo/1234")
+        response = test_app.process_request_to_response(request)
 
-    def test_pattern_pathed_handler_404s_by_path(self):
-        pass
-
-    def test_pattern_pathed_handler_404s_by_method(self):
-        pass
+        self.assertEqual(1, spy_post_handler.handler_call_count)
+        self.assertEqual(0, spy_get_handler.handler_call_count)
+        self.assertEqual("YEP", response.body)
+        self.assertEqual(1, len(spy_post_handler.request_path_parameters))
+        self.assertEqual(0, len(spy_get_handler.request_path_parameters))
+        self.assertTrue("fid" in spy_post_handler.request_path_parameters)
+        self.assertEqual("1234", spy_post_handler.request_path_parameters.get("fid"))
 
     def test_request_interceptors_called_in_order(self):
         pass
