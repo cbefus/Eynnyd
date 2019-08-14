@@ -87,8 +87,9 @@ class TestEynnydWebapp(unittest.TestCase):
 
     class SpyHandler:
 
-        def __init__(self):
+        def __init__(self, body="PANTS!"):
             self._handler_call_count = 0
+            self._body = body
 
         @property
         def handler_call_count(self):
@@ -96,7 +97,7 @@ class TestEynnydWebapp(unittest.TestCase):
 
         def test_handler(self, request):
             self._handler_call_count += 1
-            return ResponseBuilder().set_body("PANTS!").build()
+            return ResponseBuilder().set_body(self._body).build()
 
     def test_base_level_handler(self):
         spy_handler = TestEynnydWebapp.SpyHandler()
@@ -109,8 +110,8 @@ class TestEynnydWebapp(unittest.TestCase):
         self.assertEqual("PANTS!", response.body)
 
     def test_base_handler_selection_by_method(self):
-        spy_get_handler = TestEynnydWebapp.SpyHandler()
-        spy_post_handler = TestEynnydWebapp.SpyHandler()
+        spy_get_handler = TestEynnydWebapp.SpyHandler(body="NOPE")
+        spy_post_handler = TestEynnydWebapp.SpyHandler(body="YEP")
         routes = \
             RoutesBuilder()\
                 .add_handler("GET", "/", spy_get_handler.test_handler)\
@@ -122,6 +123,7 @@ class TestEynnydWebapp(unittest.TestCase):
 
         self.assertEqual(1, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
+        self.assertEqual("YEP", response.body)
 
     def test_base_handler_404s_by_method(self):
         spy_get_handler = TestEynnydWebapp.SpyHandler()
@@ -141,19 +143,78 @@ class TestEynnydWebapp(unittest.TestCase):
         self.assertEqual(HTTPStatusFactory.create(HTTPStatus.NOT_FOUND), response.status)
 
     def test_simple_pathed_handler(self):
-        pass
+        spy_handler = TestEynnydWebapp.SpyHandler()
+        routes = RoutesBuilder().add_handler("GET", "/foo/bar", spy_handler.test_handler).build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="GET", request_uri="/foo/bar")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(1, spy_handler.handler_call_count)
+        self.assertEqual("PANTS!", response.body)
 
     def test_simple_pathed_handler_selection(self):
-        pass
+        spy_get_handler = TestEynnydWebapp.SpyHandler("NOPE")
+        spy_post_handler = TestEynnydWebapp.SpyHandler("YEP")
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/foo/bar", spy_get_handler.test_handler) \
+                .add_handler("POST", "/fizz/buzz", spy_post_handler.test_handler) \
+                .build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="POST", request_uri="/fizz/buzz")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(1, spy_post_handler.handler_call_count)
+        self.assertEqual(0, spy_get_handler.handler_call_count)
+        self.assertEqual("YEP", response.body)
 
     def test_simple_pathed_handler_selection_by_method(self):
-        pass
+        spy_get_handler = TestEynnydWebapp.SpyHandler("NOPE")
+        spy_post_handler = TestEynnydWebapp.SpyHandler("YEP")
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/foo/bar", spy_get_handler.test_handler) \
+                .add_handler("POST", "/foo/bar", spy_post_handler.test_handler) \
+                .build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="POST", request_uri="/foo/bar")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(1, spy_post_handler.handler_call_count)
+        self.assertEqual(0, spy_get_handler.handler_call_count)
+        self.assertEqual("YEP", response.body)
 
     def test_simple_pathed_handler_404s_by_path(self):
-        pass
+        spy_get_handler = TestEynnydWebapp.SpyHandler("NOPE")
+        spy_post_handler = TestEynnydWebapp.SpyHandler("YEP")
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/foo/bar", spy_get_handler.test_handler) \
+                .add_handler("POST", "/foo/bar", spy_post_handler.test_handler) \
+                .build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="POST", request_uri="/foo/buzz")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(0, spy_post_handler.handler_call_count)
+        self.assertEqual(0, spy_get_handler.handler_call_count)
+        self.assertEqual(HTTPStatusFactory.create(HTTPStatus.NOT_FOUND), response.status)
 
     def test_simple_pathed_handler_404s_by_method(self):
-        pass
+        spy_get_handler = TestEynnydWebapp.SpyHandler("NOPE")
+        spy_post_handler = TestEynnydWebapp.SpyHandler("YEP")
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/foo/bar", spy_get_handler.test_handler) \
+                .add_handler("POST", "/foo/bar", spy_post_handler.test_handler) \
+                .build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebapp.StubRequest(method="PUT", request_uri="/foo/bar")
+        response = test_app.process_request_to_response(request)
+
+        self.assertEqual(0, spy_post_handler.handler_call_count)
+        self.assertEqual(0, spy_get_handler.handler_call_count)
+        self.assertEqual(HTTPStatusFactory.create(HTTPStatus.NOT_FOUND), response.status)
 
     def test_pattern_pathed_handler(self):
         pass
