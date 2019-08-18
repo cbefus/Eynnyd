@@ -12,7 +12,7 @@ class URIComponentsConverter:
             raise InvalidURIException("URI '{u}' does not start with a /".format(u=uri_path))
 
         if len(uri_path) == 1:
-            return [""]
+            return []
 
         adjusted_uri = uri_path[1:]
         if uri_path.endswith("/"):
