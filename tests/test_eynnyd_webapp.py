@@ -406,6 +406,21 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
             request._utf8_body += self._body_append
             return request
 
+    class SpyResponseInterceptor:
+
+        def __init__(self, body_append=""):
+            self._call_count = 0
+            self._body_append = body_append
+
+        @property
+        def interceptor_call_count(self):
+            return self._call_count
+
+        def test_interceptor(self, request, response):
+            self._call_count += 1
+            response._body += self._body_append
+            return response
+
     def test_request_interceptors_called_in_order(self):
         spy_root_interceptor = TestEynnydWebappInterceptors.SpyRequestInterceptor(body_append="ROOT")
         spy_foo_interceptor = TestEynnydWebappInterceptors.SpyRequestInterceptor(body_append="FOO")
@@ -453,7 +468,27 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
         self.assertEqual("ROOTHANDLER", response.body)
 
     def test_response_interceptors_called_in_order(self):
-        pass
+        spy_root_interceptor = TestEynnydWebappInterceptors.SpyResponseInterceptor(body_append="ROOT")
+        spy_foo_interceptor = TestEynnydWebappInterceptors.SpyResponseInterceptor(body_append="FOO")
+        spy_foo_id_interceptor = TestEynnydWebappInterceptors.SpyResponseInterceptor(body_append="FID")
+
+        spy_post_handler = TestEynnydWebappInterceptors.SpyHandler()
+
+        routes = \
+            RoutesBuilder() \
+                .add_handler("POST", "/foo/{fid}", spy_post_handler.test_handler) \
+                .add_response_interceptor("/foo/{fid}", spy_foo_id_interceptor.test_interceptor) \
+                .add_response_interceptor("/foo", spy_foo_interceptor.test_interceptor) \
+                .add_response_interceptor("/", spy_root_interceptor.test_interceptor) \
+                .build()
+        test_app = EynnydWebappBuilder().set_routes(routes).build()
+        request = TestEynnydWebappHandlers.StubRequest(method="POST", request_uri="/foo/1234")
+        response = test_app.process_request_to_response(request)
+        self.assertEqual(1, spy_post_handler.handler_call_count)
+        self.assertEqual(1, spy_root_interceptor.interceptor_call_count)
+        self.assertEqual(1, spy_foo_interceptor.interceptor_call_count)
+        self.assertEqual(1, spy_foo_id_interceptor.interceptor_call_count)
+        self.assertEqual("HANDLERFIDFOOROOT", response.body)
 
     def test_response_interceptors_not_called_when_not_around_path(self):
         pass
