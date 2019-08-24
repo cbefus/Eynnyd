@@ -33,13 +33,13 @@ class EynnydWebapp:
         try:
             request = WSGILoadedRequest(wsgi_environment)
         except Exception as e:
-            return self._exception_handlers.handle_request_parsing(e, wsgi_environment)
+            return self._exception_handlers.handle_while_having_a_request(e, wsgi_environment) # TODO: This is a lie, we dont have a request yet
 
         response = self.process_request_to_response(request)
         try:
             return WSGIResponseAdapter.adapt(response)
         except Exception as e:
-            error_response = self._exception_handlers.handle_response_adaption(e, response)
+            error_response = self._exception_handlers.handle_while_having_a_response(e, response)
             return WSGIResponseAdapter.adapt(error_response)
 
     def process_request_to_response(self, request):
@@ -50,14 +50,25 @@ class EynnydWebapp:
                     request.http_method,
                     request.request_uri.path)
         except Exception as e:
-            return self._exception_handlers.handle_route_finding(e, request)
+            return self._exception_handlers.handle_while_having_a_request(e, request)
 
         updated_request = request.copy_and_set_path_parameters(execution_plan.path_parameters)
 
         try:
-            return PlanExecutor.execute(execution_plan, updated_request)
+            intercepted_request = PlanExecutor.execute_request_interceptors(execution_plan, updated_request)
         except Exception as e:
-            return self._exception_handlers.handle_plan_execution(e, updated_request)
+            return self._exception_handlers.handle_while_having_a_request(e, updated_request)
+
+        try:
+            handler_response = PlanExecutor.execute_handler(execution_plan, intercepted_request)
+        except Exception as e:
+            return self._exception_handlers.handle_while_having_a_request(e, intercepted_request)
+
+        try:
+            return PlanExecutor.execute_response_interceptors(execution_plan, intercepted_request, handler_response)
+        except Exception as e:
+            return self._exception_handlers\
+                .handle_while_having_a_request_and_response(e, intercepted_request, handler_response)
 
 
 class EynnydWebappBuilder:

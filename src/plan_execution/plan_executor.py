@@ -7,13 +7,17 @@ from src.response import AbstractResponse
 class PlanExecutor:
 
     @staticmethod
-    def execute(execution_plan, request):
-        new_request = \
-            PlanExecutor._update_request_via_request_interceptors(execution_plan.request_interceptors, request)
-        response = \
-            PlanExecutor._get_response_from_handler(execution_plan.handler, new_request)
+    def execute_request_interceptors(execution_plan, request):
+        return PlanExecutor._update_request_via_request_interceptors(execution_plan.request_interceptors, request)
+
+    @staticmethod
+    def execute_handler(execution_plan, request):
+        return PlanExecutor._get_response_from_handler(execution_plan.handler, request)
+
+    @staticmethod
+    def execute_response_interceptors(execution_plan, request, response):
         return PlanExecutor\
-            ._update_response_via_response_interceptors(execution_plan.response_interceptors, new_request, response)
+            ._update_response_via_response_interceptors(execution_plan.response_interceptors, request, response)
 
     @staticmethod
     def _update_request_via_request_interceptors(request_interceptors, request):

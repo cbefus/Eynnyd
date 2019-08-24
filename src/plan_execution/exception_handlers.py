@@ -16,16 +16,13 @@ class ExceptionHandlers:
     def __init__(self, handlers_by_exception):
         self._handlers_by_exception = handlers_by_exception
 
-    def handle_request_parsing(self, exc, request):
+    def handle_while_having_a_request(self, exc, request):
         return self._get_handler_for_exception(exc)(exc, Optional.of(request), Optional.empty())
 
-    def handle_route_finding(self, exc, request):
-        return self._get_handler_for_exception(exc)(exc, Optional.of(request), Optional.empty())
+    def handle_while_having_a_request_and_response(self, exc, request, response):
+        return self._get_handler_for_exception(exc)(exc, Optional.of(request), Optional.of(response))
 
-    def handle_plan_execution(self, exc, request):
-        return self._get_handler_for_exception(exc)(exc, Optional.of(request), Optional.empty())
-
-    def handle_response_adaption(self, exc, response):
+    def handle_while_having_a_response(self, exc, response):
         return self._get_handler_for_exception(exc)(exc, Optional.empty(), Optional.of(response))
 
     def _get_handler_for_exception(self, exc):

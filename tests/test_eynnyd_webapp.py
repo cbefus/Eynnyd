@@ -1,11 +1,13 @@
 import unittest
 from http import HTTPStatus
 from src.routing.routes_builder import RoutesBuilder
+from src.plan_execution.exception_handlers import ExceptionHandlersRegistry
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.request_uri import RequestURI
 from src.eynnyd_webapp import EynnydWebappBuilder
 from src.request import AbstractRequest
 from src.response import ResponseBuilder
+from src.exceptions import RouteNotFoundException
 
 
 class TestEynnydWebappHandlers(unittest.TestCase):
@@ -513,11 +515,290 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
         self.assertEqual(1, spy_post_handler.handler_call_count)
         self.assertEqual("HANDLERROOT", response.body)
 
-    def test_error_handlers_called(self):
-        pass
 
-    def test_generic_error_handler_called(self):
-        pass
+class TestEynnydWebappErrorHandlers(unittest.TestCase):
+
+    class StubRequest(AbstractRequest):
+
+        def __init__(
+                self,
+                method="GET",
+                request_uri="/",
+                headers=None,
+                client_ip_address="127.0.0.1",
+                cookies=None,
+                query_parameters=None,
+                path_parameters=None,
+                byte_body=b"",
+                utf8_body=""):
+            self._method = method
+            self._request_uri = RequestURI("http", "localhost", 8000, request_uri, "")
+            self._headers = {} if not headers else headers
+            self._ip_address = client_ip_address
+            self._cookies = {} if not cookies else cookies
+            self._query_params = {} if not query_parameters else query_parameters
+            self._path_params = {} if not path_parameters else path_parameters
+            self._byte_body = byte_body
+            self._utf8_body = utf8_body
+
+        def copy_and_set_path_parameters(self, path_parameters):
+            return TestEynnydWebappHandlers.StubRequest(
+                method=self.http_method,
+                request_uri=self.request_uri.path,
+                headers=self.headers,
+                client_ip_address=self.client_ip_address,
+                cookies=self.cookies,
+                query_parameters=self.query_parameters,
+                path_parameters=path_parameters,
+                byte_body=self.byte_body,
+                utf8_body=self.utf8_body)
+
+        @property
+        def http_method(self):
+            return self._method
+
+        @property
+        def request_uri(self):
+            return self._request_uri
+
+        @property
+        def forwarded_request_uri(self):
+            return self._request_uri
+
+        @property
+        def headers(self):
+            return self._headers
+
+        @property
+        def client_ip_address(self):
+            return self._ip_address
+
+        @property
+        def cookies(self):
+            return self._cookies
+
+        @property
+        def query_parameters(self):
+            return self._query_params
+
+        @property
+        def path_parameters(self):
+            return self._path_params
+
+        @property
+        def byte_body(self):
+            return self._byte_body
+
+        @property
+        def utf8_body(self):
+            return self._utf8_body
+
+    class StubRaisesHandler:
+
+        def __init__(self, exception_to_throw):
+            self._exception_to_throw = exception_to_throw
+
+        def test_handler(self, request):
+            raise self._exception_to_throw("BOOM!!")
+
+    class StubHandler:
+
+        def test_handler(self, request):
+            return ResponseBuilder().build()
+
+    class StubRaisesRequestInterceptor:
+
+        def __init__(self, exception_to_throw):
+            self._exception_to_throw = exception_to_throw
+
+        def test_interceptor(self, request):
+            raise self._exception_to_throw("BOOM!!")
+
+    class StubRaisesResponseInterceptor:
+
+        def __init__(self, exception_to_throw):
+            self._exception_to_throw = exception_to_throw
+
+        def test_interceptor(self, request, response):
+            raise self._exception_to_throw("BOOM!!")
+
+    class SpyExceptionHandler:
+
+        def __init__(self):
+            self._call_count = 0
+            self._had_request_param_count = 0
+            self._had_response_param_count = 0
+
+        @property
+        def call_count(self):
+            return self._call_count
+
+        @property
+        def had_request_param_count(self):
+            return self._had_request_param_count
+
+        @property
+        def had_response_param_count(self):
+            return self._had_response_param_count
+
+        def test_handler(self, exc, optional_request, optional_response):
+            if optional_request:
+                self._had_request_param_count += 1
+            if optional_response:
+                self._had_response_param_count += 1
+            self._call_count += 1
+            return ResponseBuilder() \
+                .set_status(HTTPStatus.BAD_REQUEST) \
+                .set_body("Big Boom") \
+                .build()
+
+    def test_error_handle_from_handler_called(self):
+
+        class BoomException(Exception):
+            pass
+
+        stub_raises_handler = TestEynnydWebappErrorHandlers.StubRaisesHandler(BoomException)
+        spy_boom_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+        spy_generic_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/boom", stub_raises_handler.test_handler) \
+                .build()
+
+        error_handlers = \
+            ExceptionHandlersRegistry() \
+                .register(BoomException, spy_boom_exception_handler.test_handler) \
+                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .create()
+
+        test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
+        request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/boom")
+        response = test_app.process_request_to_response(request)
+        self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
+        self.assertEqual(1, spy_boom_exception_handler.call_count)
+        self.assertEqual(0, spy_generic_exception_handler.call_count)
+        self.assertEqual(1, spy_boom_exception_handler.had_request_param_count)
+        self.assertEqual(0, spy_boom_exception_handler.had_response_param_count)
+
+    def test_error_handler_from_request_interceptor(self):
+        class BoomException(Exception):
+            pass
+
+        stub_raises_request_handler = TestEynnydWebappErrorHandlers.StubRaisesRequestInterceptor(BoomException)
+
+        stub_raises_handler = TestEynnydWebappErrorHandlers.StubRaisesHandler(Exception)
+        spy_boom_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+        spy_generic_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+
+        routes = \
+            RoutesBuilder() \
+                .add_request_interceptor("/", stub_raises_request_handler.test_interceptor) \
+                .add_handler("GET", "/boom", stub_raises_handler.test_handler) \
+                .build()
+
+        error_handlers = \
+            ExceptionHandlersRegistry() \
+                .register(BoomException, spy_boom_exception_handler.test_handler) \
+                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .create()
+
+        test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
+        request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/boom")
+        response = test_app.process_request_to_response(request)
+        self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
+        self.assertEqual(1, spy_boom_exception_handler.call_count)
+        self.assertEqual(0, spy_generic_exception_handler.call_count)
+        self.assertEqual(1, spy_boom_exception_handler.had_request_param_count)
+        self.assertEqual(0, spy_boom_exception_handler.had_response_param_count)
+
+    def test_error_handler_from_response_interceptor(self):
+        class BoomException(Exception):
+            pass
+
+        stub_raises_response_handler = TestEynnydWebappErrorHandlers.StubRaisesResponseInterceptor(BoomException)
+
+        stub_handler = TestEynnydWebappErrorHandlers.StubHandler()
+        spy_boom_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+        spy_generic_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/boom", stub_handler.test_handler) \
+                .add_response_interceptor("/", stub_raises_response_handler.test_interceptor) \
+                .build()
+
+        error_handlers = \
+            ExceptionHandlersRegistry() \
+                .register(BoomException, spy_boom_exception_handler.test_handler) \
+                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .create()
+
+        test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
+        request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/boom")
+        response = test_app.process_request_to_response(request)
+        self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
+        self.assertEqual(1, spy_boom_exception_handler.call_count)
+        self.assertEqual(0, spy_generic_exception_handler.call_count)
+        self.assertEqual(1, spy_boom_exception_handler.had_request_param_count)
+        self.assertEqual(1, spy_boom_exception_handler.had_response_param_count)
+
+    def test_not_found_exception_handler(self):
+
+        stub_raises_handler = TestEynnydWebappErrorHandlers.StubRaisesHandler(Exception)
+        spy_not_found_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+        spy_generic_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/boom", stub_raises_handler.test_handler) \
+                .build()
+
+        error_handlers = \
+            ExceptionHandlersRegistry() \
+                .register(RouteNotFoundException, spy_not_found_exception_handler.test_handler) \
+                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .create()
+
+        test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
+        request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/route_does_not_exist")
+        response = test_app.process_request_to_response(request)
+        self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
+        self.assertEqual(1, spy_not_found_exception_handler.call_count)
+        self.assertEqual(0, spy_generic_exception_handler.call_count)
+        self.assertEqual(1, spy_not_found_exception_handler.had_request_param_count)
+        self.assertEqual(0, spy_not_found_exception_handler.had_response_param_count)
+
+    def test_generic_error_handler_fallthrough_called(self):
+        class NotRegisteredException(Exception):
+            pass
+
+        class BoomException(Exception):
+            pass
+
+        stub_raises_handler = TestEynnydWebappErrorHandlers.StubRaisesHandler(NotRegisteredException)
+        spy_boom_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+        spy_generic_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
+
+        routes = \
+            RoutesBuilder() \
+                .add_handler("GET", "/boom", stub_raises_handler.test_handler) \
+                .build()
+
+        error_handlers = \
+            ExceptionHandlersRegistry() \
+                .register(BoomException, spy_boom_exception_handler.test_handler) \
+                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .create()
+
+        test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
+        request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/boom")
+        response = test_app.process_request_to_response(request)
+        self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
+        self.assertEqual(0, spy_boom_exception_handler.call_count)
+        self.assertEqual(1, spy_generic_exception_handler.call_count)
+        self.assertEqual(1, spy_generic_exception_handler.had_request_param_count)
+        self.assertEqual(0, spy_generic_exception_handler.had_response_param_count)
 
 
 
