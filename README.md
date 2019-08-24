@@ -27,7 +27,7 @@ This is the framework for you if the following sound good:
 * There is nothing _clever_ or _magic_. (like global singletons or special decorators)
 * You can see your entire routing layout, succinctly, in your main.
 
-If this at all sounds we recommend you keep reading and see what else Eynnyd
+If this at all sounds good we recommend you keep reading and see what else Eynnyd
 can provide for you.
 
 ## How to use it
