@@ -18,13 +18,12 @@ class EynnydWebapp:
         self._route_tree = route_tree
         self._exception_handlers = exception_handlers
 
-    # TODO: pull the error stream off of the wsgi environment and use it to log errors through to wsgi server
     def __call__(self, wsgi_environment, wsgi_start_response):
         try:
             wsgi_response = self._wsgi_input_to_wsgi_output(wsgi_environment)
         except Exception as e:
             LOG.exception("Unexpected error thrown")
-            wsgi_response = RawWSGIServerError()  # TODO: Add context here from environment
+            wsgi_response = RawWSGIServerError()
 
         wsgi_start_response(wsgi_response.status, wsgi_response.headers)
         return wsgi_response.body
@@ -33,7 +32,7 @@ class EynnydWebapp:
         try:
             request = WSGILoadedRequest(wsgi_environment)
         except Exception as e:
-            return self._exception_handlers.handle_while_having_a_request(e, wsgi_environment) # TODO: This is a lie, we dont have a request yet
+            return self._exception_handlers.handle_while_having_a_request(e, wsgi_environment)
 
         response = self.process_request_to_response(request)
         try:

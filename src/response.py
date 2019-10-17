@@ -18,8 +18,6 @@ class AbstractResponse(ABC):
     def body(self):
         pass
 
-    #  TODO: Add byte body and streaming body options
-
     @property
     @abstractmethod
     def headers(self):
@@ -78,12 +76,10 @@ class ResponseBuilder:
         return self
 
     def set_headers(self, headers_by_name):
-        #  TODO: Validation
         self._headers = headers_by_name
         return self
 
     def add_header(self, name, value):
-        #  TODO: Validation
         self._headers[name] = value
         return self
 

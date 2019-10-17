@@ -72,7 +72,6 @@ _PATH_AV_REGEX = r"(Path=" + _PATH_REGEX + "){1}"
 _SECURE_AV_REGEX = r"(Secure){1}"
 _HTTP_ONLY_AV_REGEX = r"(HttpOnly){1}"
 _EXTENTION_AV_REGEX = r"(([^" + _CONTROL_CHARS + ";])+){1}"
-# TODO: Test below
 _COOKIE_AV_REGEX = r"(" + _EXPIRES_AV_REGEX + "|" + _MAX_AGE_AV_REGEX + "|" + _DOMAIN_AV_REGEX + "|" + _PATH_AV_REGEX + "|" + _SECURE_AV_REGEX + "|" + _HTTP_ONLY_AV_REGEX + "|" + _EXTENTION_AV_REGEX + ")*"
 _COOKIE_PAIR_REGEX = r"(" + _COOKIE_NAME_REGEX + "=" + _COOKIE_VALUE_REGEX + "){1}"
 _SET_COOKIE_STRING_REGEX = r"(" + _COOKIE_PAIR_REGEX + "(;" + _SPACE_CHAR + _COOKIE_AV_REGEX + ")*" + "){1}"
