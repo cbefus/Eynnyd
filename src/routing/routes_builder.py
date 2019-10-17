@@ -1,6 +1,6 @@
 import inspect
 
-from src.routing.route_tree import RouteTreeNodeBuilder
+from src.routing.route_tree import RouteTeeBuilder
 from src.exceptions import DuplicateHandlerRoutesException, RouteBuildException, NonCallableInterceptor, \
     NonCallableHandler, CallbackIncorrectNumberOfParametersException
 from src.utils.uri_components_converter import URIComponentsConverter
@@ -9,7 +9,7 @@ from src.utils.uri_components_converter import URIComponentsConverter
 class RoutesBuilder:
 
     def __init__(self):
-        self._root_node_builder = RouteTreeNodeBuilder()
+        self._route_tree_builder = RouteTeeBuilder()
 
     def add_request_interceptor(self, uri_path, interceptor):
         if not hasattr(interceptor, '__call__'):
@@ -22,25 +22,7 @@ class RoutesBuilder:
 
         components = URIComponentsConverter.from_uri(uri_path)
         RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
-        self._root_node_builder.add_request_interceptor(components, interceptor)
-        return self
-
-    def add_handler(self, http_method, uri_path, handler):
-        if not hasattr(handler, '__call__'):
-            raise NonCallableHandler(
-                "Handler for method {m} on path {u} is not callable.".format(m=http_method, u=uri_path))
-        if 1 != len(inspect.signature(handler).parameters):
-            raise CallbackIncorrectNumberOfParametersException(
-                "Handler {n} for method {m} on path {u} does not take exactly 1 argument (the request)"
-                    .format(u=uri_path, n=handler.__name__, m=http_method))
-        components = URIComponentsConverter.from_uri(uri_path)
-        RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
-        try:
-            self._root_node_builder.add_handler(http_method, components, handler)
-        except DuplicateHandlerRoutesException as e:
-            raise RouteBuildException(
-                "Error while trying to add handler to route {u}, method: {m}".format(u=uri_path, m=http_method),
-                e)
+        self._route_tree_builder.add_request_interceptor(components, interceptor)
         return self
 
     def add_response_interceptor(self, uri_path, interceptor):
@@ -54,11 +36,29 @@ class RoutesBuilder:
 
         components = URIComponentsConverter.from_uri(uri_path)
         RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
-        self._root_node_builder.add_response_interceptor(components, interceptor)
+        self._route_tree_builder.add_response_interceptor(components, interceptor)
+        return self
+
+    def add_handler(self, http_method, uri_path, handler):
+        if not hasattr(handler, '__call__'):
+            raise NonCallableHandler(
+                "Handler for method {m} on path {u} is not callable.".format(m=http_method, u=uri_path))
+        if 1 != len(inspect.signature(handler).parameters):
+            raise CallbackIncorrectNumberOfParametersException(
+                "Handler {n} for method {m} on path {u} does not take exactly 1 argument (the request)"
+                    .format(u=uri_path, n=handler.__name__, m=http_method))
+        components = URIComponentsConverter.from_uri(uri_path)
+        RoutesBuilder._validate_path_has_unique_parameter_names_or_raise(components)
+        try:
+            self._route_tree_builder.add_handler(http_method, components, handler)
+        except DuplicateHandlerRoutesException as e:
+            raise RouteBuildException(
+                "Error while trying to add handler to route {u}, method: {m}".format(u=uri_path, m=http_method),
+                e)
         return self
 
     def build(self):
-        return self._root_node_builder.build()
+        return self._route_tree_builder.build()
 
     @staticmethod
     def _validate_path_has_unique_parameter_names_or_raise(uri_components):
