@@ -48,6 +48,10 @@ class InvalidCookieHeaderException(Exception):
     pass
 
 
+class InvalidHeaderException(Exception):
+    pass
+
+
 class RequestInterceptorReturnedNonRequestException(Exception):
     pass
 

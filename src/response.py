@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from abc import ABC, abstractmethod
 
-from src.exceptions import ResponseBuildException, InvalidResponseCookieException
+from src.exceptions import ResponseBuildException, InvalidResponseCookieException, InvalidHeaderException
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.cookies.cookie import ResponseCookie
 
@@ -76,11 +76,17 @@ class ResponseBuilder:
         return self
 
     def set_headers(self, headers_by_name):
-        self._headers = headers_by_name
+        self._headers = {}
+        for name, value in headers_by_name.items():
+            self.add_header(name, value)
         return self
 
     def add_header(self, name, value):
-        self._headers[name] = value
+        ascii_lowered_name = str(name).lower()
+        if ascii_lowered_name == 'set-cookie':
+            raise InvalidHeaderException("Cannot set header with {n} as name".format(n=name))
+
+        self._headers[ascii_lowered_name] = str(value).lower()
         return self
 
     def set_cookies(self, cookies):
