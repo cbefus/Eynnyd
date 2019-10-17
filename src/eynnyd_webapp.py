@@ -22,7 +22,7 @@ class EynnydWebapp:
         try:
             wsgi_response = self._wsgi_input_to_wsgi_output(wsgi_environment)
         except Exception as e:
-            LOG.exception("Unexpected error thrown")
+            LOG.exception("Unexpected error thrown, wsgi environment was: {wsgi}".format(wsgi=wsgi_environment))
             wsgi_response = RawWSGIServerError()
 
         wsgi_start_response(wsgi_response.status, wsgi_response.headers)
