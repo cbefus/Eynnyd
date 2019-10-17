@@ -92,7 +92,7 @@ class WSGILoadedRequest(AbstractRequest):
     @functools.lru_cache()
     def headers(self):
         headers = {}
-        for wsgi_environment_variable_name, wsgi_environment_variable_value in self.wsgi_environment.items():
+        for wsgi_environment_variable_name, wsgi_environment_variable_value in self._wsgi_environment.items():
             if wsgi_environment_variable_name.startswith("HTTP_"):
                 headers[wsgi_environment_variable_name[5:].replace("_", "-")] = wsgi_environment_variable_value
             elif wsgi_environment_variable_name in ("CONTENT_LENGTH", "CONTENT_TYPE"):

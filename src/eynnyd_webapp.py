@@ -29,11 +29,7 @@ class EynnydWebapp:
         return wsgi_response.body
 
     def _wsgi_input_to_wsgi_output(self, wsgi_environment):
-        try:
-            request = WSGILoadedRequest(wsgi_environment)
-        except Exception as e:
-            return self._exception_handlers.handle_while_having_a_request(e, wsgi_environment)
-
+        request = WSGILoadedRequest(wsgi_environment)
         response = self.process_request_to_response(request)
         try:
             return WSGIResponseAdapter.adapt(response)
