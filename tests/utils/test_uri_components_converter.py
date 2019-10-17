@@ -12,8 +12,7 @@ class TestURIComponentsConverter(unittest.TestCase):
 
     def test_single_slash_returns_single_empty_component(self):
         components = URIComponentsConverter.from_uri("/")
-        self.assertEqual(1, len(components))
-        self.assertEqual("", components[0])
+        self.assertEqual(0, len(components))
 
     def test_multiple_neighboring_slashes_raises(self):
         with self.assertRaises(InvalidURIException):
