@@ -36,6 +36,10 @@ class InvalidHTTPStatusException(Exception):
     pass
 
 
+class SettingNonTypedStatusWithContentTypeException(Exception):
+    pass
+
+
 class InvalidURIException(Exception):
     pass
 

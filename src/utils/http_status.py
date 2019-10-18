@@ -34,6 +34,9 @@ class HTTPStatus:
     def __eq__(self, other):
         return self._code == HTTPStatusFactory.create(other).code
 
+    def __hash__(self):
+        return hash(self._code)
+
 
 class HTTPStatusFactory:
 
@@ -114,14 +117,14 @@ class HTTPStatusFactory:
         raise InvalidHTTPStatusException("No status could be created from value: {s}".format(s=status))
 
 
-# NON_BODY_STATUSES = frozenset([
-#     HTTPStatusFactory.create(HTTPLibHTTPStatus.CONTINUE),
-#     HTTPStatusFactory.create(HTTPLibHTTPStatus.SWITCHING_PROTOCOLS),
-#     HTTPStatusFactory.create(HTTPLibHTTPStatus.NO_CONTENT),
-#     HTTPStatusFactory.create(HTTPLibHTTPStatus.NOT_MODIFIED)
-# ])
-#
-# NON_TYPED_STATUSES = frozenset([
-#     HTTPStatusFactory.create(HTTPLibHTTPStatus.NO_CONTENT),
-#     HTTPStatusFactory.create(HTTPLibHTTPStatus.NOT_MODIFIED)
-# ])
+NON_BODY_STATUSES = frozenset([
+    HTTPLibHTTPStatus.CONTINUE,
+    HTTPLibHTTPStatus.SWITCHING_PROTOCOLS,
+    HTTPLibHTTPStatus.NO_CONTENT,
+    HTTPLibHTTPStatus.NOT_MODIFIED
+])
+
+NON_TYPED_STATUSES = frozenset([
+    HTTPLibHTTPStatus.NO_CONTENT,
+    HTTPLibHTTPStatus.NOT_MODIFIED
+])

@@ -5,8 +5,10 @@ from enum import Enum
 from src.exceptions import InvalidResponseCookieException
 from src.exceptions import InvalidHeaderException
 from src.exceptions import InvalidBodyTypeException
+from src.exceptions import SettingNonTypedStatusWithContentTypeException
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.cookies.cookie import ResponseCookie
+from src.utils.http_status import NON_TYPED_STATUSES, NON_BODY_STATUSES
 
 
 class ResponseBodyType(Enum):
@@ -96,6 +98,9 @@ class ResponseBuilder:
         self._cookies = []
 
     def set_status(self, status):
+        if status in NON_TYPED_STATUSES and "content-type" in self._headers:
+            raise SettingNonTypedStatusWithContentTypeException(
+                "Cannot set status {s} when content-type header exists.".format(s=status))
         self._status = HTTPStatusFactory.create(status)
         return self
 
