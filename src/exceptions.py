@@ -40,6 +40,10 @@ class SettingNonTypedStatusWithContentTypeException(Exception):
     pass
 
 
+class SettingContentTypeWithNonTypedStatusException(Exception):
+    pass
+
+
 class InvalidURIException(Exception):
     pass
 

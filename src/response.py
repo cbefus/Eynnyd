@@ -6,6 +6,7 @@ from src.exceptions import InvalidResponseCookieException
 from src.exceptions import InvalidHeaderException
 from src.exceptions import InvalidBodyTypeException
 from src.exceptions import SettingNonTypedStatusWithContentTypeException
+from src.exceptions import SettingContentTypeWithNonTypedStatusException
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.cookies.cookie import ResponseCookie
 from src.utils.http_status import NON_TYPED_STATUSES, NON_BODY_STATUSES
@@ -129,7 +130,7 @@ class ResponseBuilder:
 
     def set_iterable_body(self, body):
         try:
-            iterator = iter(body)
+            iter(body)
         except TypeError as e:
             raise InvalidBodyTypeException("Iterable bodies must be iterable", e)
         self._body = ResponseBody(ResponseBodyType.ITERABLE, body)
@@ -149,7 +150,9 @@ class ResponseBuilder:
         ascii_lowered_name = str(name).lower()
         if ascii_lowered_name == 'set-cookie':
             raise InvalidHeaderException("Cannot set header with {n} as name".format(n=name))
-
+        if self._status in NON_TYPED_STATUSES and ascii_lowered_name == 'content-type':
+            raise SettingContentTypeWithNonTypedStatusException(
+                "Cannot set content-type header on response with status {s}".format(s=self._status))
         self._headers[ascii_lowered_name] = str(value).lower()
         return self
 
