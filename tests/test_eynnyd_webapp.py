@@ -627,31 +627,25 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
 
         def __init__(self):
             self._call_count = 0
-            self._had_request_param_count = 0
-            self._had_response_param_count = 0
 
         @property
         def call_count(self):
             return self._call_count
 
-        @property
-        def had_request_param_count(self):
-            return self._had_request_param_count
-
-        @property
-        def had_response_param_count(self):
-            return self._had_response_param_count
-
-        def test_handler(self, exc, optional_request, optional_response):
-            if optional_request:
-                self._had_request_param_count += 1
-            if optional_response:
-                self._had_response_param_count += 1
+        def test_pre_response_handler(self, exc, request):
             self._call_count += 1
             return ResponseBuilder() \
                 .set_status(HTTPStatus.BAD_REQUEST) \
                 .set_utf8_body("Big Boom") \
                 .build()
+
+        def test_post_response_handler(self, exc, request, response):
+            self._call_count += 1
+            return ResponseBuilder() \
+                .set_status(HTTPStatus.BAD_REQUEST) \
+                .set_utf8_body("Big Boom") \
+                .build()
+
 
     def test_error_handle_from_handler_called(self):
 
@@ -669,8 +663,12 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
 
         error_handlers = \
             ExceptionHandlersRegistry() \
-                .register(BoomException, spy_boom_exception_handler.test_handler) \
-                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .register_pre_response_error_handler(
+                    BoomException,
+                    spy_boom_exception_handler.test_pre_response_handler) \
+                .register_pre_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -679,8 +677,6 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
         self.assertEqual(1, spy_boom_exception_handler.call_count)
         self.assertEqual(0, spy_generic_exception_handler.call_count)
-        self.assertEqual(1, spy_boom_exception_handler.had_request_param_count)
-        self.assertEqual(0, spy_boom_exception_handler.had_response_param_count)
 
     def test_error_handler_from_request_interceptor(self):
         class BoomException(Exception):
@@ -700,8 +696,12 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
 
         error_handlers = \
             ExceptionHandlersRegistry() \
-                .register(BoomException, spy_boom_exception_handler.test_handler) \
-                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .register_pre_response_error_handler(
+                    BoomException,
+                    spy_boom_exception_handler.test_pre_response_handler) \
+                .register_pre_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -710,8 +710,6 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
         self.assertEqual(1, spy_boom_exception_handler.call_count)
         self.assertEqual(0, spy_generic_exception_handler.call_count)
-        self.assertEqual(1, spy_boom_exception_handler.had_request_param_count)
-        self.assertEqual(0, spy_boom_exception_handler.had_response_param_count)
 
     def test_error_handler_from_response_interceptor(self):
         class BoomException(Exception):
@@ -725,24 +723,26 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
 
         routes = \
             RoutesBuilder() \
-                .add_handler("GET", "/boom", stub_handler.test_handler) \
+                .add_handler("GET", "/noboom", stub_handler.test_handler) \
                 .add_response_interceptor("/", stub_raises_response_handler.test_interceptor) \
                 .build()
 
         error_handlers = \
             ExceptionHandlersRegistry() \
-                .register(BoomException, spy_boom_exception_handler.test_handler) \
-                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .register_post_response_error_handler(
+                    BoomException,
+                    spy_boom_exception_handler.test_post_response_handler) \
+                .register_post_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_post_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
-        request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/boom")
+        request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/noboom")
         response = test_app.process_request_to_response(request)
         self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
         self.assertEqual(1, spy_boom_exception_handler.call_count)
         self.assertEqual(0, spy_generic_exception_handler.call_count)
-        self.assertEqual(1, spy_boom_exception_handler.had_request_param_count)
-        self.assertEqual(1, spy_boom_exception_handler.had_response_param_count)
 
     def test_not_found_exception_handler(self):
 
@@ -757,8 +757,12 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
 
         error_handlers = \
             ExceptionHandlersRegistry() \
-                .register(RouteNotFoundException, spy_not_found_exception_handler.test_handler) \
-                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .register_pre_response_error_handler(
+                    RouteNotFoundException,
+                    spy_not_found_exception_handler.test_pre_response_handler) \
+                .register_pre_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -767,8 +771,6 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
         self.assertEqual(1, spy_not_found_exception_handler.call_count)
         self.assertEqual(0, spy_generic_exception_handler.call_count)
-        self.assertEqual(1, spy_not_found_exception_handler.had_request_param_count)
-        self.assertEqual(0, spy_not_found_exception_handler.had_response_param_count)
 
     def test_generic_error_handler_fallthrough_called(self):
         class NotRegisteredException(Exception):
@@ -788,8 +790,12 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
 
         error_handlers = \
             ExceptionHandlersRegistry() \
-                .register(BoomException, spy_boom_exception_handler.test_handler) \
-                .register(Exception, spy_generic_exception_handler.test_handler) \
+                .register_pre_response_error_handler(
+                    BoomException,
+                    spy_boom_exception_handler.test_pre_response_handler) \
+                .register_pre_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -798,8 +804,6 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
         self.assertEqual(0, spy_boom_exception_handler.call_count)
         self.assertEqual(1, spy_generic_exception_handler.call_count)
-        self.assertEqual(1, spy_generic_exception_handler.had_request_param_count)
-        self.assertEqual(0, spy_generic_exception_handler.had_response_param_count)
 
 
 
