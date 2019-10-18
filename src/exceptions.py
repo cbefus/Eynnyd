@@ -44,6 +44,14 @@ class SettingContentTypeWithNonTypedStatusException(Exception):
     pass
 
 
+class SettingBodyWithNonBodyStatusException(Exception):
+    pass
+
+
+class SettingNonBodyStatusWithBodyException(Exception):
+    pass
+
+
 class InvalidURIException(Exception):
     pass
 

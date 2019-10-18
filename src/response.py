@@ -7,6 +7,8 @@ from src.exceptions import InvalidHeaderException
 from src.exceptions import InvalidBodyTypeException
 from src.exceptions import SettingNonTypedStatusWithContentTypeException
 from src.exceptions import SettingContentTypeWithNonTypedStatusException
+from src.exceptions import SettingBodyWithNonBodyStatusException
+from src.exceptions import SettingNonBodyStatusWithBodyException
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.cookies.cookie import ResponseCookie
 from src.utils.http_status import NON_TYPED_STATUSES, NON_BODY_STATUSES
@@ -102,10 +104,16 @@ class ResponseBuilder:
         if status in NON_TYPED_STATUSES and "content-type" in self._headers:
             raise SettingNonTypedStatusWithContentTypeException(
                 "Cannot set status {s} when content-type header exists.".format(s=status))
+        if status in NON_BODY_STATUSES and self._body.type != ResponseBodyType.EMPTY:
+            raise SettingNonBodyStatusWithBodyException(
+                "Cannot set status {s} on response with body".format(s=status))
         self._status = HTTPStatusFactory.create(status)
         return self
 
     def set_utf8_body(self, body):
+        if self._status in NON_BODY_STATUSES:
+            raise SettingBodyWithNonBodyStatusException(
+                "Cannot set a body on response with status {s}".format(s=self._status))
         encoded_body = body.encode("utf-8")
         if len(body) != len(encoded_body):
             raise InvalidBodyTypeException("Body must be UTF8 to set via set_utf8_body method.")
@@ -115,6 +123,9 @@ class ResponseBuilder:
         return self
 
     def set_byte_body(self, body):
+        if self._status in NON_BODY_STATUSES:
+            raise SettingBodyWithNonBodyStatusException(
+                "Cannot set a body on response with status {s}".format(s=self._status))
         if not isinstance(body, bytes):
             raise InvalidBodyTypeException("Body must be byte encoded to set via set_byte_body mothod.")
         if "content-length" not in self._headers:
@@ -123,12 +134,18 @@ class ResponseBuilder:
         return self
 
     def set_stream_body(self, body):
+        if self._status in NON_BODY_STATUSES:
+            raise SettingBodyWithNonBodyStatusException(
+                "Cannot set a body on response with status {s}".format(s=self._status))
         if not hasattr(body, "read"):
             raise InvalidBodyTypeException("Streamable body must have a read method.")
         self._body = ResponseBody(ResponseBodyType.STREAM, body)
         return self
 
     def set_iterable_body(self, body):
+        if self._status in NON_BODY_STATUSES:
+            raise SettingBodyWithNonBodyStatusException(
+                "Cannot set a body on response with status {s}".format(s=self._status))
         try:
             iter(body)
         except TypeError as e:
