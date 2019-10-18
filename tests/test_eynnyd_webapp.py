@@ -2,7 +2,6 @@ import unittest
 from http import HTTPStatus
 from src.routing.routes_builder import RoutesBuilder
 from src.plan_execution.exception_handlers import ExceptionHandlersRegistry
-from src.utils.http_status import HTTPStatusFactory
 from src.utils.request_uri import RequestURI
 from src.eynnyd_webapp import EynnydWebappBuilder
 from src.request import AbstractRequest
@@ -149,7 +148,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(0, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual(HTTPStatusFactory.create(HTTPStatus.NOT_FOUND), response.status)
+        self.assertEqual(HTTPStatus.NOT_FOUND, response.status)
 
     def test_simple_pathed_handler(self):
         spy_handler = TestEynnydWebappHandlers.SpyHandler()
@@ -207,7 +206,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(0, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual(HTTPStatusFactory.create(HTTPStatus.NOT_FOUND), response.status)
+        self.assertEqual(HTTPStatus.NOT_FOUND, response.status)
 
     def test_simple_pathed_handler_404s_by_method(self):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler("NOPE")
@@ -223,7 +222,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(0, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual(HTTPStatusFactory.create(HTTPStatus.NOT_FOUND), response.status)
+        self.assertEqual(HTTPStatus.NOT_FOUND, response.status)
 
     def test_pattern_pathed_handler(self):
         spy_handler = TestEynnydWebappHandlers.SpyHandler()

@@ -32,7 +32,7 @@ class HTTPStatus:
         return "{c} {p}".format(c=self._code, p=self._phrase)
 
     def __eq__(self, other):
-        return self._code == other.code
+        return self._code == HTTPStatusFactory.create(other).code
 
 
 class HTTPStatusFactory:
@@ -113,7 +113,7 @@ class HTTPStatusFactory:
 
         raise InvalidHTTPStatusException("No status could be created from value: {s}".format(s=status))
 
-#
+
 # NON_BODY_STATUSES = frozenset([
 #     HTTPStatusFactory.create(HTTPLibHTTPStatus.CONTINUE),
 #     HTTPStatusFactory.create(HTTPLibHTTPStatus.SWITCHING_PROTOCOLS),
