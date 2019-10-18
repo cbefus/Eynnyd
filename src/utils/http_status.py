@@ -3,6 +3,8 @@ from http import HTTPStatus as HTTPLibHTTPStatus
 from src.exceptions import InvalidHTTPStatusException
 
 
+
+
 class HTTPStatus:
 
     def __init__(self, code, phrase, description=""):
@@ -110,3 +112,16 @@ class HTTPStatusFactory:
             return HTTPStatus(status, "Custom Status")
 
         raise InvalidHTTPStatusException("No status could be created from value: {s}".format(s=status))
+
+#
+# NON_BODY_STATUSES = frozenset([
+#     HTTPStatusFactory.create(HTTPLibHTTPStatus.CONTINUE),
+#     HTTPStatusFactory.create(HTTPLibHTTPStatus.SWITCHING_PROTOCOLS),
+#     HTTPStatusFactory.create(HTTPLibHTTPStatus.NO_CONTENT),
+#     HTTPStatusFactory.create(HTTPLibHTTPStatus.NOT_MODIFIED)
+# ])
+#
+# NON_TYPED_STATUSES = frozenset([
+#     HTTPStatusFactory.create(HTTPLibHTTPStatus.NO_CONTENT),
+#     HTTPStatusFactory.create(HTTPLibHTTPStatus.NOT_MODIFIED)
+# ])

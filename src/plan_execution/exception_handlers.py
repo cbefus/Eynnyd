@@ -41,7 +41,7 @@ def default_route_not_found_exception_handler(exc, request, response):
 
     return ResponseBuilder()\
         .set_status(HTTPStatus.NOT_FOUND)\
-        .set_body(body)\
+        .set_utf8_body(body)\
         .build()
 
 
@@ -50,7 +50,7 @@ def default_invalid_cookie_header_exception_handler(exc, request, response):
         "Request attempted with invalid cookie header: {rc}".format(rc=str(request.get().headers.get("COOKIE"))))
     return ResponseBuilder()\
         .set_status(HTTPStatus.BAD_REQUEST)\
-        .set_body(
+        .set_utf8_body(
             "Invalid cookies sent (Did you forget to URLEncode them?). "
             "Check your formatting against RFC6265 standards.")\
         .build()
@@ -60,7 +60,7 @@ def default_internal_server_error_exception_handler(exc, request, response):
     LOG.exception("Unexpected exception occured.", exc_info=exc)
     return ResponseBuilder()\
         .set_status(HTTPStatus.INTERNAL_SERVER_ERROR)\
-        .set_body("Internal Server Error")\
+        .set_utf8_body("Internal Server Error")\
         .build()
 
 

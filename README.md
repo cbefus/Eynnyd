@@ -45,7 +45,7 @@ from http import HTTPStatus
 def hello_world(request):
     return ResponseBuilder()\
         .set_status(HTTPStatus.OK)\
-        .set_body("Hello World")\
+        .set_utf8_body("Hello World")\
         .build()
 
 
@@ -79,7 +79,7 @@ LOG = logging.getLogger("hello_world_app")
 def hello_world(request):
     return ResponseBuilder()\
         .set_status(HTTPStatus.OK)\
-        .set_body("Hello World")\
+        .set_utf8_body("Hello World")\
         .build()
 
 def log_request(request):

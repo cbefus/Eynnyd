@@ -8,6 +8,7 @@ from src.eynnyd_webapp import EynnydWebappBuilder
 from src.request import AbstractRequest
 from src.response import ResponseBuilder
 from src.exceptions import RouteNotFoundException
+from src.response import ResponseBody
 
 
 class TestEynnydWebappHandlers(unittest.TestCase):
@@ -105,7 +106,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
         def test_handler(self, request):
             self._handler_call_count += 1
             self._request_path_params = request.path_parameters
-            return ResponseBuilder().set_body(self._body).build()
+            return ResponseBuilder().set_utf8_body(self._body).build()
 
     def test_base_level_handler(self):
         spy_handler = TestEynnydWebappHandlers.SpyHandler()
@@ -115,7 +116,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
         response = test_app.process_request_to_response(request)
 
         self.assertEqual(1, spy_handler.handler_call_count)
-        self.assertEqual("PANTS!", response.body)
+        self.assertEqual(b"PANTS!", response.body.content)
 
     def test_base_handler_selection_by_method(self):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler(body="NOPE")
@@ -131,7 +132,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(1, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual("YEP", response.body)
+        self.assertEqual(b"YEP", response.body.content)
 
     def test_base_handler_404s_by_method(self):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler()
@@ -158,7 +159,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
         response = test_app.process_request_to_response(request)
 
         self.assertEqual(1, spy_handler.handler_call_count)
-        self.assertEqual("PANTS!", response.body)
+        self.assertEqual(b"PANTS!", response.body.content)
 
     def test_simple_pathed_handler_selection(self):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler("NOPE")
@@ -174,7 +175,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(1, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual("YEP", response.body)
+        self.assertEqual(b"YEP", response.body.content)
 
     def test_simple_pathed_handler_selection_by_method(self):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler("NOPE")
@@ -190,7 +191,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(1, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual("YEP", response.body)
+        self.assertEqual(b"YEP", response.body.content)
 
     def test_simple_pathed_handler_404s_by_path(self):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler("NOPE")
@@ -232,7 +233,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
         response = test_app.process_request_to_response(request)
 
         self.assertEqual(1, spy_handler.handler_call_count)
-        self.assertEqual("PANTS!", response.body)
+        self.assertEqual(b"PANTS!", response.body.content)
         self.assertEqual(1, len(spy_handler.request_path_parameters))
         self.assertTrue("fid" in spy_handler.request_path_parameters)
         self.assertEqual("1234", spy_handler.request_path_parameters.get("fid"))
@@ -245,7 +246,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
         response = test_app.process_request_to_response(request)
 
         self.assertEqual(1, spy_handler.handler_call_count)
-        self.assertEqual("PANTS!", response.body)
+        self.assertEqual(b"PANTS!", response.body.content)
         self.assertEqual(1, len(spy_handler.request_path_parameters))
         self.assertTrue("fid" in spy_handler.request_path_parameters)
         self.assertEqual("1234", spy_handler.request_path_parameters.get("fid"))
@@ -258,7 +259,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
         response = test_app.process_request_to_response(request)
 
         self.assertEqual(1, spy_handler.handler_call_count)
-        self.assertEqual("PANTS!", response.body)
+        self.assertEqual(b"PANTS!", response.body.content)
         self.assertEqual(2, len(spy_handler.request_path_parameters))
         self.assertTrue("fid" in spy_handler.request_path_parameters)
         self.assertTrue("bid" in spy_handler.request_path_parameters)
@@ -279,7 +280,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(0, spy_pattern_handler.handler_call_count)
         self.assertEqual(1, spy_direct_match_handler.handler_call_count)
-        self.assertEqual("YEP", response.body)
+        self.assertEqual(b"YEP", response.body.content)
 
     def test_pattern_pathed_handler_selection_by_method(self):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler("NOPE")
@@ -295,7 +296,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(1, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual("YEP", response.body)
+        self.assertEqual(b"YEP", response.body.content)
         self.assertEqual(1, len(spy_post_handler.request_path_parameters))
         self.assertEqual(0, len(spy_get_handler.request_path_parameters))
         self.assertTrue("fid" in spy_post_handler.request_path_parameters)
@@ -391,7 +392,7 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
 
         def test_handler(self, request):
             self._handler_call_count += 1
-            return ResponseBuilder().set_body(request._utf8_body+"HANDLER").build()
+            return ResponseBuilder().set_utf8_body(request._utf8_body+"HANDLER").build()
 
     class SpyRequestInterceptor:
 
@@ -420,7 +421,8 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
 
         def test_interceptor(self, request, response):
             self._call_count += 1
-            response._body += self._body_append
+            response._body = \
+                ResponseBody(response._body.type, response._body.content + self._body_append.encode("utf-8"))
             return response
 
     def test_request_interceptors_called_in_order(self):
@@ -444,7 +446,7 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
         self.assertEqual(1, spy_foo_interceptor.interceptor_call_count)
         self.assertEqual(1, spy_foo_id_interceptor.interceptor_call_count)
         self.assertEqual(1, spy_post_handler.handler_call_count)
-        self.assertEqual("ROOTFOOFIDHANDLER", response.body)
+        self.assertEqual(b"ROOTFOOFIDHANDLER", response.body.content)
 
     def test_request_interceptors_not_called_when_not_around_path(self):
         spy_root_interceptor = TestEynnydWebappInterceptors.SpyRequestInterceptor(body_append="ROOT")
@@ -467,7 +469,7 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
         self.assertEqual(0, spy_bar_interceptor.interceptor_call_count)
         self.assertEqual(0, spy_bar_id_interceptor.interceptor_call_count)
         self.assertEqual(1, spy_post_handler.handler_call_count)
-        self.assertEqual("ROOTHANDLER", response.body)
+        self.assertEqual(b"ROOTHANDLER", response.body.content)
 
     def test_response_interceptors_called_in_order(self):
         spy_root_interceptor = TestEynnydWebappInterceptors.SpyResponseInterceptor(body_append="ROOT")
@@ -490,7 +492,7 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
         self.assertEqual(1, spy_root_interceptor.interceptor_call_count)
         self.assertEqual(1, spy_foo_interceptor.interceptor_call_count)
         self.assertEqual(1, spy_foo_id_interceptor.interceptor_call_count)
-        self.assertEqual("HANDLERFIDFOOROOT", response.body)
+        self.assertEqual(b"HANDLERFIDFOOROOT", response.body.content)
 
     def test_response_interceptors_not_called_when_not_around_path(self):
         spy_root_interceptor = TestEynnydWebappInterceptors.SpyResponseInterceptor(body_append="ROOT")
@@ -513,7 +515,7 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
         self.assertEqual(0, spy_bar_interceptor.interceptor_call_count)
         self.assertEqual(0, spy_bar_id_interceptor.interceptor_call_count)
         self.assertEqual(1, spy_post_handler.handler_call_count)
-        self.assertEqual("HANDLERROOT", response.body)
+        self.assertEqual(b"HANDLERROOT", response.body.content)
 
 
 class TestEynnydWebappErrorHandlers(unittest.TestCase):
@@ -649,7 +651,7 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
             self._call_count += 1
             return ResponseBuilder() \
                 .set_status(HTTPStatus.BAD_REQUEST) \
-                .set_body("Big Boom") \
+                .set_utf8_body("Big Boom") \
                 .build()
 
     def test_error_handle_from_handler_called(self):

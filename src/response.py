@@ -1,9 +1,39 @@
 from http import HTTPStatus
 from abc import ABC, abstractmethod
+from enum import Enum
 
-from src.exceptions import ResponseBuildException, InvalidResponseCookieException, InvalidHeaderException
+from src.exceptions import InvalidResponseCookieException
+from src.exceptions import InvalidHeaderException
+from src.exceptions import InvalidBodyTypeException
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.cookies.cookie import ResponseCookie
+
+
+class ResponseBodyType(Enum):
+    EMPTY = 1
+    UTF8 = 2
+    BYTE = 3
+    STREAM = 4
+    ITERABLE = 5
+
+
+class ResponseBody:
+
+    def __init__(self, type, content):
+        self._type = type
+        self._content = content
+
+    @staticmethod
+    def empty_response():
+        return ResponseBody(ResponseBodyType.EMPTY, "")
+
+    @property
+    def type(self):
+        return self._type
+
+    @property
+    def content(self):
+        return self._content
 
 
 class AbstractResponse(ABC):
@@ -61,7 +91,7 @@ class ResponseBuilder:
 
     def __init__(self):
         self._status = HTTPStatusFactory.create(HTTPStatus.OK)
-        self._body = ""
+        self._body = ResponseBody.empty_response()
         self._headers = {}
         self._cookies = []
 
@@ -69,10 +99,39 @@ class ResponseBuilder:
         self._status = HTTPStatusFactory.create(status)
         return self
 
-    def set_body(self, body):
-        if not isinstance(body, str):
-            raise ResponseBuildException("Cannot set non-string body: {b}".format(b=body))
-        self._body = body
+    def set_utf8_body(self, body):
+        encoded_body = body.encode("utf-8")
+        if len(body) != len(encoded_body):
+            raise InvalidBodyTypeException("Body must be UTF8 to set via set_utf8_body method.")
+        if "content-length" not in self._headers:
+            self._headers["content-length"] = str(len(encoded_body))
+        self._body = ResponseBody(ResponseBodyType.UTF8, encoded_body)
+        return self
+
+    def set_byte_body(self, body):
+        if not isinstance(body, bytes):
+            raise InvalidBodyTypeException("Body must be byte encoded to set via set_byte_body mothod.")
+        if "content-length" not in self._headers:
+            self._headers["content-length"] = str(len(body))
+        self._body = ResponseBody(ResponseBodyType.BYTE, body)
+        return self
+
+    def set_stream_body(self, body):
+        if not hasattr(body, "read"):
+            raise InvalidBodyTypeException("Streamable body must have a read method.")
+        self._body = ResponseBody(ResponseBodyType.STREAM, body)
+        return self
+
+    def set_iterable_body(self, body):
+        try:
+            iterator = iter(body)
+        except TypeError as e:
+            raise InvalidBodyTypeException("Iterable bodies must be iterable", e)
+        self._body = ResponseBody(ResponseBodyType.ITERABLE, body)
+        return self
+
+    def unset_body(self):
+        self._body = ResponseBody.empty_response()
         return self
 
     def set_headers(self, headers_by_name):
@@ -107,8 +166,6 @@ class ResponseBuilder:
         return self
 
     def build(self):
-        if "Content-Length" not in self._headers:
-            self._headers["Content-Length"] = str(len(self._body))
         return Response(
             self._status,
             self._body,

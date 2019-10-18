@@ -32,7 +32,7 @@ class EynnydWebapp:
         request = WSGILoadedRequest(wsgi_environment)
         response = self.process_request_to_response(request)
         try:
-            return WSGIResponseAdapter.adapt(response)
+            return WSGIResponseAdapter(wsgi_environment.get("wsgi.file_wrapper")).adapt(response)
         except Exception as e:
             error_response = self._exception_handlers.handle_while_having_a_response(e, response)
             return WSGIResponseAdapter.adapt(error_response)

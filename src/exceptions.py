@@ -52,6 +52,14 @@ class InvalidHeaderException(Exception):
     pass
 
 
+class InvalidBodyTypeException(Exception):
+    pass
+
+
+class UnknownResponseBodyTypeException(Exception):
+    pass
+
+
 class RequestInterceptorReturnedNonRequestException(Exception):
     pass
 
