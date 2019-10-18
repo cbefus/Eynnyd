@@ -173,6 +173,12 @@ class ResponseBuilder:
         self._headers[ascii_lowered_name] = str(value).lower()
         return self
 
+    def remove_header(self, name):
+        ascii_lowered_name = str(name).lower()
+        if ascii_lowered_name in self._headers:
+            self._headers.pop(ascii_lowered_name)
+        return self
+
     def set_cookies(self, cookies):
         for cookie in cookies:
             if not isinstance(cookie, ResponseCookie):
@@ -186,9 +192,12 @@ class ResponseBuilder:
         self._cookies.append(cookie)
         return self
 
-    def add_basic_cookie(self,  name, value):
+    def add_basic_cookie(self, name, value):
         self._cookies.append(ResponseCookie.build_basic(name, value))
         return self
+
+    def remove_cookie(self, name):
+        self._cookies = filter(lambda cookie: cookie.name != name, self._cookies)
 
     def build(self):
         return Response(
