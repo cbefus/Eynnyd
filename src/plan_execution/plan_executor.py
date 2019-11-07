@@ -4,8 +4,6 @@ from src.request import AbstractRequest
 from src.response import AbstractResponse
 
 
-
-
 class PlanExecutor:
 
     def __init__(self, exception_handlers):

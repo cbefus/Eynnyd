@@ -30,27 +30,25 @@ class EynnydWebapp:
         return wsgi_response.body
 
     def _wsgi_input_to_wsgi_output(self, wsgi_environment):
-        request = WSGILoadedRequest(wsgi_environment)
-        response = self.process_request_to_response(request)
+        wsgi_loaded_request = WSGILoadedRequest(wsgi_environment)
+        response = self.process_request_to_response(wsgi_loaded_request)
         try:
             return WSGIResponseAdapter(wsgi_environment.get("wsgi.file_wrapper")).adapt(response)
         except Exception as e:
-            error_response = self._exception_handlers.handle_post_response_error(e, request, response)
+            error_response = self._exception_handlers.handle_post_response_error(e, wsgi_loaded_request, response)
             return WSGIResponseAdapter(wsgi_environment.get("wsgi.file_wrapper")).adapt(error_response)
 
-    def process_request_to_response(self, request):
+    def process_request_to_response(self, wsgi_loaded_request):
         try:
             execution_plan = \
                 RouteTreeTraverser.traverse(
                     self._route_tree,
-                    request.http_method,
-                    request.request_uri.path)
+                    wsgi_loaded_request.http_method,
+                    wsgi_loaded_request.request_uri.path)
         except Exception as e:
-            return self._exception_handlers.handle_pre_response_error(e, request)
+            return self._exception_handlers.handle_pre_response_error(e, wsgi_loaded_request)
 
-        # TODO: Don't mutate the request but instead pass the path params as an extra param to interceptors and handler
-        # TODO:     this gets rid of nasty copy function in AbstractRequest!!
-        updated_request = request.copy_and_set_path_parameters(execution_plan.path_parameters)
+        updated_request = wsgi_loaded_request.copy_and_set_path_parameters(execution_plan.path_parameters)
         return self._plan_executor.execute_plan(execution_plan, updated_request)
 
 

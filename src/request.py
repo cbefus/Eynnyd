@@ -11,10 +11,6 @@ LOG = logging.getLogger("request")
 
 class AbstractRequest(ABC):
 
-    @abstractmethod
-    def copy_and_set_path_parameters(self, path_parameters):
-        pass
-
     @property
     @abstractmethod
     def http_method(self):

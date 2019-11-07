@@ -83,9 +83,6 @@ class TestPlanExecutor(unittest.TestCase):
             def __init__(self, http_method):
                 self._http_method = http_method
 
-            def copy_and_set_path_parameters(self, path_parameters):
-                pass
-
             @property
             def http_method(self):
                 return self._http_method
@@ -179,8 +176,6 @@ class TestPlanExecutor(unittest.TestCase):
 
     def test_execute_plan_request_interceptors_swap_out_request(self):
         class FakeRequest(AbstractRequest):
-            def copy_and_set_path_parameters(self, path_parameters):
-                pass
 
             @property
             def http_method(self):
