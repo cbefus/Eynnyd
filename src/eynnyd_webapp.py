@@ -17,6 +17,7 @@ class EynnydWebapp:
     def __init__(self, route_tree, exception_handlers):
         self._route_tree = route_tree
         self._exception_handlers = exception_handlers
+        self._plan_executor = PlanExecutor(self._exception_handlers)
 
     def __call__(self, wsgi_environment, wsgi_start_response):
         try:
@@ -47,23 +48,10 @@ class EynnydWebapp:
         except Exception as e:
             return self._exception_handlers.handle_pre_response_error(e, request)
 
+        # TODO: Don't mutate the request but instead pass the path params as an extra param to interceptors and handler
+        # TODO:     this gets rid of nasty copy function in AbstractRequest!!
         updated_request = request.copy_and_set_path_parameters(execution_plan.path_parameters)
-
-        try:
-            intercepted_request = PlanExecutor.execute_request_interceptors(execution_plan, updated_request)
-        except Exception as e:
-            return self._exception_handlers.handle_pre_response_error(e, updated_request)
-
-        try:
-            handler_response = PlanExecutor.execute_handler(execution_plan, intercepted_request)
-        except Exception as e:
-            return self._exception_handlers.handle_pre_response_error(e, intercepted_request)
-
-        try:
-            return PlanExecutor.execute_response_interceptors(execution_plan, intercepted_request, handler_response)
-        except Exception as e:
-            return self._exception_handlers\
-                .handle_post_response_error(e, intercepted_request, handler_response)
+        return self._plan_executor.execute_plan(execution_plan, updated_request)
 
 
 class EynnydWebappBuilder:

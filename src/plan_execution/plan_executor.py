@@ -4,18 +4,41 @@ from src.request import AbstractRequest
 from src.response import AbstractResponse
 
 
+
+
 class PlanExecutor:
 
+    def __init__(self, exception_handlers):
+        self._exception_handlers = exception_handlers
+
+    def execute_plan(self, execution_plan, request):
+        try:
+            intercepted_request = self._execute_request_interceptors(execution_plan, request)
+        except Exception as e:
+            return self._exception_handlers.handle_pre_response_error(e, request)
+
+        try:
+            handler_response = self._execute_handler(execution_plan, intercepted_request)
+        except Exception as e:
+            return self._exception_handlers.handle_pre_response_error(e, intercepted_request)
+
+        try:
+            return self._execute_response_interceptors(execution_plan, intercepted_request, handler_response)
+        except Exception as e:
+            return self._exception_handlers\
+                .handle_post_response_error(e, intercepted_request, handler_response)
+
+
     @staticmethod
-    def execute_request_interceptors(execution_plan, request):
+    def _execute_request_interceptors(execution_plan, request):
         return PlanExecutor._update_request_via_request_interceptors(execution_plan.request_interceptors, request)
 
     @staticmethod
-    def execute_handler(execution_plan, request):
+    def _execute_handler(execution_plan, request):
         return PlanExecutor._get_response_from_handler(execution_plan.handler, request)
 
     @staticmethod
-    def execute_response_interceptors(execution_plan, request, response):
+    def _execute_response_interceptors(execution_plan, request, response):
         return PlanExecutor\
             ._update_response_via_response_interceptors(execution_plan.response_interceptors, request, response)
 
