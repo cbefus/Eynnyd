@@ -20,35 +20,36 @@ class ExceptionHandlersRegistry:
         self._pre_response_error_handlers = []
         self._post_response_error_handler = []
 
-    def register_pre_response_error_handler(self, exc, handler):
+    def register_pre_response_error_handler(self, exception_class, handler):
         if not hasattr(handler, '__call__'):
             raise NonCallableExceptionHandlerException(
-                "Pre Response Error Handler for exception {e} is not callable.".format(e=str(exc)))
+                "Pre Response Error Handler for exception {e} is not callable.".format(e=str(exception_class)))
         if 2 != len(inspect.signature(handler).parameters):
             raise CallbackIncorrectNumberOfParametersException(
                 "Pre Response Error Handler for exception {e} does not take exactly 2 argument "
-                "(the exception, the request)".format(e=str(exc)))
+                "(the exception, the request)".format(e=str(exception_class)))
 
-        if ExceptionHandlersRegistry._is_registered_already(exc, self._pre_response_error_handlers):
+        if ExceptionHandlersRegistry._is_registered_already(exception_class, self._pre_response_error_handlers):
             raise ExceptionHandlingRegisterException(
-                "Cannot register exc: {e} to more than one handler for pre response exceptions.".format(e=str(exc)))
-        self._pre_response_error_handlers.append((exc, handler))
+                "Cannot register exc: {e} to more than one handler for pre response exceptions."
+                    .format(e=str(exception_class)))
+        self._pre_response_error_handlers.append((exception_class, handler))
         return self
 
-    def register_post_response_error_handler(self, exc, handler):
+    def register_post_response_error_handler(self, exception_class, handler):
         if not hasattr(handler, '__call__'):
             raise NonCallableExceptionHandlerException(
-                "Post Response Exception Handler for exception {e} is not callable.".format(e=str(exc)))
+                "Post Response Exception Handler for exception {e} is not callable.".format(e=str(exception_class)))
         if 3 != len(inspect.signature(handler).parameters):
             raise CallbackIncorrectNumberOfParametersException(
                 "Post Response  Exception Handler for exception {e} does not take exactly 3 argument "
-                "(the exception, the request, the response)".format(e=str(exc)))
+                "(the exception, the request, the response)".format(e=str(exception_class)))
 
-        if ExceptionHandlersRegistry._is_registered_already(exc, self._post_response_error_handler):
+        if ExceptionHandlersRegistry._is_registered_already(exception_class, self._post_response_error_handler):
             raise ExceptionHandlingRegisterException(
                 "Cannot register exc: {e} to more than one handler for post response exceptions."
-                    .format(e=str(exc)))
-        self._post_response_error_handler.append((exc, handler))
+                    .format(e=str(exception_class)))
+        self._post_response_error_handler.append((exception_class, handler))
         return self
 
     def create(self):
