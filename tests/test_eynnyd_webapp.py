@@ -1,7 +1,7 @@
 import unittest
 from http import HTTPStatus
 from src.routing.routes_builder import RoutesBuilder
-from src.plan_execution.exception_handlers import ExceptionHandlersRegistry
+from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegistry
 from src.utils.request_uri import RequestURI
 from src.eynnyd_webapp import EynnydWebappBuilder
 from src.request import AbstractRequest

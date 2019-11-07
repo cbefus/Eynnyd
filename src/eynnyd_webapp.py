@@ -7,7 +7,7 @@ from src.routing.route_tree_traverser import RouteTreeTraverser
 from src.plan_execution.plan_executor import PlanExecutor
 from src.wsgi.wsgi_response import RawWSGIServerError
 from src.wsgi.wsgi_response_adapter import WSGIResponseAdapter
-from src.plan_execution.exception_handlers import ExceptionHandlersRegistry
+from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegistry
 
 LOG = logging.getLogger("eynnyd_webapp")
 
