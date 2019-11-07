@@ -106,3 +106,7 @@ class NonCallableExceptionHandlerException(Exception):
 
 class InvalidResponseCookieException(Exception):
     pass
+
+
+class ExecutionPlanBuildException(Exception):
+    pass

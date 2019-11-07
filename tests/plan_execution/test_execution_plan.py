@@ -1,6 +1,7 @@
 import unittest
 
-from src.plan_execution.execution_plan import ExecutionPlanBuilder, ExecutionPlanBuildException
+from src.plan_execution.execution_plan_builder import ExecutionPlanBuilder
+from src.exceptions import ExecutionPlanBuildException
 
 
 class TestExecutionPlanBuilder(unittest.TestCase):
