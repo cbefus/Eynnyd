@@ -117,3 +117,24 @@ will worry about speed.
 #### What python versions do you support and why?
 We use functools.lru_cache() which limits us to python >3.2 but since python 2
 is about to be deprecated we feel this isn't a limiting constraint.
+
+# For Developers / Contributors
+
+## Installing requirements
+run:
+```bash
+pip install -r test_requirements.txt
+```
+
+## Running the tests
+After installing the requirements run:
+```bash
+python -m unittest discover tests
+```
+
+## Checking coverage
+After installing the requirements run:
+```bash
+coverage run --source src/ -m unittest discover tests/
+coverage report
+```

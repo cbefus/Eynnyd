@@ -1,0 +1,3 @@
+arrow==0.14.4
+coverage==4.5.4
+optional.py==1.0.0
