@@ -5,7 +5,7 @@ from src.exceptions import EynnydWebappBuildException
 from src.request import WSGILoadedRequest
 from src.routing.route_tree_traverser import RouteTreeTraverser
 from src.plan_execution.plan_executor import PlanExecutor
-from src.wsgi.wsgi_response import RawWSGIServerError
+from src.wsgi.raw_wsgi_server_error_response import RawWSGIServerErrorResponse
 from src.wsgi.wsgi_response_adapter import WSGIResponseAdapter
 from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegistry
 
@@ -24,7 +24,7 @@ class EynnydWebapp:
             wsgi_response = self._wsgi_input_to_wsgi_output(wsgi_environment)
         except Exception as e:
             LOG.exception("Unexpected error thrown, wsgi environment was: {wsgi}".format(wsgi=wsgi_environment))
-            wsgi_response = RawWSGIServerError()
+            wsgi_response = RawWSGIServerErrorResponse()
 
         wsgi_start_response(wsgi_response.status, wsgi_response.headers)
         return wsgi_response.body

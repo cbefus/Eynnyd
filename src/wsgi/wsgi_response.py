@@ -1,6 +1,3 @@
-from http import HTTPStatus
-from src.utils.http_status_factory import HTTPStatusFactory
-
 
 class WSGIResponse:
 
@@ -22,18 +19,3 @@ class WSGIResponse:
         return self._body
 
 
-class RawWSGIServerError:
-
-    @property
-    def status(self):
-        return HTTPStatusFactory\
-            .create(HTTPStatus.INTERNAL_SERVER_ERROR)\
-            .wsgi_format
-
-    @property
-    def headers(self):
-        return []
-
-    @property
-    def body(self):
-        return ["500 Internal Server Error".encode("utf-8")]
