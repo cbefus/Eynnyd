@@ -9,10 +9,10 @@ from src.exceptions import SettingNonTypedStatusWithContentTypeException
 from src.exceptions import SettingContentTypeWithNonTypedStatusException
 from src.exceptions import SettingBodyWithNonBodyStatusException
 from src.exceptions import SettingNonBodyStatusWithBodyException
-from src.utils.http_status import HTTPStatusFactory
+from src.utils.http_status_factory import HTTPStatusFactory
 from src.utils.cookies.response_cookie import ResponseCookie
 from src.utils.cookies.response_cookie_builder import ResponseCookieBuilder
-from src.utils.http_status import NON_TYPED_STATUSES, NON_BODY_STATUSES
+from src.utils.http_status_groups import NON_BODY_STATUSES, NON_TYPED_STATUSES
 
 
 class ResponseBodyType(Enum):

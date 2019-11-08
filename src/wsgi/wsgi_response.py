@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from src.utils.http_status import HTTPStatusFactory
+from src.utils.http_status_factory import HTTPStatusFactory
 
 
 class WSGIResponse:

@@ -52,7 +52,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
 
         exception_handlers = ExceptionHandlersRegistry().create()
         response = exception_handlers.handle_pre_response_error(RouteNotFoundException(), FakeRequest())
-        self.assertEqual(HTTPStatus.NOT_FOUND, response.status)
+        self.assertEqual(HTTPStatus.NOT_FOUND.value, response.status.code)
 
     def test_pre_response_handler_can_override_default_route_not_found_error_handler(self):
         class FakeRequest:
@@ -72,7 +72,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
                 .register_pre_response_error_handler(RouteNotFoundException, fake_handler)\
                 .create()
         response = exception_handlers.handle_pre_response_error(RouteNotFoundException(), FakeRequest())
-        self.assertEqual(HTTPStatus.OK, response.status)
+        self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
     def test_pre_response_handler_has_default_invalid_cookie_error_handler(self):
         class FakeRequest:
@@ -82,7 +82,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
 
         exception_handlers = ExceptionHandlersRegistry().create()
         response = exception_handlers.handle_pre_response_error(InvalidCookieHeaderException(), FakeRequest())
-        self.assertEqual(HTTPStatus.BAD_REQUEST, response.status)
+        self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
 
     def test_pre_response_handler_can_override_default_invalid_cookie_error_handler(self):
         class FakeRequest:
@@ -98,12 +98,12 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
                 .register_pre_response_error_handler(InvalidCookieHeaderException, fake_handler)\
                 .create()
         response = exception_handlers.handle_pre_response_error(InvalidCookieHeaderException(), FakeRequest())
-        self.assertEqual(HTTPStatus.OK, response.status)
+        self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
     def test_pre_response_handler_has_default_internal_server_error_handler(self):
         exception_handlers = ExceptionHandlersRegistry().create()
         response = exception_handlers.handle_pre_response_error(Exception(), "fake request")
-        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR, response.status)
+        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR.value, response.status.code)
 
     def test_pre_response_handler_can_override_default_internal_server_error_handler(self):
         def fake_handler(thrown_exc, request):
@@ -112,7 +112,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
         exception_handlers = \
             ExceptionHandlersRegistry().register_pre_response_error_handler(Exception, fake_handler).create()
         response = exception_handlers.handle_pre_response_error(Exception(), "fake request")
-        self.assertEqual(HTTPStatus.OK, response.status)
+        self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
     def test_pre_response_handler_gets_registered(self):
         class FakeException(Exception):
@@ -124,7 +124,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
         exception_handlers = \
             ExceptionHandlersRegistry().register_pre_response_error_handler(FakeException, fake_handler).create()
         response = exception_handlers.handle_pre_response_error(FakeException(), "fake request")
-        self.assertEqual(HTTPStatus.OK, response.status)
+        self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
     def test_post_response_handler_not_callable_raises(self):
         registry = ExceptionHandlersRegistry()
@@ -159,7 +159,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
     def test_post_response_handler_has_default_internal_server_error_handler(self):
         exception_handlers = ExceptionHandlersRegistry().create()
         response = exception_handlers.handle_post_response_error(Exception(), "fake request", "fake response")
-        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR, response.status)
+        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR.value, response.status.code)
 
     def test_post_response_handler_can_override_default_internal_server_error_handler(self):
         def fake_handler(thrown_exc, request, response):
@@ -168,7 +168,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
         exception_handlers = \
             ExceptionHandlersRegistry().register_post_response_error_handler(Exception, fake_handler).create()
         response = exception_handlers.handle_post_response_error(Exception(), "fake request", "fake response")
-        self.assertEqual(HTTPStatus.OK, response.status)
+        self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
     def test_post_response_handler_gets_registered(self):
         class FakeException(Exception):
@@ -180,4 +180,4 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
         exception_handlers = \
             ExceptionHandlersRegistry().register_post_response_error_handler(FakeException, fake_handler).create()
         response = exception_handlers.handle_post_response_error(FakeException(), "fake request", "fake response")
-        self.assertEqual(HTTPStatus.OK, response.status)
+        self.assertEqual(HTTPStatus.OK.value, response.status.code)

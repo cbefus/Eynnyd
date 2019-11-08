@@ -1,0 +1,12 @@
+from http import HTTPStatus as HTTPLibHTTPStatus
+
+NON_BODY_STATUSES = frozenset([
+    HTTPLibHTTPStatus.CONTINUE,
+    HTTPLibHTTPStatus.SWITCHING_PROTOCOLS,
+    HTTPLibHTTPStatus.NO_CONTENT,
+    HTTPLibHTTPStatus.NOT_MODIFIED
+])
+NON_TYPED_STATUSES = frozenset([
+    HTTPLibHTTPStatus.NO_CONTENT,
+    HTTPLibHTTPStatus.NOT_MODIFIED
+])

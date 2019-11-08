@@ -18,7 +18,7 @@ class TestDefaultExceptionHandlers(unittest.TestCase):
             def request_uri(self):
                 return "fake request uri"
         response = default_route_not_found_exception_handler(Exception(), FakeRequest())
-        self.assertEqual(HTTPStatus.NOT_FOUND, response.status)
+        self.assertEqual(HTTPStatus.NOT_FOUND.value, response.status.code)
 
     def test_default_invalid_cookie_header_exception_returns_400(self):
         class FakeRequest:
@@ -27,15 +27,15 @@ class TestDefaultExceptionHandlers(unittest.TestCase):
                 return {"COOKIE": "fake cookie"}
 
         response = default_invalid_cookie_header_exception_handler(Exception(), FakeRequest())
-        self.assertEqual(HTTPStatus.BAD_REQUEST, response.status)
+        self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
 
     def test_default_internal_server_error_exception_request_only_returns_500(self):
         response = default_internal_server_error_exception_handler_only_request(Exception(), "fake request")
-        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR, response.status)
+        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR.value, response.status.code)
 
     def test_default_internal_server_error_exception_returns_500(self):
         response = default_internal_server_error_exception_handler(Exception(), "fake request", "fake response")
-        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR, response.status)
+        self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR.value, response.status.code)
 
 
 

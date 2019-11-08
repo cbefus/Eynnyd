@@ -148,7 +148,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(0, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual(HTTPStatus.NOT_FOUND, response.status)
+        self.assertEqual(HTTPStatus.NOT_FOUND.value, response.status.code)
 
     def test_simple_pathed_handler(self):
         spy_handler = TestEynnydWebappHandlers.SpyHandler()
@@ -206,7 +206,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(0, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual(HTTPStatus.NOT_FOUND, response.status)
+        self.assertEqual(HTTPStatus.NOT_FOUND.value, response.status.code)
 
     def test_simple_pathed_handler_404s_by_method(self):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler("NOPE")
@@ -222,7 +222,7 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
         self.assertEqual(0, spy_post_handler.handler_call_count)
         self.assertEqual(0, spy_get_handler.handler_call_count)
-        self.assertEqual(HTTPStatus.NOT_FOUND, response.status)
+        self.assertEqual(HTTPStatus.NOT_FOUND.value, response.status.code)
 
     def test_pattern_pathed_handler(self):
         spy_handler = TestEynnydWebappHandlers.SpyHandler()

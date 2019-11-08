@@ -33,7 +33,7 @@ class TestPlanExecutor(unittest.TestCase):
 
         plan = ExecutionPlan([fake_interceptor], "some handler", [], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE, response.status)
+        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE.value, response.status.code)
 
     def test_execute_plan_exception_in_handler_run_pre_response_error_handler(self):
         class CustomException(Exception):
@@ -53,7 +53,7 @@ class TestPlanExecutor(unittest.TestCase):
 
         plan = ExecutionPlan([], fake_handler, [], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE, response.status)
+        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE.value, response.status.code)
 
     def test_execute_plan_exception_in_response_interceptor_runs_post_response_error_handler(self):
         class CustomException(Exception):
@@ -76,7 +76,7 @@ class TestPlanExecutor(unittest.TestCase):
 
         plan = ExecutionPlan([], fake_handler, [fake_interceptor], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE, response.status)
+        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE.value, response.status.code)
 
     def test_execute_plan_executes_request_interceptors_handler_and_response_interceptors_correctly(self):
         class FakeRequest(AbstractRequest):
@@ -137,12 +137,12 @@ class TestPlanExecutor(unittest.TestCase):
 
         def fake_response_interceptor_first(request, response):
             self.assertEqual("PUT", request.http_method)
-            self.assertEqual(HTTPStatus.OK, response.status)
+            self.assertEqual(HTTPStatus.OK.value, response.status.code)
             return ResponseBuilder().set_status(HTTPStatus.ACCEPTED).build()
 
         def fakse_response_interceptor_second(request, response):
             self.assertEqual("PUT", request.http_method)
-            self.assertEqual(HTTPStatus.ACCEPTED, response.status)
+            self.assertEqual(HTTPStatus.ACCEPTED.value, response.status.code)
             return ResponseBuilder().set_status(HTTPStatus.CREATED).build()
 
         plan_executor = PlanExecutor(ExceptionHandlersRegistry().create())
@@ -153,7 +153,7 @@ class TestPlanExecutor(unittest.TestCase):
                 [fakse_response_interceptor_second, fake_response_interceptor_first],
                 {})
         response = plan_executor.execute_plan(plan, FakeRequest("GET"))
-        self.assertEqual(HTTPStatus.CREATED, response.status)
+        self.assertEqual(HTTPStatus.CREATED.value, response.status.code)
 
     def test_execute_plan_with_non_request_returning_request_interceptor_raises(self):
         def fake_interceptor(original_request):
@@ -172,7 +172,7 @@ class TestPlanExecutor(unittest.TestCase):
 
         plan = ExecutionPlan([fake_interceptor], "some handler", [], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE, response.status)
+        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE.value, response.status.code)
 
     def test_execute_plan_request_interceptors_swap_out_request(self):
         class FakeRequest(AbstractRequest):
@@ -227,7 +227,7 @@ class TestPlanExecutor(unittest.TestCase):
         plan_executor = PlanExecutor(ExceptionHandlersRegistry().create())
         plan = ExecutionPlan([fake_interceptor], fake_handler, [], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.OK, response.status)
+        self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
     def test_execute_plan_non_response_returning_handlers_raises(self):
         def fake_handler(some_request):
@@ -244,7 +244,7 @@ class TestPlanExecutor(unittest.TestCase):
 
         plan = ExecutionPlan([], fake_handler, [], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE, response.status)
+        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE.value, response.status.code)
 
     def test_execute_plan_handler_sets_the_response(self):
 
@@ -254,7 +254,7 @@ class TestPlanExecutor(unittest.TestCase):
         plan_executor = PlanExecutor(ExceptionHandlersRegistry().create())
         plan = ExecutionPlan([], fake_handler, [], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.ACCEPTED, response.status)
+        self.assertEqual(HTTPStatus.ACCEPTED.value, response.status.code)
 
     def test_execute_plan_non_response_returing_response_interceptor_raises(self):
 
@@ -277,7 +277,7 @@ class TestPlanExecutor(unittest.TestCase):
 
         plan = ExecutionPlan([], fake_handler, [fake_interceptor], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE, response.status)
+        self.assertEqual(HTTPStatus.SERVICE_UNAVAILABLE.value, response.status.code)
 
     def test_execute_plan_response_interceptors_swaps_the_response(self):
         def fake_handler(request):
@@ -289,4 +289,4 @@ class TestPlanExecutor(unittest.TestCase):
         plan_executor = PlanExecutor(ExceptionHandlersRegistry().create())
         plan = ExecutionPlan([], fake_handler, [fake_interceptor], {})
         response = plan_executor.execute_plan(plan, "original test request")
-        self.assertEqual(HTTPStatus.ACCEPTED, response.status)
+        self.assertEqual(HTTPStatus.ACCEPTED.value, response.status.code)
