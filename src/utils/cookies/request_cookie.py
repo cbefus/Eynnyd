@@ -13,3 +13,6 @@ class RequestCookie:
     @property
     def value(self):
         return self._value
+
+    def __eq__(self, other_cookie):
+        return self._name == other_cookie.name and self._value == other_cookie.value
