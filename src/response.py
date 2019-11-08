@@ -11,6 +11,7 @@ from src.exceptions import SettingBodyWithNonBodyStatusException
 from src.exceptions import SettingNonBodyStatusWithBodyException
 from src.utils.http_status import HTTPStatusFactory
 from src.utils.cookies.response_cookie import ResponseCookie
+from src.utils.cookies.response_cookie_builder import ResponseCookieBuilder
 from src.utils.http_status import NON_TYPED_STATUSES, NON_BODY_STATUSES
 
 
@@ -193,7 +194,7 @@ class ResponseBuilder:
         return self
 
     def add_basic_cookie(self, name, value):
-        self._cookies.append(ResponseCookie.build_basic(name, value))
+        self._cookies.append(ResponseCookieBuilder(name, value).build())
         return self
 
     def remove_cookie(self, name):
