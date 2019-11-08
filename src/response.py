@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from abc import ABC, abstractmethod
 from enum import Enum
+import inspect
 
 from src.exceptions import InvalidResponseCookieException
 from src.exceptions import InvalidHeaderException
@@ -140,6 +141,10 @@ class ResponseBuilder:
                 "Cannot set a body on response with status {s}".format(s=self._status))
         if not hasattr(body, "read"):
             raise InvalidBodyTypeException("Streamable body must have a read method.")
+
+        if 1 != len(inspect.signature(body.read).parameters):
+            raise InvalidBodyTypeException("Streamable body read method must take a block size parameter")
+
         self._body = ResponseBody(ResponseBodyType.STREAM, body)
         return self
 
