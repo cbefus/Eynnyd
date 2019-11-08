@@ -17,5 +17,5 @@ class HeaderSplitter:
             k, v = token.strip().split("=")
             if k.strip() not in kv:
                 kv[k.strip()] = []
-            kv[k].append(v.strip())
+            kv[k.strip()].append(v.strip())
         return kv
