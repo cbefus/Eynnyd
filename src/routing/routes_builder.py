@@ -1,6 +1,6 @@
 import inspect
 
-from src.routing.route_tree import RouteTeeBuilder
+from src.routing.route_tree_builder import RouteTeeBuilder
 from src.exceptions import DuplicateHandlerRoutesException, RouteBuildException, NonCallableInterceptor, \
     NonCallableHandler, CallbackIncorrectNumberOfParametersException
 from src.utils.uri_components_converter import URIComponentsConverter
