@@ -1,7 +1,7 @@
 import unittest
 import arrow
 
-from src.utils.cookies.cookie import ResponseCookieBuilder
+from src.utils.cookies.response_cookie import ResponseCookieBuilder
 from src.exceptions import InvalidCookieBuildException
 
 

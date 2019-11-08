@@ -1,5 +1,5 @@
 from src.exceptions import InvalidCookieHeaderException
-from src.utils.cookies.cookie import RequestCookie
+from src.utils.cookies.request_cookie import RequestCookie
 from src.utils.cookies import rfc
 
 

@@ -10,7 +10,7 @@ from src.exceptions import SettingContentTypeWithNonTypedStatusException
 from src.exceptions import SettingBodyWithNonBodyStatusException
 from src.exceptions import SettingNonBodyStatusWithBodyException
 from src.utils.http_status import HTTPStatusFactory
-from src.utils.cookies.cookie import ResponseCookie
+from src.utils.cookies.response_cookie import ResponseCookie
 from src.utils.http_status import NON_TYPED_STATUSES, NON_BODY_STATUSES
 
 
