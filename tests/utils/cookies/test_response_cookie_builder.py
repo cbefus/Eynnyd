@@ -73,12 +73,44 @@ class TestResponseCookieBuilder(unittest.TestCase):
                 .set_max_age(0)\
                 .build()
 
+    def test_set_domain(self):
+        cookie = \
+            ResponseCookieBuilder("foo", "bar") \
+                .set_domain("localhost")\
+                .build()
+        self.assertTrue(cookie.domain.is_present())
+        self.assertEqual("localhost", cookie.domain.get())
 
+    def test_raises_on_bad_domain(self):
+        with self.assertRaises(InvalidCookieBuildException):
+            ResponseCookieBuilder("foo", "bar") \
+                .set_domain("--")\
+                .build()
 
+    def test_set_path(self):
+        cookie = \
+            ResponseCookieBuilder("foo", "bar") \
+                .set_path("abc/123")\
+                .build()
+        self.assertTrue(cookie.path.is_present())
+        self.assertEqual("abc/123", cookie.path.get())
 
+    def test_raises_on_bad_path(self):
+        with self.assertRaises(InvalidCookieBuildException):
+            ResponseCookieBuilder("foo", "bar") \
+                .set_path("\n\t") \
+                .build()
 
+    def test_set_secure(self):
+        cookie = \
+            ResponseCookieBuilder("foo", "bar") \
+                .set_secure(False) \
+                .build()
+        self.assertFalse(cookie.secure)
 
-
-
-
-
+    def test_set_http_only(self):
+        cookie = \
+            ResponseCookieBuilder("foo", "bar") \
+                .set_http_only(False) \
+                .build()
+        self.assertFalse(cookie.http_only)
