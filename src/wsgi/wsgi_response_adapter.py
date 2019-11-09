@@ -16,5 +16,8 @@ class WSGIResponseAdapter:
         return WSGIResponse(
             response.status.wsgi_format,
             headers,
-            WSGIResponseBodyFactory(StreamReaderFactory.create_reader(self._wsgi_file_wrapper)).create(response.body))
+            WSGIResponseBodyFactory(
+                StreamReaderFactory.create_reader(self._wsgi_file_wrapper))
+                    .create(response.body)
+                        .get_body())
 
