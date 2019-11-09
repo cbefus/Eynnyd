@@ -1,7 +1,7 @@
 import unittest
 from http import HTTPStatus
 
-from src.response import ResponseBuilder
+from src.response_builder import ResponseBuilder
 from src.exceptions import ExceptionHandlingRegisterException, RouteNotFoundException, \
     CallbackIncorrectNumberOfParametersException, NonCallableExceptionHandlerException, \
     InvalidCookieHeaderException

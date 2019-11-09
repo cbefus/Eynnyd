@@ -1,7 +1,6 @@
 import logging
 from http import HTTPStatus
-from src.response import ResponseBuilder
-
+from src.response_builder import ResponseBuilder
 
 LOG = logging.getLogger("exception_handlers_registry")
 

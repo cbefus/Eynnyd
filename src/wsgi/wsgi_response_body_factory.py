@@ -1,5 +1,5 @@
 from src.exceptions import UnknownResponseBodyTypeException
-from src.response import ResponseBodyType
+from src.response_body_type import ResponseBodyType
 from src.wsgi.byte_response_body import ByteResponseBody
 from src.wsgi.empty_response_body import EmptyResponseBody
 from src.wsgi.iterable_response_body import IterableResponseBody

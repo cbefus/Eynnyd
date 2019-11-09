@@ -2,7 +2,7 @@ from unittest import TestCase
 from http import HTTPStatus
 
 from src.wsgi.wsgi_response_adapter import WSGIResponseAdapter
-from src.response import ResponseBuilder
+from src.response_builder import ResponseBuilder
 
 
 class TestWSGIResponseAdapter(TestCase):

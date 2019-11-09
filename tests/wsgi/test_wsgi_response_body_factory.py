@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from src.response import ResponseBody, ResponseBodyType
+from src.response_body import ResponseBody
+from src.response_body_type import ResponseBodyType
 from src.wsgi.wsgi_response_body_factory import WSGIResponseBodyFactory
 from src.wsgi.empty_response_body import EmptyResponseBody
 from src.wsgi.utf8_response_body import UTF8ResponseBody

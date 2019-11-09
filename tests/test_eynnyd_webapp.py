@@ -5,9 +5,9 @@ from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegi
 from src.utils.request_uri import RequestURI
 from src.eynnyd_webapp import EynnydWebappBuilder
 from src.abstract_request import AbstractRequest
-from src.response import ResponseBuilder
+from src.response_builder import ResponseBuilder
 from src.exceptions import RouteNotFoundException
-from src.response import ResponseBody
+from src.response_body import ResponseBody
 
 
 class TestEynnydWebappHandlers(unittest.TestCase):

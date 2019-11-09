@@ -1,7 +1,7 @@
 from src.exceptions import RequestInterceptorReturnedNonRequestException, HandlerReturnedNonResponseException, \
     ResponseInterceptorReturnedNonResponseException
 from src.abstract_request import AbstractRequest
-from src.response import AbstractResponse
+from src.abstract_response import AbstractResponse
 
 
 class PlanExecutor:
