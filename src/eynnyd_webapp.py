@@ -2,7 +2,7 @@ from optional import Optional
 import logging
 
 from src.exceptions import EynnydWebappBuildException
-from src.request import WSGILoadedRequest
+from src.wsgi_loaded_request import WSGILoadedRequest
 from src.routing.route_tree_traverser import RouteTreeTraverser
 from src.plan_execution.plan_executor import PlanExecutor
 from src.wsgi.raw_wsgi_server_error_response import RawWSGIServerErrorResponse

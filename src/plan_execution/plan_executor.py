@@ -1,6 +1,6 @@
 from src.exceptions import RequestInterceptorReturnedNonRequestException, HandlerReturnedNonResponseException, \
     ResponseInterceptorReturnedNonResponseException
-from src.request import AbstractRequest
+from src.abstract_request import AbstractRequest
 from src.response import AbstractResponse
 
 

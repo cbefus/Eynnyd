@@ -5,7 +5,7 @@ from src.plan_execution.execution_plan import ExecutionPlan
 from src.plan_execution.plan_executor import PlanExecutor
 from src.exceptions import RequestInterceptorReturnedNonRequestException, HandlerReturnedNonResponseException, \
     ResponseInterceptorReturnedNonResponseException
-from src.request import AbstractRequest
+from src.abstract_request import AbstractRequest
 from src.response import ResponseBuilder
 from http import HTTPStatus
 from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegistry
