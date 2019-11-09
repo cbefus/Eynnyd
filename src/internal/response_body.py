@@ -1,4 +1,4 @@
-from src.response_body_type import ResponseBodyType
+from src.internal.response_body_type import ResponseBodyType
 
 
 class ResponseBody:

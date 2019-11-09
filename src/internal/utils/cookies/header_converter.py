@@ -1,6 +1,6 @@
 from src.exceptions import InvalidCookieHeaderException
-from src.utils.cookies.request_cookie import RequestCookie
-from src.utils.cookies import rfc
+from src.internal.utils.cookies.request_cookie import RequestCookie
+from src.internal.utils.cookies import rfc
 
 
 class CookieHeaderConverter:

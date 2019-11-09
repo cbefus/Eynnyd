@@ -3,8 +3,8 @@ import logging
 from optional import Optional
 
 from src.exceptions import DuplicateHandlerRoutesException
-from src.routing.pattern_route_builder import PatternRouteBuilder
-from src.routing.route_tree_node import RouteTreeNode
+from src.internal.routing.pattern_route_builder import PatternRouteBuilder
+from src.internal.routing.route_tree_node import RouteTreeNode
 
 LOG = logging.getLogger("route_tree")
 

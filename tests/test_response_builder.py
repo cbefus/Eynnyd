@@ -5,8 +5,8 @@ from src.exceptions import SettingNonTypedStatusWithContentTypeException, Settin
     SettingBodyWithNonBodyStatusException, InvalidBodyTypeException, InvalidHeaderException, \
     SettingContentTypeWithNonTypedStatusException, InvalidResponseCookieException
 from src.response_builder import ResponseBuilder
-from src.response_body_type import ResponseBodyType
-from src.utils.cookies.response_cookie_builder import ResponseCookieBuilder
+from src.internal.response_body_type import ResponseBodyType
+from src.response_cookie_builder import ResponseCookieBuilder
 
 
 class TestResponseBuilder(TestCase):

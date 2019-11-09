@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.utils.http_status import HTTPStatus
+from src.internal.utils.http_status import HTTPStatus
 
 
 class TestHTTPStatus(TestCase):

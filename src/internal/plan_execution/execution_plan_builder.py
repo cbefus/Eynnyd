@@ -1,6 +1,6 @@
 from optional import Optional
 
-from src.plan_execution.execution_plan import ExecutionPlan
+from src.internal.plan_execution.execution_plan import ExecutionPlan
 from src.exceptions import ExecutionPlanBuildException
 
 

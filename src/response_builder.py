@@ -4,13 +4,13 @@ from http import HTTPStatus
 from src.exceptions import SettingNonTypedStatusWithContentTypeException, SettingNonBodyStatusWithBodyException, \
     SettingBodyWithNonBodyStatusException, InvalidBodyTypeException, InvalidHeaderException, \
     SettingContentTypeWithNonTypedStatusException, InvalidResponseCookieException
-from src.response import Response
-from src.response_body import ResponseBody
-from src.response_body_type import ResponseBodyType
-from src.utils.cookies.response_cookie import ResponseCookie
-from src.utils.cookies.response_cookie_builder import ResponseCookieBuilder
-from src.utils.http_status_factory import HTTPStatusFactory
-from src.utils.http_status_groups import NON_TYPED_STATUSES, NON_BODY_STATUSES
+from src.internal.response import Response
+from src.internal.response_body import ResponseBody
+from src.internal.response_body_type import ResponseBodyType
+from src.internal.utils.cookies.response_cookie import ResponseCookie
+from src.response_cookie_builder import ResponseCookieBuilder
+from src.internal.utils.http_status_factory import HTTPStatusFactory
+from src.internal.utils.http_status_groups import NON_TYPED_STATUSES, NON_BODY_STATUSES
 
 
 class ResponseBuilder:

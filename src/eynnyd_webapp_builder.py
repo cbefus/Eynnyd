@@ -1,8 +1,8 @@
 from optional import Optional
 
 from src.exceptions import EynnydWebappBuildException
-from src.eynnyd_webapp import EynnydWebapp
-from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegistry
+from src.internal.eynnyd_webapp import EynnydWebapp
+from src.exception_handlers_registry import ExceptionHandlersRegistry
 
 
 class EynnydWebappBuilder:

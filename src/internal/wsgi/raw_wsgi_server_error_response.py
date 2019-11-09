@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from src.utils.http_status_factory import HTTPStatusFactory
+from src.internal.utils.http_status_factory import HTTPStatusFactory
 
 
 class RawWSGIServerErrorResponse:

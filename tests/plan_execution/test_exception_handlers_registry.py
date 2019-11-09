@@ -5,7 +5,7 @@ from src.response_builder import ResponseBuilder
 from src.exceptions import ExceptionHandlingRegisterException, RouteNotFoundException, \
     CallbackIncorrectNumberOfParametersException, NonCallableExceptionHandlerException, \
     InvalidCookieHeaderException
-from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegistry
+from src.exception_handlers_registry import ExceptionHandlersRegistry
 
 
 class TestExceptionHandlersRegistry(unittest.TestCase):

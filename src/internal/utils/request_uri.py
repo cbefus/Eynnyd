@@ -1,4 +1,4 @@
-from src.utils.header_helpers import HeaderSplitter
+from src.internal.utils.header_helpers import HeaderSplitter
 
 
 class RequestURI:

@@ -1,14 +1,14 @@
 import unittest
 import logging
 
-from src.plan_execution.execution_plan import ExecutionPlan
-from src.plan_execution.plan_executor import PlanExecutor
+from src.internal.plan_execution.execution_plan import ExecutionPlan
+from src.internal.plan_execution.plan_executor import PlanExecutor
 from src.exceptions import RequestInterceptorReturnedNonRequestException, HandlerReturnedNonResponseException, \
     ResponseInterceptorReturnedNonResponseException
 from src.abstract_request import AbstractRequest
 from src.response_builder import ResponseBuilder
 from http import HTTPStatus
-from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegistry
+from src.exception_handlers_registry import ExceptionHandlersRegistry
 
 LOG = logging.getLogger("test_plan_executor")
 

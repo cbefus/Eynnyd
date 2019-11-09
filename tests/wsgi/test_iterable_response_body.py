@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.wsgi.iterable_response_body import IterableResponseBody
+from src.internal.wsgi.iterable_response_body import IterableResponseBody
 
 
 class TestIterableResponseBody(TestCase):

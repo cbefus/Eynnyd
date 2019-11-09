@@ -1,4 +1,4 @@
-from src.wsgi.abstract_response_body import AbstractResponseBody
+from src.internal.wsgi.abstract_response_body import AbstractResponseBody
 
 
 class UTF8ResponseBody(AbstractResponseBody):

@@ -2,8 +2,8 @@ import arrow
 from optional import Optional
 
 from src.exceptions import InvalidCookieBuildException
-from src.utils.cookies import rfc
-from src.utils.cookies.response_cookie import ResponseCookie
+from src.internal.utils.cookies import rfc
+from src.internal.utils.cookies.response_cookie import ResponseCookie
 
 
 class ResponseCookieBuilder:

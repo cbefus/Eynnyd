@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.response import Response
+from src.internal.response import Response
 
 
 class TestResponse(TestCase):

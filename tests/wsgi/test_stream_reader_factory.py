@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from src.wsgi.stream_reader_factory import StreamReaderFactory
-from src.wsgi.closeable_stream_iterator import CloseableStreamIterator
+from src.internal.wsgi.stream_reader_factory import StreamReaderFactory
+from src.internal.wsgi.closeable_stream_iterator import CloseableStreamIterator
 
 
 class TestStreamReaderFactory(TestCase):

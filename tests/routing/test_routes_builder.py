@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from src.exceptions import DuplicateHandlerRoutesException, RouteBuildException, NonCallableInterceptor, \
+from src.exceptions import RouteBuildException, NonCallableInterceptor, \
     NonCallableHandler, CallbackIncorrectNumberOfParametersException
-from src.routing.routes_builder import RoutesBuilder
+from src.routes_builder import RoutesBuilder
 
 
 class TestRoutesBuilder(TestCase):

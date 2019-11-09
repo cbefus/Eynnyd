@@ -1,6 +1,6 @@
 import unittest
 
-from src.utils.cookies.request_cookie import RequestCookie
+from src.internal.utils.cookies.request_cookie import RequestCookie
 
 
 class TestRequestCookie(unittest.TestCase):

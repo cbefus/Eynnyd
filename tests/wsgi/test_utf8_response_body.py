@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.wsgi.utf8_response_body import UTF8ResponseBody
+from src.internal.wsgi.utf8_response_body import UTF8ResponseBody
 
 
 class TestUTF8ResponseBody(TestCase):

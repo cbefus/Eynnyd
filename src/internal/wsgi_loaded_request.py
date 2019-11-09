@@ -3,8 +3,8 @@ import urllib.parse
 import logging
 
 from src.abstract_request import AbstractRequest
-from src.utils.cookies.header_converter import CookieHeaderConverter
-from src.utils.request_uri import RequestURI
+from src.internal.utils.cookies.header_converter import CookieHeaderConverter
+from src.internal.utils.request_uri import RequestURI
 
 LOG = logging.getLogger("abstract_request")
 

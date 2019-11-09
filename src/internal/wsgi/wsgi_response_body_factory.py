@@ -1,10 +1,10 @@
 from src.exceptions import UnknownResponseBodyTypeException
-from src.response_body_type import ResponseBodyType
-from src.wsgi.byte_response_body import ByteResponseBody
-from src.wsgi.empty_response_body import EmptyResponseBody
-from src.wsgi.iterable_response_body import IterableResponseBody
-from src.wsgi.stream_response_body import StreamResponseBody
-from src.wsgi.utf8_response_body import UTF8ResponseBody
+from src.internal.response_body_type import ResponseBodyType
+from src.internal.wsgi.byte_response_body import ByteResponseBody
+from src.internal.wsgi.empty_response_body import EmptyResponseBody
+from src.internal.wsgi.iterable_response_body import IterableResponseBody
+from src.internal.wsgi.stream_response_body import StreamResponseBody
+from src.internal.wsgi.utf8_response_body import UTF8ResponseBody
 
 
 class WSGIResponseBodyFactory:

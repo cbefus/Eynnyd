@@ -1,7 +1,7 @@
-from src.wsgi.stream_reader_factory import StreamReaderFactory
-from src.wsgi.wsgi_response import WSGIResponse
-from src.utils.cookies.header_converter import CookieHeaderConverter
-from src.wsgi.wsgi_response_body_factory import WSGIResponseBodyFactory
+from src.internal.wsgi.stream_reader_factory import StreamReaderFactory
+from src.internal.wsgi.wsgi_response import WSGIResponse
+from src.internal.utils.cookies.header_converter import CookieHeaderConverter
+from src.internal.wsgi.wsgi_response_body_factory import WSGIResponseBodyFactory
 
 
 class WSGIResponseAdapter:

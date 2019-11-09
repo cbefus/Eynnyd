@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.wsgi.stream_response_body import StreamResponseBody
+from src.internal.wsgi.stream_response_body import StreamResponseBody
 
 
 class TestStreamResponseBody(TestCase):

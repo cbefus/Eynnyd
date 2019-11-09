@@ -1,10 +1,10 @@
 import logging
 
-from src.wsgi_loaded_request import WSGILoadedRequest
-from src.routing.route_tree_traverser import RouteTreeTraverser
-from src.plan_execution.plan_executor import PlanExecutor
-from src.wsgi.raw_wsgi_server_error_response import RawWSGIServerErrorResponse
-from src.wsgi.wsgi_response_adapter import WSGIResponseAdapter
+from src.internal.wsgi_loaded_request import WSGILoadedRequest
+from src.internal.routing.route_tree_traverser import RouteTreeTraverser
+from src.internal.plan_execution.plan_executor import PlanExecutor
+from src.internal.wsgi.raw_wsgi_server_error_response import RawWSGIServerErrorResponse
+from src.internal.wsgi.wsgi_response_adapter import WSGIResponseAdapter
 
 LOG = logging.getLogger("eynnyd_webapp")
 

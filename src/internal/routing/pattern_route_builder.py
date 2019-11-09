@@ -1,5 +1,5 @@
 
-from src.routing.pattern_route import PatternRoute
+from src.internal.routing.pattern_route import PatternRoute
 
 
 class PatternRouteBuilder:

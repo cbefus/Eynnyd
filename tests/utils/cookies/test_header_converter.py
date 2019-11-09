@@ -1,9 +1,9 @@
 import unittest
 import arrow
 
-from src.utils.cookies.request_cookie import RequestCookie
-from src.utils.cookies.response_cookie_builder import ResponseCookieBuilder
-from src.utils.cookies.header_converter import CookieHeaderConverter
+from src.internal.utils.cookies.request_cookie import RequestCookie
+from src.response_cookie_builder import ResponseCookieBuilder
+from src.internal.utils.cookies.header_converter import CookieHeaderConverter
 from src.exceptions import InvalidCookieHeaderException
 
 

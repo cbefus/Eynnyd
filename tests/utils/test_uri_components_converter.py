@@ -1,6 +1,6 @@
 import unittest
 
-from src.utils.uri_components_converter import URIComponentsConverter
+from src.internal.utils.uri_components_converter import URIComponentsConverter
 from src.exceptions import InvalidURIException
 
 

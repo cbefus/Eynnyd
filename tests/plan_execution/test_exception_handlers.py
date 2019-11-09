@@ -1,6 +1,6 @@
 import unittest
 
-from src.plan_execution.exception_handlers import ExceptionHandlers
+from src.internal.plan_execution.exception_handlers import ExceptionHandlers
 from src.exceptions import NoGenericExceptionHandlerRegistered
 
 

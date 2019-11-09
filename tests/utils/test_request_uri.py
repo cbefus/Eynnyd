@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.utils.request_uri import RequestURI
+from src.internal.utils.request_uri import RequestURI
 
 
 class TestRequestURI(TestCase):
