@@ -4,6 +4,7 @@ exclude_lines =
     @abstractmethod
     pragma: no cover
     def __repr__
+    def __hash__
     if self.debug:
     if settings.DEBUG
     raise AssertionError
