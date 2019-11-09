@@ -1,9 +1,10 @@
 import unittest
 from http import HTTPStatus
+
 from src.routing.routes_builder import RoutesBuilder
 from src.plan_execution.exception_handlers_registry import ExceptionHandlersRegistry
 from src.utils.request_uri import RequestURI
-from src.eynnyd_webapp import EynnydWebappBuilder
+from src.eynnyd_webapp_builder import EynnydWebappBuilder
 from src.abstract_request import AbstractRequest
 from src.response_builder import ResponseBuilder
 from src.exceptions import RouteNotFoundException
@@ -11,7 +12,6 @@ from src.response_body import ResponseBody
 
 
 class TestEynnydWebappHandlers(unittest.TestCase):
-
     class StubRequest(AbstractRequest):
 
         def __init__(
@@ -121,9 +121,9 @@ class TestEynnydWebappHandlers(unittest.TestCase):
         spy_get_handler = TestEynnydWebappHandlers.SpyHandler(body="NOPE")
         spy_post_handler = TestEynnydWebappHandlers.SpyHandler(body="YEP")
         routes = \
-            RoutesBuilder()\
-                .add_handler("GET", "/", spy_get_handler.test_handler)\
-                .add_handler("POST", "/", spy_post_handler.test_handler)\
+            RoutesBuilder() \
+                .add_handler("GET", "/", spy_get_handler.test_handler) \
+                .add_handler("POST", "/", spy_post_handler.test_handler) \
                 .build()
         test_app = EynnydWebappBuilder().set_routes(routes).build()
         request = TestEynnydWebappHandlers.StubRequest(method="POST", request_uri="/")
@@ -303,7 +303,6 @@ class TestEynnydWebappHandlers(unittest.TestCase):
 
 
 class TestEynnydWebappInterceptors(unittest.TestCase):
-
     class StubRequest(AbstractRequest):
 
         def __init__(
@@ -391,7 +390,7 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
 
         def test_handler(self, request):
             self._handler_call_count += 1
-            return ResponseBuilder().set_utf8_body(request._utf8_body+"HANDLER").build()
+            return ResponseBuilder().set_utf8_body(request._utf8_body + "HANDLER").build()
 
     class SpyRequestInterceptor:
 
@@ -518,7 +517,6 @@ class TestEynnydWebappInterceptors(unittest.TestCase):
 
 
 class TestEynnydWebappErrorHandlers(unittest.TestCase):
-
     class StubRequest(AbstractRequest):
 
         def __init__(
@@ -646,9 +644,7 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .set_utf8_body("Big Boom") \
                 .build()
 
-
     def test_error_handle_from_handler_called(self):
-
         class BoomException(Exception):
             pass
 
@@ -664,11 +660,11 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         error_handlers = \
             ExceptionHandlersRegistry() \
                 .register_pre_response_error_handler(
-                    BoomException,
-                    spy_boom_exception_handler.test_pre_response_handler) \
+                BoomException,
+                spy_boom_exception_handler.test_pre_response_handler) \
                 .register_pre_response_error_handler(
-                    Exception,
-                    spy_generic_exception_handler.test_pre_response_handler) \
+                Exception,
+                spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -697,11 +693,11 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         error_handlers = \
             ExceptionHandlersRegistry() \
                 .register_pre_response_error_handler(
-                    BoomException,
-                    spy_boom_exception_handler.test_pre_response_handler) \
+                BoomException,
+                spy_boom_exception_handler.test_pre_response_handler) \
                 .register_pre_response_error_handler(
-                    Exception,
-                    spy_generic_exception_handler.test_pre_response_handler) \
+                Exception,
+                spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -730,11 +726,11 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         error_handlers = \
             ExceptionHandlersRegistry() \
                 .register_post_response_error_handler(
-                    BoomException,
-                    spy_boom_exception_handler.test_post_response_handler) \
+                BoomException,
+                spy_boom_exception_handler.test_post_response_handler) \
                 .register_post_response_error_handler(
-                    Exception,
-                    spy_generic_exception_handler.test_post_response_handler) \
+                Exception,
+                spy_generic_exception_handler.test_post_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -745,7 +741,6 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         self.assertEqual(0, spy_generic_exception_handler.call_count)
 
     def test_not_found_exception_handler(self):
-
         stub_raises_handler = TestEynnydWebappErrorHandlers.StubRaisesHandler(Exception)
         spy_not_found_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
         spy_generic_exception_handler = TestEynnydWebappErrorHandlers.SpyExceptionHandler()
@@ -758,11 +753,11 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         error_handlers = \
             ExceptionHandlersRegistry() \
                 .register_pre_response_error_handler(
-                    RouteNotFoundException,
-                    spy_not_found_exception_handler.test_pre_response_handler) \
+                RouteNotFoundException,
+                spy_not_found_exception_handler.test_pre_response_handler) \
                 .register_pre_response_error_handler(
-                    Exception,
-                    spy_generic_exception_handler.test_pre_response_handler) \
+                Exception,
+                spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -791,11 +786,11 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         error_handlers = \
             ExceptionHandlersRegistry() \
                 .register_pre_response_error_handler(
-                    BoomException,
-                    spy_boom_exception_handler.test_pre_response_handler) \
+                BoomException,
+                spy_boom_exception_handler.test_pre_response_handler) \
                 .register_pre_response_error_handler(
-                    Exception,
-                    spy_generic_exception_handler.test_pre_response_handler) \
+                Exception,
+                spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -804,11 +799,6 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
         self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
         self.assertEqual(0, spy_boom_exception_handler.call_count)
         self.assertEqual(1, spy_generic_exception_handler.call_count)
-
-
-
-
-
 
 
 
