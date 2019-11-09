@@ -22,17 +22,18 @@ class ResponseBuilder:
         self._cookies = []
 
     def set_status(self, status):
-        if status in NON_TYPED_STATUSES and "content-type" in self._headers:
+        encoded_status = HTTPStatusFactory.create(status)
+        if encoded_status.code in NON_TYPED_STATUSES and "content-type" in self._headers:
             raise SettingNonTypedStatusWithContentTypeException(
                 "Cannot set status {s} when content-type header exists.".format(s=status))
-        if status in NON_BODY_STATUSES and self._body.type != ResponseBodyType.EMPTY:
+        if encoded_status.code in NON_BODY_STATUSES and self._body.type != ResponseBodyType.EMPTY:
             raise SettingNonBodyStatusWithBodyException(
                 "Cannot set status {s} on response with body".format(s=status))
-        self._status = HTTPStatusFactory.create(status)
+        self._status = encoded_status
         return self
 
     def set_utf8_body(self, body):
-        if self._status in NON_BODY_STATUSES:
+        if self._status.code in NON_BODY_STATUSES:
             raise SettingBodyWithNonBodyStatusException(
                 "Cannot set a body on response with status {s}".format(s=self._status))
         encoded_body = body.encode("utf-8")
@@ -44,7 +45,7 @@ class ResponseBuilder:
         return self
 
     def set_byte_body(self, body):
-        if self._status in NON_BODY_STATUSES:
+        if self._status.code in NON_BODY_STATUSES:
             raise SettingBodyWithNonBodyStatusException(
                 "Cannot set a body on response with status {s}".format(s=self._status))
         if not isinstance(body, bytes):
@@ -55,7 +56,7 @@ class ResponseBuilder:
         return self
 
     def set_stream_body(self, body):
-        if self._status in NON_BODY_STATUSES:
+        if self._status.code in NON_BODY_STATUSES:
             raise SettingBodyWithNonBodyStatusException(
                 "Cannot set a body on response with status {s}".format(s=self._status))
         if not hasattr(body, "read"):
@@ -68,7 +69,7 @@ class ResponseBuilder:
         return self
 
     def set_iterable_body(self, body):
-        if self._status in NON_BODY_STATUSES:
+        if self._status.code in NON_BODY_STATUSES:
             raise SettingBodyWithNonBodyStatusException(
                 "Cannot set a body on response with status {s}".format(s=self._status))
         try:
@@ -92,7 +93,7 @@ class ResponseBuilder:
         ascii_lowered_name = str(name).lower()
         if ascii_lowered_name == 'set-cookie':
             raise InvalidHeaderException("Cannot set header with {n} as name".format(n=name))
-        if self._status in NON_TYPED_STATUSES and ascii_lowered_name == 'content-type':
+        if self._status.code in NON_TYPED_STATUSES and ascii_lowered_name == 'content-type':
             raise SettingContentTypeWithNonTypedStatusException(
                 "Cannot set content-type header on response with status {s}".format(s=self._status))
         self._headers[ascii_lowered_name] = str(value).lower()
@@ -122,7 +123,8 @@ class ResponseBuilder:
         return self
 
     def remove_cookie(self, name):
-        self._cookies = filter(lambda cookie: cookie.name != name, self._cookies)
+        self._cookies = list(filter(lambda cookie: cookie.name != name, self._cookies))
+        return self
 
     def build(self):
         return Response(

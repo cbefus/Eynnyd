@@ -44,4 +44,14 @@ class ResponseCookie:
     def http_only(self):
         return self._http_only
 
+    def __eq__(self, other):
+        return \
+            self.name == other.name and \
+            self.value == other.value and \
+            self.expires == other.expires and \
+            self.max_age == other.max_age and \
+            self.domain == other.domain and \
+            self.path == other.path and \
+            self.secure == other.secure and \
+            self.http_only == other.http_only
 
