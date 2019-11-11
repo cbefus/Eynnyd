@@ -1,3 +1,11 @@
+[![Build Status](https://img.shields.io/pypi/v/eynnyd.svg)](https://pypi.org/project/eynnyd/)
+[![Build Status](https://travis-ci.com/cbefus/eynnyd.svg?branch=master)](https://travis-ci.com/cbefus/eynnyd)
+[![Coverage Status](https://coveralls.io/repos/github/cbefus/Eynnyd/badge.svg?branch=master)](https://coveralls.io/github/cbefus/Eynnyd?branch=master)
+[![PyPI - License](https://img.shields.io/pypi/l/eynnyd)](https://pypi.org/project/eynnyd/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/eynnyd.svg)](https://pypi.org/project/eynnyd/)
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/open-source)
+
+
 <div align="center" style="margin-top: -32px!important;margin-bottom: -70px!important;">
     <img
         src="https://raw.githubusercontent.com/cbefus/eynnyd/master/logo/banner.png"
@@ -5,7 +13,6 @@
         style="width:100%"
     >
 </div>
-
 
 # Eynnyd Web Framework (Beta)
 Eynnyd (pronounced [Ey-nahyd]) is an acronym for **Everything You Need, Nothing
