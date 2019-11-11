@@ -7,7 +7,7 @@
 </div>
 
 
-# Eynnyd Web Framework (Pre-Alpha)
+# Eynnyd Web Framework (Beta)
 Eynnyd (pronounced [Ey-nahyd]) is an acronym for **Everything You Need, Nothing
 You Don't**. It is a light-weight WSGI compliant python 3 web framework.
 Eynnyd was designed with the primary goal to not impose bad engineering decisions
