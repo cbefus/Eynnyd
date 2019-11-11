@@ -7,11 +7,21 @@ from src.internal.utils.uri_components_converter import URIComponentsConverter
 
 
 class RoutesBuilder:
+    """
+    A builder for registering request interceptors, handlers, and response interceptors.
+    """
 
     def __init__(self):
         self._route_tree_builder = RouteTeeBuilder()
 
     def add_request_interceptor(self, uri_path, interceptor):
+        """
+        Adds a request interceptor to be run (before handler execution) given a uri path for when to execute it
+
+        :param uri_path: The path dictating what requests this interceptor is run against
+        :param interceptor: A function which takes a request parameter and returns a request
+        :return: This builder to allow fluent design
+        """
         if not hasattr(interceptor, '__call__'):
             raise NonCallableInterceptor(
                 "Request Interceptor for path {u} is not callable.".format(u=uri_path))
@@ -26,6 +36,13 @@ class RoutesBuilder:
         return self
 
     def add_response_interceptor(self, uri_path, interceptor):
+        """
+        Adds a response interceptor to be run (after handler execution) given a uri path for when to execute it
+
+        :param uri_path: The path dictating what requests this interceptor is run against
+        :param interceptor: A function which takes a request and a response and returns a response
+        :return: This builder to allow for fluent design
+        """
         if not hasattr(interceptor, '__call__'):
             raise NonCallableInterceptor(
                 "Response Interceptor for path {u} is not callable.".format(u=uri_path))
@@ -40,6 +57,15 @@ class RoutesBuilder:
         return self
 
     def add_handler(self, http_method, uri_path, handler):
+        """
+        Adds a handler to be run (after request interceptors and before response interceptors) given a http method
+        and uri path for when to execute it
+
+        :param http_method: the method to match to execute this handler against a request
+        :param uri_path: The path dictating what requests this handler is run against
+        :param handler: A function taking a request and returning a response
+        :return: This handler to allow for fluent design
+        """
         if not hasattr(handler, '__call__'):
             raise NonCallableHandler(
                 "Handler for method {m} on path {u} is not callable.".format(m=http_method, u=uri_path))
@@ -58,6 +84,11 @@ class RoutesBuilder:
         return self
 
     def build(self):
+        """
+        Builds out the route tree for processing requests into responses.
+
+        :return: The route tree for usage in the Eynnyd WebAppBuilder
+        """
         return self._route_tree_builder.build()
 
     @staticmethod
