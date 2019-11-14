@@ -37,6 +37,12 @@ This is the framework for you if the following sound good:
 If this at all sounds good we recommend you keep reading and see what else Eynnyd
 can provide for you.
 
+## How to install it
+Eynnyd is published to pypi and can be installed using:
+```bash
+pip install eynnyd
+```
+
 ## How to use it
 Eynnyd does not come with a built in WSGI HTTP server. We recommend
 [gunicorn](https://gunicorn.org/) for running your application.
