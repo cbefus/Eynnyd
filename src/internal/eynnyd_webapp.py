@@ -5,6 +5,7 @@ from src.internal.routing.route_tree_traverser import RouteTreeTraverser
 from src.internal.plan_execution.plan_executor import PlanExecutor
 from src.internal.wsgi.raw_wsgi_server_error_response import RawWSGIServerErrorResponse
 from src.internal.wsgi.wsgi_response_adapter import WSGIResponseAdapter
+from src.internal.wsgi.stream_reader_factory import StreamReaderFactory
 
 LOG = logging.getLogger("eynnyd_webapp")
 
@@ -29,11 +30,12 @@ class EynnydWebapp:
     def _wsgi_input_to_wsgi_output(self, wsgi_environment):  # pragma: no cover
         wsgi_loaded_request = WSGILoadedRequest(wsgi_environment)
         response = self.process_request_to_response(wsgi_loaded_request)
+        response_stream_reader = StreamReaderFactory.create_reader(wsgi_environment.get("wsgi.file_wrapper"))
         try:
-            return WSGIResponseAdapter(wsgi_environment.get("wsgi.file_wrapper")).adapt(response)
+            return WSGIResponseAdapter(response_stream_reader).adapt(response)
         except Exception as e:
             error_response = self._exception_handlers.handle_post_response_error(e, wsgi_loaded_request, response)
-            return WSGIResponseAdapter(wsgi_environment.get("wsgi.file_wrapper")).adapt(error_response)
+            return WSGIResponseAdapter(response_stream_reader).adapt(error_response)
 
     def process_request_to_response(self, wsgi_loaded_request):
         try:
