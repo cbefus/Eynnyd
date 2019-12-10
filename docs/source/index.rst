@@ -12,27 +12,28 @@ not impose bad engineering decisions on it's users. It is also designed to not o
 the wants of it's user.
 
 Other frameworks weigh you down with extraneous dependencies, unnecessary inheritance, highly coupled
-design, forced restrictions into REST, magic global singletons, and so much more.
+design, forced restrictions into REST, forced function naming, magic global singletons, and so much more.
 
 .. code:: python
-   from eynnyd import RoutesBuilder
-   from eynnyd import EynnydWebappBuilder
-   from eynnyd import ResponseBuilder
 
-    def hello_world(request):
-        return ResponseBuilder() \
-            .set_utf8_body("Hello World") \
-            .build()
+    from eynnyd import RoutesBuilder
+    from eynnyd import EynnydWebappBuilder
+    from eynnyd import ResponseBuilder
 
-    routes = \
-        RoutesBuilder() \
-            .add_handler("GET", "/hello", hello_world) \
-            .build()
+     def hello_world(request):
+         return ResponseBuilder() \
+             .set_utf8_body("Hello World") \
+             .build()
 
-    application = \
-        EynnydWebappBuilder() \
-            .set_routes(routes) \
-            .build()
+     routes = \
+         RoutesBuilder() \
+             .add_handler("GET", "/hello", hello_world) \
+             .build()
+
+     application = \
+         EynnydWebappBuilder() \
+             .set_routes(routes) \
+             .build()
 
 
 Why Use Eynnyd?
@@ -41,37 +42,44 @@ Eynnyd was created to provide all the power of a WSGI web framework without impo
 restricting your design.  You can use Eynnyd with minimal interaction with the framework.
 
 The priorities when building Eynnyd are as follows:
-#. **Readable:** By using intention revealing names, small functions with single
+
+1. **Readable:** By using intention revealing names, small functions with single
 levels of abstraction, pushing conditionals up the stack, avoiding exceptions for control flow, and all the
 other core principles of good software engineering (found in
-`Clean Code <https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship-dp-0132350882/dp/0132350882>`),
+`Clean Code <https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship-dp-0132350882/dp/0132350882>`__),
 the code in Eynnyd is designed to be easily read and understood by other developers (or even just ourselves in
 the future).  Given that it should be easy to read our code, it should be easy to extend, fix bugs, test, and
 improve over time; thus why this is our top priority.
-#. **Flexible:** Our framework was fueled from a frustration of restrictive engineering decisions being
-imposed upon users from other frameworks.  Freedom to design your own implementation your way was our
-goal. With our framework you can:
+
+2. **Flexible:** Our framework was fueled from a frustration of restrictive engineering decisions being
+imposed upon users from other frameworks.  Our goal was freedom for you to design your own implementations, your
+way. With our framework you can:
 
    * Use Object-oriented, procedural, or functional design.
-   * Use REST, REST-like, or completely ad-hoc api design.
-   * Name your functions anything you like, allowing your to be expressive with your naming.
+   * Use REST, REST-like, or completely ad-hoc API design.
+   * Name your functions anything you like, allowing you to be expressive with your naming.
    * Use dependency injection, or don't.
-   * Have as many interceptors (both request and response) as you like and restrict the routes the wrap.
+   * Have as many interceptors (both request and response) as you like and restrict the routes they wrap.
+   * Pick whatever libraries are best for your dependencies (Not some selection we made for you).
    * And pretty much anything else you want to do.
 
-#. **Extensible:** Designed following the SOLID principles, adding new features should be easily done
+3. **Extensible:** Designed following the **SOLID** principles, adding new features should be easily done
 without having to dig through miles of coupled code.  This means that we can address feature requests quickly
 and maintain confidence in our backwards compatibility.
-#. **Reliable:** To add confidence to our code we have an extensive suite of unittests covering our framework.
+
+4. **Reliable:** To add confidence to our code we have an extensive suite of unittests covering our framework.
 While we don't actually believe in the validity of code coverage measurements (bad tests are worse than no
-tests) we purposely pushed our coverage to 100% (Largely this was for marketing purposes).  In doing so we
-wrote highly decoupled tests which all follow the F.I.R.S.T. principles of good tests.  With these tests we
+tests) we purposely pushed our coverage to 100% (Largely this was for marketing purposes).  But the important
+paths of execution in our code are heavily covered in layers of well designed tests. In doing so we
+wrote highly decoupled tests which all follow the F.I.R.S.T. principles of good unittests.  With these tests we
 can address bugs and add features with high confidence that we are not introducing new bugs.
-#. **Predictable:** With Eynnyd you get pretty-much-what-you-expect.  We don't bury exceptions, or assume
+
+5. **Predictable:** With Eynnyd you get pretty-much-what-you-expect.  We don't bury exceptions, or assume
 implementation. We wont parse your body into JSON for you or any other magic.  We also work hard to provide
 you with a strong-borders-free-society environment; by doing validation at the edge we can raise errors as close
 to their implementation as possible, instead of deep in the belly of unrelated logic.
-#. **Fast:** Let's be honest, when dealing with HTTP overhead speed is a luxury.  Certainly the various
+
+6. **Fast:** Let's be honest, when dealing with HTTP overhead speed is a luxury.  Certainly the various
 frameworks range in their speed, and handle very specific situation better or worse than each other, but the
 best any WSGI framework can do is match the speed of raw WSGI.  With the other priorities on this list
 maximized we will continue to re-evaluate our design and speed to make progress here, but never at the cost
