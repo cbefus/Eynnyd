@@ -6,6 +6,7 @@ API Documentation
 
    request
    response
+   interceptors
    cookies
    routes
    errors

@@ -1,4 +1,4 @@
-.. _response_interceptors:
+.. _tutorial_response_interceptors:
 
 Tutorial: Response Interceptors
 ===============================

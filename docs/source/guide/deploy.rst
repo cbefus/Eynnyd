@@ -16,7 +16,7 @@ If you used Gunicorn then you can run your application via:
     gunicorn hello_world_app
 
 This assumes that you have a file named *hellow_world_app.py* where inside you have a variable named
-*application* which returns the built Eynnyd Webapp (See :ref:`the hello world tutorial <hello_world>`
+*application* which returns the built Eynnyd Webapp (See :ref:`the hello world tutorial <tutorial_hello_world>`
 for an example).
 
 Deploying a Server

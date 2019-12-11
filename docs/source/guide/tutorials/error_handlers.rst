@@ -1,4 +1,4 @@
-.. _error_handlers:
+.. _tutorial_error_handlers:
 
 Tutorial: Error Handlers
 ========================

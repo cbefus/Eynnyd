@@ -1,4 +1,4 @@
-.. _hello_world:
+.. _tutorial_hello_world:
 
 Tutorial: Hello World
 =====================
@@ -46,9 +46,11 @@ Our request handler is called **hello_world**. It looks like:
             .set_utf8_body("Hello World")\
             .build()
 
-It's simply a function which takes a :ref:`request <request>` and returns a :ref:`response <response>`. For
-the purposes of this handler, we don't care anything about the request, all we want to do is return a
-response with the content "Hello World".
+It's simply a function which takes a :ref:`request <request>` and returns a :ref:`response <response>`.  Many
+other frameworks provide you with both a request and response as inputs to your handlers.  This is exploiting
+output parameters and is generally a violation of Clean Code.  We prefer to use returns for outputs and reserve
+parameters for inputs.  For the purposes of this handler, we don't care anything about the request, all we want
+to do is return a response with the content "Hello World".
 
 We are using Eynnyds built in :ref:`ResponseBuilder <response>`.
 to construct a response.  It is possible to build responses yourself, but the :code:`ResponseBuilder` is a convenient

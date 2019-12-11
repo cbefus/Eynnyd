@@ -1,4 +1,4 @@
-.. _decorators:
+.. _tutorial_decorators:
 
 Tutorial: Decorators
 ====================
