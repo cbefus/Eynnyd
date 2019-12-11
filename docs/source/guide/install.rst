@@ -9,3 +9,4 @@ Eynnyd is published to `pypi <https://pypi.org/>`__ and can be installed using
 .. code:: bash
 
     pip install eynnyd
+
