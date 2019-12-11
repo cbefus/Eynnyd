@@ -88,10 +88,10 @@ comparisons between our framework and others soon.  However, if you absolutely n
 Eynnyd, you probably should look into non HTTP type frameworks or at least non WSGI frameworks.
 
 
-Documentation:
---------------
+Documentation
+-------------
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    guide/index
    api/index
