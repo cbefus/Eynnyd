@@ -33,6 +33,7 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx_copybutton'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -77,6 +78,5 @@ html_logo = "_static/images/logo.png"
 html_favicon = "_static/images/favicon.ico"
 
 github_url = "https://github.com/cbefus/Eynnyd"
-
 
 

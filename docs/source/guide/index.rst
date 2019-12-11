@@ -5,5 +5,6 @@ User's Guide
    :maxdepth: 2
 
    install
+   deploy
    tutorials/index
    faq
