@@ -4,7 +4,7 @@ Tutorials
 We will build up our collection of Tutorials over time to include as many real world situations as possible.
 Our tutorials use Eynnyd the way we prefer **but this is not the only way to use the framework.**
 
-For example, we like to using `Fluent Interfaces <https://en.wikipedia.org/wiki/Fluent_interface>` and our
+For example, we like to using `Fluent Interfaces <https://en.wikipedia.org/wiki/Fluent_interface>`__ and our
 framework allows for that, but it also allows for you to not work this way.
 
 A Fluent usage might look like:
