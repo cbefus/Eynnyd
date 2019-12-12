@@ -7,16 +7,16 @@ class EynnydWebappBuildException(Exception):
     pass
 
 
-class ExceptionHandlingRegisterException(Exception):
+class ErrorHandlingBuilderException(Exception):
     """
-    Raised when there is a problem with registering an exception handler.
+    Raised when there is a problem with adding an error handler.
     """
     pass
 
 
-class NoGenericExceptionHandlerRegistered(Exception):
+class NoGenericErrorHandlerException(Exception):
     """
-    Raised when attempting to handle an exception and there are no registered handlers (even the base Exception).
+    Raised when attempting to handle an exception and there are no configured handlers (even the base Exception).
     This should not happen.
     """
     pass
