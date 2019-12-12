@@ -1,12 +1,12 @@
 import unittest
 
-from src.internal.plan_execution.exception_handlers import ExceptionHandlers
-from src.exceptions import NoGenericExceptionHandlerRegistered
+from src.internal.plan_execution.error_handlers import ErrorHandlers
+from src.exceptions import NoGenericErrorHandlerException
 
 
-class TestExceptionHandlers(unittest.TestCase):
+class TestErrorHandlers(unittest.TestCase):
 
-    def test_no_matching_pre_exception_handler_raises(self):
+    def test_no_matching_pre_error_handler_raises(self):
 
         class CustomTestException(Exception):
             pass
@@ -26,12 +26,12 @@ class TestExceptionHandlers(unittest.TestCase):
                 self._call_count += 1
 
         fake_handler = SpyFakeExceptionHandler()
-        exception_handlers = ExceptionHandlers([], [(CustomRegisterException, fake_handler.test_fake_handler)])
-        with self.assertRaises(NoGenericExceptionHandlerRegistered):
-            exception_handlers.handle_pre_response_error(CustomTestException(), None)
+        error_handlers = ErrorHandlers([], [(CustomRegisterException, fake_handler.test_fake_handler)])
+        with self.assertRaises(NoGenericErrorHandlerException):
+            error_handlers.handle_pre_response_error(CustomTestException(), None)
         self.assertEqual(0, fake_handler.call_count)
 
-    def test_no_matching_post_exception_handler_raises(self):
+    def test_no_matching_post_error_handler_raises(self):
 
         class CustomTestException(Exception):
             pass
@@ -51,12 +51,12 @@ class TestExceptionHandlers(unittest.TestCase):
                 self._call_count += 1
 
         fake_handler = SpyFakeExceptionHandler()
-        exception_handlers = ExceptionHandlers([], [(CustomRegisterException, fake_handler.test_fake_handler)])
-        with self.assertRaises(NoGenericExceptionHandlerRegistered):
-            exception_handlers.handle_post_response_error(CustomTestException(), None, None)
+        error_handlers = ErrorHandlers([], [(CustomRegisterException, fake_handler.test_fake_handler)])
+        with self.assertRaises(NoGenericErrorHandlerException):
+            error_handlers.handle_post_response_error(CustomTestException(), None, None)
         self.assertEqual(0, fake_handler.call_count)
 
-    def test_matching_pre_exception_handler_is_called(self):
+    def test_matching_pre_error_handler_is_called(self):
 
         class CustomRegisterException(Exception):
             pass
@@ -81,15 +81,15 @@ class TestExceptionHandlers(unittest.TestCase):
                 self._post_call_count += 1
 
         fake_handler = SpyFakeExceptionHandler()
-        exception_handlers = \
-            ExceptionHandlers(
+        error_handlers = \
+            ErrorHandlers(
                 [(CustomRegisterException, fake_handler.test_pre_fake_handler)],
                 [(CustomRegisterException, fake_handler.test_post_fake_handler)])
-        exception_handlers.handle_pre_response_error(CustomRegisterException(), None)
+        error_handlers.handle_pre_response_error(CustomRegisterException(), None)
         self.assertEqual(1, fake_handler.pre_call_count)
         self.assertEqual(0, fake_handler.post_call_count)
 
-    def test_matching_post_exception_handler_is_called(self):
+    def test_matching_post_error_handler_is_called(self):
 
         class CustomRegisterException(Exception):
             pass
@@ -114,10 +114,10 @@ class TestExceptionHandlers(unittest.TestCase):
                 self._post_call_count += 1
 
         fake_handler = SpyFakeExceptionHandler()
-        exception_handlers = \
-            ExceptionHandlers(
+        error_handlers = \
+            ErrorHandlers(
                 [(CustomRegisterException, fake_handler.test_pre_fake_handler)],
                 [(CustomRegisterException, fake_handler.test_post_fake_handler)])
-        exception_handlers.handle_post_response_error(CustomRegisterException(), None, None)
+        error_handlers.handle_post_response_error(CustomRegisterException(), None, None)
         self.assertEqual(0, fake_handler.pre_call_count)
         self.assertEqual(1, fake_handler.post_call_count)

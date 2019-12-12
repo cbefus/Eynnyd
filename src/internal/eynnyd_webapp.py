@@ -12,10 +12,10 @@ LOG = logging.getLogger("eynnyd_webapp")
 
 class EynnydWebapp:
 
-    def __init__(self, route_tree, exception_handlers):
+    def __init__(self, route_tree, error_handlers):
         self._route_tree = route_tree
-        self._exception_handlers = exception_handlers
-        self._plan_executor = PlanExecutor(self._exception_handlers)
+        self._error_handlers = error_handlers
+        self._plan_executor = PlanExecutor(self._error_handlers)
 
     def __call__(self, wsgi_environment, wsgi_start_response):  # pragma: no cover
         try:
@@ -34,7 +34,7 @@ class EynnydWebapp:
         try:
             return WSGIResponseAdapter(response_stream_reader).adapt(response)
         except Exception as e:
-            error_response = self._exception_handlers.handle_post_response_error(e, wsgi_loaded_request, response)
+            error_response = self._error_handlers.handle_post_response_error(e, wsgi_loaded_request, response)
             return WSGIResponseAdapter(response_stream_reader).adapt(error_response)
 
     def process_request_to_response(self, wsgi_loaded_request):
@@ -45,7 +45,7 @@ class EynnydWebapp:
                     wsgi_loaded_request.http_method,
                     wsgi_loaded_request.request_uri.path)
         except Exception as e:
-            return self._exception_handlers.handle_pre_response_error(e, wsgi_loaded_request)
+            return self._error_handlers.handle_pre_response_error(e, wsgi_loaded_request)
 
         updated_request = wsgi_loaded_request.copy_and_set_path_parameters(execution_plan.path_parameters)
         return self._plan_executor.execute_plan(execution_plan, updated_request)

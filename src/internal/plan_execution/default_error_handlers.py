@@ -2,10 +2,10 @@ import logging
 from http import HTTPStatus
 from src.response_builder import ResponseBuilder
 
-LOG = logging.getLogger("exception_handlers_registry")
+LOG = logging.getLogger("default_error_handlers")
 
 
-def default_route_not_found_exception_handler(exc, request):
+def default_route_not_found_error_handler(exc, request):
     return ResponseBuilder()\
         .set_status(HTTPStatus.NOT_FOUND)\
         .set_utf8_body(
@@ -14,7 +14,7 @@ def default_route_not_found_exception_handler(exc, request):
         .build()
 
 
-def default_invalid_cookie_header_exception_handler(exc, request):
+def default_invalid_cookie_header_error_handler(exc, request):
     LOG.warning(
         "Request attempted with invalid cookie header: {rc}".format(rc=str(request.headers.get("COOKIE"))))
     return ResponseBuilder()\
@@ -25,7 +25,7 @@ def default_invalid_cookie_header_exception_handler(exc, request):
         .build()
 
 
-def default_internal_server_error_exception_handler_only_request(exc, request):
+def default_internal_server_error_error_handler_only_request(exc, request):
     LOG.exception("Unexpected exception occurred with request {r}.".format(r=request), exc_info=exc)
     return ResponseBuilder()\
         .set_status(HTTPStatus.INTERNAL_SERVER_ERROR)\
@@ -33,7 +33,7 @@ def default_internal_server_error_exception_handler_only_request(exc, request):
         .build()
 
 
-def default_internal_server_error_exception_handler(exc, request, response):
+def default_internal_server_error_error_handler(exc, request, response):
     LOG.exception(
         "Unexpected exception occurred with request {q} and response {s}.".format(q=request, s=response), exc_info=exc)
     return ResponseBuilder()\

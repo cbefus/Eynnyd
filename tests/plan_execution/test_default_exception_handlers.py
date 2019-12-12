@@ -1,9 +1,9 @@
 import unittest
 from http import HTTPStatus
 
-from src.internal.plan_execution.default_exception_handlers import default_invalid_cookie_header_exception_handler, \
-    default_internal_server_error_exception_handler_only_request, default_internal_server_error_exception_handler, \
-    default_route_not_found_exception_handler
+from src.internal.plan_execution.default_error_handlers import default_invalid_cookie_header_error_handler, \
+    default_internal_server_error_error_handler_only_request, default_internal_server_error_error_handler, \
+    default_route_not_found_error_handler
 
 
 class TestDefaultExceptionHandlers(unittest.TestCase):
@@ -17,7 +17,7 @@ class TestDefaultExceptionHandlers(unittest.TestCase):
             @property
             def request_uri(self):
                 return "fake request uri"
-        response = default_route_not_found_exception_handler(Exception(), FakeRequest())
+        response = default_route_not_found_error_handler(Exception(), FakeRequest())
         self.assertEqual(HTTPStatus.NOT_FOUND.value, response.status.code)
 
     def test_default_invalid_cookie_header_exception_returns_400(self):
@@ -26,15 +26,15 @@ class TestDefaultExceptionHandlers(unittest.TestCase):
             def headers(self):
                 return {"COOKIE": "fake cookie"}
 
-        response = default_invalid_cookie_header_exception_handler(Exception(), FakeRequest())
+        response = default_invalid_cookie_header_error_handler(Exception(), FakeRequest())
         self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
 
     def test_default_internal_server_error_exception_request_only_returns_500(self):
-        response = default_internal_server_error_exception_handler_only_request(Exception(), "fake request")
+        response = default_internal_server_error_error_handler_only_request(Exception(), "fake request")
         self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR.value, response.status.code)
 
     def test_default_internal_server_error_exception_returns_500(self):
-        response = default_internal_server_error_exception_handler(Exception(), "fake request", "fake response")
+        response = default_internal_server_error_error_handler(Exception(), "fake request", "fake response")
         self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR.value, response.status.code)
 
 

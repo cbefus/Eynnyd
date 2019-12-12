@@ -6,24 +6,24 @@ from src.abstract_response import AbstractResponse
 
 class PlanExecutor:
 
-    def __init__(self, exception_handlers):
-        self._exception_handlers = exception_handlers
+    def __init__(self, error_handlers):
+        self._error_handlers = error_handlers
 
     def execute_plan(self, execution_plan, request):
         try:
             intercepted_request = self._execute_request_interceptors(execution_plan, request)
         except Exception as e:
-            return self._exception_handlers.handle_pre_response_error(e, request)
+            return self._error_handlers.handle_pre_response_error(e, request)
 
         try:
             handler_response = self._execute_handler(execution_plan, intercepted_request)
         except Exception as e:
-            return self._exception_handlers.handle_pre_response_error(e, intercepted_request)
+            return self._error_handlers.handle_pre_response_error(e, intercepted_request)
 
         try:
             return self._execute_response_interceptors(execution_plan, intercepted_request, handler_response)
         except Exception as e:
-            return self._exception_handlers\
+            return self._error_handlers\
                 .handle_post_response_error(e, intercepted_request, handler_response)
 
 
