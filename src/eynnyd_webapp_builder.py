@@ -9,7 +9,7 @@ class EynnydWebappBuilder:
 
     def __init__(self):
         self._routes = Optional.empty()
-        self._error_handlers = ErrorHandlersBuilder().create()
+        self._error_handlers = ErrorHandlersBuilder().build()
 
     def set_routes(self, root_tree_node):
         """

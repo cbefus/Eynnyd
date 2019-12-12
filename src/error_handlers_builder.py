@@ -78,9 +78,9 @@ class ErrorHandlersBuilder:
         self._post_response_error_handler.append((error_class, handler))
         return self
 
-    def create(self):
+    def build(self):
         """
-        Create the error handlers for setting into the Eynnyd WebAppBuilder.
+       set defaults and build the error handlers for setting into the Eynnyd WebAppBuilder.
 
         :return: The ErrorHandlers required by the Eynnyd WebAppBuilder set_error_handlers method.
         """

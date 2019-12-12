@@ -665,7 +665,7 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .add_pre_response_error_handler(
                     Exception,
                     spy_generic_exception_handler.test_pre_response_handler) \
-                .create()
+                .build()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
         request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/boom")
@@ -698,7 +698,7 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .add_pre_response_error_handler(
                     Exception,
                     spy_generic_exception_handler.test_pre_response_handler) \
-                .create()
+                .build()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
         request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/boom")
@@ -731,7 +731,7 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .add_post_response_error_handler(
                     Exception,
                     spy_generic_exception_handler.test_post_response_handler) \
-                .create()
+                .build()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
         request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/noboom")
@@ -758,7 +758,7 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .add_pre_response_error_handler(
                     Exception,
                     spy_generic_exception_handler.test_pre_response_handler) \
-                .create()
+                .build()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
         request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/route_does_not_exist")
@@ -791,7 +791,7 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .add_pre_response_error_handler(
                     Exception,
                     spy_generic_exception_handler.test_pre_response_handler) \
-                .create()
+                .build()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
         request = TestEynnydWebappHandlers.StubRequest(method="GET", request_uri="/boom")

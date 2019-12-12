@@ -50,7 +50,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
             def request_uri(self):
                 return "fake request uri"
 
-        exception_handlers = ErrorHandlersBuilder().create()
+        exception_handlers = ErrorHandlersBuilder().build()
         response = exception_handlers.handle_pre_response_error(RouteNotFoundException(), FakeRequest())
         self.assertEqual(HTTPStatus.NOT_FOUND.value, response.status.code)
 
@@ -70,7 +70,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
         exception_handlers = \
             ErrorHandlersBuilder()\
                 .add_pre_response_error_handler(RouteNotFoundException, fake_handler)\
-                .create()
+                .build()
         response = exception_handlers.handle_pre_response_error(RouteNotFoundException(), FakeRequest())
         self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
@@ -80,7 +80,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
             def headers(self):
                 return {"COOKIE": "fake cookie"}
 
-        exception_handlers = ErrorHandlersBuilder().create()
+        exception_handlers = ErrorHandlersBuilder().build()
         response = exception_handlers.handle_pre_response_error(InvalidCookieHeaderException(), FakeRequest())
         self.assertEqual(HTTPStatus.BAD_REQUEST.value, response.status.code)
 
@@ -96,12 +96,12 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
         exception_handlers = \
             ErrorHandlersBuilder()\
                 .add_pre_response_error_handler(InvalidCookieHeaderException, fake_handler)\
-                .create()
+                .build()
         response = exception_handlers.handle_pre_response_error(InvalidCookieHeaderException(), FakeRequest())
         self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
     def test_pre_response_handler_has_default_internal_server_error_handler(self):
-        exception_handlers = ErrorHandlersBuilder().create()
+        exception_handlers = ErrorHandlersBuilder().build()
         response = exception_handlers.handle_pre_response_error(Exception(), "fake request")
         self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR.value, response.status.code)
 
@@ -110,7 +110,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.OK).build()
 
         exception_handlers = \
-            ErrorHandlersBuilder().add_pre_response_error_handler(Exception, fake_handler).create()
+            ErrorHandlersBuilder().add_pre_response_error_handler(Exception, fake_handler).build()
         response = exception_handlers.handle_pre_response_error(Exception(), "fake request")
         self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
@@ -122,7 +122,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.OK).build()
 
         exception_handlers = \
-            ErrorHandlersBuilder().add_pre_response_error_handler(FakeException, fake_handler).create()
+            ErrorHandlersBuilder().add_pre_response_error_handler(FakeException, fake_handler).build()
         response = exception_handlers.handle_pre_response_error(FakeException(), "fake request")
         self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
@@ -157,7 +157,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
             registry.add_post_response_error_handler(Exception, fake_handler)
 
     def test_post_response_handler_has_default_internal_server_error_handler(self):
-        exception_handlers = ErrorHandlersBuilder().create()
+        exception_handlers = ErrorHandlersBuilder().build()
         response = exception_handlers.handle_post_response_error(Exception(), "fake request", "fake response")
         self.assertEqual(HTTPStatus.INTERNAL_SERVER_ERROR.value, response.status.code)
 
@@ -166,7 +166,7 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.OK).build()
 
         exception_handlers = \
-            ErrorHandlersBuilder().add_post_response_error_handler(Exception, fake_handler).create()
+            ErrorHandlersBuilder().add_post_response_error_handler(Exception, fake_handler).build()
         response = exception_handlers.handle_post_response_error(Exception(), "fake request", "fake response")
         self.assertEqual(HTTPStatus.OK.value, response.status.code)
 
@@ -178,6 +178,6 @@ class TestExceptionHandlersRegistry(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.OK).build()
 
         exception_handlers = \
-            ErrorHandlersBuilder().add_post_response_error_handler(FakeException, fake_handler).create()
+            ErrorHandlersBuilder().add_post_response_error_handler(FakeException, fake_handler).build()
         response = exception_handlers.handle_post_response_error(FakeException(), "fake request", "fake response")
         self.assertEqual(HTTPStatus.OK.value, response.status.code)
