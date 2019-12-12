@@ -7,4 +7,5 @@ User's Guide
    install
    deploy
    tutorials/index
+   contributing
    faq
