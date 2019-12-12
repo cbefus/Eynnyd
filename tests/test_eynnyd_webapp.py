@@ -2,7 +2,7 @@ import unittest
 from http import HTTPStatus
 
 from src.routes_builder import RoutesBuilder
-from src.exception_handlers_registry import ExceptionHandlersRegistry
+from src.error_handlers_builder import ErrorHandlersBuilder
 from src.internal.utils.request_uri import RequestURI
 from src.eynnyd_webapp_builder import EynnydWebappBuilder
 from src.abstract_request import AbstractRequest
@@ -658,13 +658,13 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .build()
 
         error_handlers = \
-            ExceptionHandlersRegistry() \
-                .register_pre_response_error_handler(
-                BoomException,
-                spy_boom_exception_handler.test_pre_response_handler) \
-                .register_pre_response_error_handler(
-                Exception,
-                spy_generic_exception_handler.test_pre_response_handler) \
+            ErrorHandlersBuilder() \
+                .add_pre_response_error_handler(
+                    BoomException,
+                    spy_boom_exception_handler.test_pre_response_handler) \
+                .add_pre_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -691,13 +691,13 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .build()
 
         error_handlers = \
-            ExceptionHandlersRegistry() \
-                .register_pre_response_error_handler(
-                BoomException,
-                spy_boom_exception_handler.test_pre_response_handler) \
-                .register_pre_response_error_handler(
-                Exception,
-                spy_generic_exception_handler.test_pre_response_handler) \
+            ErrorHandlersBuilder() \
+                .add_pre_response_error_handler(
+                    BoomException,
+                    spy_boom_exception_handler.test_pre_response_handler) \
+                .add_pre_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -724,13 +724,13 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .build()
 
         error_handlers = \
-            ExceptionHandlersRegistry() \
-                .register_post_response_error_handler(
-                BoomException,
-                spy_boom_exception_handler.test_post_response_handler) \
-                .register_post_response_error_handler(
-                Exception,
-                spy_generic_exception_handler.test_post_response_handler) \
+            ErrorHandlersBuilder() \
+                .add_post_response_error_handler(
+                    BoomException,
+                    spy_boom_exception_handler.test_post_response_handler) \
+                .add_post_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_post_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -751,13 +751,13 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .build()
 
         error_handlers = \
-            ExceptionHandlersRegistry() \
-                .register_pre_response_error_handler(
-                RouteNotFoundException,
-                spy_not_found_exception_handler.test_pre_response_handler) \
-                .register_pre_response_error_handler(
-                Exception,
-                spy_generic_exception_handler.test_pre_response_handler) \
+            ErrorHandlersBuilder() \
+                .add_pre_response_error_handler(
+                    RouteNotFoundException,
+                    spy_not_found_exception_handler.test_pre_response_handler) \
+                .add_pre_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()
@@ -784,13 +784,13 @@ class TestEynnydWebappErrorHandlers(unittest.TestCase):
                 .build()
 
         error_handlers = \
-            ExceptionHandlersRegistry() \
-                .register_pre_response_error_handler(
-                BoomException,
-                spy_boom_exception_handler.test_pre_response_handler) \
-                .register_pre_response_error_handler(
-                Exception,
-                spy_generic_exception_handler.test_pre_response_handler) \
+            ErrorHandlersBuilder() \
+                .add_pre_response_error_handler(
+                    BoomException,
+                    spy_boom_exception_handler.test_pre_response_handler) \
+                .add_pre_response_error_handler(
+                    Exception,
+                    spy_generic_exception_handler.test_pre_response_handler) \
                 .create()
 
         test_app = EynnydWebappBuilder().set_routes(routes).set_error_handlers(error_handlers).build()

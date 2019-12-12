@@ -8,7 +8,7 @@ from src.exceptions import RequestInterceptorReturnedNonRequestException, Handle
 from src.abstract_request import AbstractRequest
 from src.response_builder import ResponseBuilder
 from http import HTTPStatus
-from src.exception_handlers_registry import ExceptionHandlersRegistry
+from src.error_handlers_builder import ErrorHandlersBuilder
 
 LOG = logging.getLogger("test_plan_executor")
 
@@ -26,8 +26,8 @@ class TestPlanExecutor(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.SERVICE_UNAVAILABLE).build()
 
         exception_handlers = \
-            ExceptionHandlersRegistry()\
-                .register_pre_response_error_handler(CustomException, error_handler)\
+            ErrorHandlersBuilder()\
+                .add_pre_response_error_handler(CustomException, error_handler)\
                 .create()
         plan_executor = PlanExecutor(exception_handlers)
 
@@ -46,8 +46,8 @@ class TestPlanExecutor(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.SERVICE_UNAVAILABLE).build()
 
         exception_handlers = \
-            ExceptionHandlersRegistry()\
-                .register_pre_response_error_handler(CustomException, error_handler)\
+            ErrorHandlersBuilder()\
+                .add_pre_response_error_handler(CustomException, error_handler)\
                 .create()
         plan_executor = PlanExecutor(exception_handlers)
 
@@ -69,8 +69,8 @@ class TestPlanExecutor(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.OK).build()
 
         exception_handlers = \
-            ExceptionHandlersRegistry()\
-                .register_post_response_error_handler(CustomException, error_handler)\
+            ErrorHandlersBuilder()\
+                .add_post_response_error_handler(CustomException, error_handler)\
                 .create()
         plan_executor = PlanExecutor(exception_handlers)
 
@@ -145,7 +145,7 @@ class TestPlanExecutor(unittest.TestCase):
             self.assertEqual(HTTPStatus.ACCEPTED.value, response.status.code)
             return ResponseBuilder().set_status(HTTPStatus.CREATED).build()
 
-        plan_executor = PlanExecutor(ExceptionHandlersRegistry().create())
+        plan_executor = PlanExecutor(ErrorHandlersBuilder().create())
         plan = \
             ExecutionPlan(
                 [fake_request_interceptor_first, fake_request_interceptor_second],
@@ -163,8 +163,8 @@ class TestPlanExecutor(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.SERVICE_UNAVAILABLE).build()
 
         exception_handlers = \
-            ExceptionHandlersRegistry()\
-                .register_pre_response_error_handler(
+            ErrorHandlersBuilder()\
+                .add_pre_response_error_handler(
                     RequestInterceptorReturnedNonRequestException,
                     correct_error_thrown_handler)\
                 .create()
@@ -224,7 +224,7 @@ class TestPlanExecutor(unittest.TestCase):
             self.assertEqual("PUT", request.http_method)
             return ResponseBuilder().set_status(HTTPStatus.OK).build()
 
-        plan_executor = PlanExecutor(ExceptionHandlersRegistry().create())
+        plan_executor = PlanExecutor(ErrorHandlersBuilder().create())
         plan = ExecutionPlan([fake_interceptor], fake_handler, [], {})
         response = plan_executor.execute_plan(plan, "original test request")
         self.assertEqual(HTTPStatus.OK.value, response.status.code)
@@ -237,8 +237,8 @@ class TestPlanExecutor(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.SERVICE_UNAVAILABLE).build()
 
         exception_handlers = \
-            ExceptionHandlersRegistry()\
-                .register_pre_response_error_handler(HandlerReturnedNonResponseException, correct_error_thrown_handler)\
+            ErrorHandlersBuilder()\
+                .add_pre_response_error_handler(HandlerReturnedNonResponseException, correct_error_thrown_handler)\
                 .create()
         plan_executor = PlanExecutor(exception_handlers)
 
@@ -251,7 +251,7 @@ class TestPlanExecutor(unittest.TestCase):
         def fake_handler(some_request):
             return ResponseBuilder().set_status(HTTPStatus.ACCEPTED).build()
 
-        plan_executor = PlanExecutor(ExceptionHandlersRegistry().create())
+        plan_executor = PlanExecutor(ErrorHandlersBuilder().create())
         plan = ExecutionPlan([], fake_handler, [], {})
         response = plan_executor.execute_plan(plan, "original test request")
         self.assertEqual(HTTPStatus.ACCEPTED.value, response.status.code)
@@ -268,8 +268,8 @@ class TestPlanExecutor(unittest.TestCase):
             return ResponseBuilder().set_status(HTTPStatus.OK).build()
 
         exception_handlers = \
-            ExceptionHandlersRegistry()\
-                .register_post_response_error_handler(
+            ErrorHandlersBuilder()\
+                .add_post_response_error_handler(
                     ResponseInterceptorReturnedNonResponseException,
                     correct_error_thrown_handler)\
                 .create()
@@ -286,7 +286,7 @@ class TestPlanExecutor(unittest.TestCase):
         def fake_interceptor(original_request, original_response):
             return ResponseBuilder().set_status(HTTPStatus.ACCEPTED).build()
 
-        plan_executor = PlanExecutor(ExceptionHandlersRegistry().create())
+        plan_executor = PlanExecutor(ErrorHandlersBuilder().create())
         plan = ExecutionPlan([], fake_handler, [fake_interceptor], {})
         response = plan_executor.execute_plan(plan, "original test request")
         self.assertEqual(HTTPStatus.ACCEPTED.value, response.status.code)
