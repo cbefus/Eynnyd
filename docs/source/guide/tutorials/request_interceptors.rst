@@ -3,7 +3,7 @@
 Tutorial: Request Interceptors
 ==============================
 
-This tutorial builds on what we saw in our :ref:`hello world tutorial <hello_world>` so you probably want to
+This tutorial builds on what we saw in our :ref:`hello world tutorial <tutorial_hello_world>` so you probably want to
 read that if you haven't yet.  All we are going to do is add a :ref:`request interceptor <interceptors>` which
 logs every request coming into the application.   First we will show you the code and then we will explain the
 *relevant* parts (AKA the parts not in the hello world tutorial).
