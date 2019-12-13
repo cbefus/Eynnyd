@@ -5,13 +5,13 @@ with open('README.md') as f:
 
 setup(
     name='eynnyd',
-    version='0.0.1',
+    version='0.1.0',
     description='A light-weight wsgi web framework',
     long_description=readme,
     long_description_content_type='text/markdown',
     author='Chad Befus',
     author_email='crbefus@gmail.com',
-    url='https://github.com/cbefus/Eynnyd',
+    url='https://eynnyd.readthedocs.io/en/latest/',
     license='MIT License',
     install_requies=[
         'arrow==0.14.4',
