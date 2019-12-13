@@ -1,4 +1,0 @@
-.. _cookies:
-
-Cookies
-=======

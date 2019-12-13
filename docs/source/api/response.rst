@@ -1,4 +1,0 @@
-.. _response:
-
-Responses
-=========
