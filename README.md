@@ -4,7 +4,7 @@
 [![PyPI - License](https://img.shields.io/pypi/l/eynnyd)](https://pypi.org/project/eynnyd/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/eynnyd.svg)](https://pypi.org/project/eynnyd/)
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/open-source)
-
+[![Documentation Status](https://readthedocs.org/projects/eynnyd/badge/?version=latest)](https://eynnyd.readthedocs.io/en/latest/?badge=latest)
 
 <div align="center" style="margin-top: -32px!important;margin-bottom: -70px!important;">
     <img
@@ -14,7 +14,7 @@
     >
 </div>
 
-# Eynnyd Web Framework (Beta)
+# Eynnyd Web Framework
 Eynnyd (pronounced [Ey-nahyd]) is an acronym for **Everything You Need, Nothing
 You Don't**. It is a light-weight WSGI compliant python 3 web framework.
 Eynnyd was designed with the primary goal to not impose bad engineering decisions
@@ -36,6 +36,9 @@ This is the framework for you if the following sound good:
 
 If this at all sounds good we recommend you keep reading and see what else Eynnyd
 can provide for you.
+
+## Documents
+Read the documents at [eynnyd.readthedocs.io](https://eynnyd.readthedocs.io/en/latest)
 
 ## How to install it
 Eynnyd is published to pypi and can be installed using:
