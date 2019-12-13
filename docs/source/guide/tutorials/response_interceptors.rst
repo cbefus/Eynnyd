@@ -71,7 +71,7 @@ a clone) or return a completely different response.
 
 
 Routing Responses Through The Response Interceptor
-------------------------------------------------
+--------------------------------------------------
 
 The other relevant change to prior tutorials is the adding of the response interceptors route to
 :code:`RoutesBuilder`.

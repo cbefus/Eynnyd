@@ -34,7 +34,8 @@ release = '0.0.1'
 # ones.
 extensions = [
     'sphinx_copybutton',
-    'sphinx.ext.autodoc'
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -44,6 +45,13 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
+
+autodoc_default_options = {
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': False,
+    'exclude-members': '__weakref__'
+}
 
 
 # -- Options for HTML output -------------------------------------------------
