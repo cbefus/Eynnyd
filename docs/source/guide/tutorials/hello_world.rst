@@ -52,7 +52,7 @@ output parameters and is generally a violation of Clean Code.  We prefer to use 
 parameters for inputs.  For the purposes of this :term:`Handler`, we don't care anything about the request, all we want
 to do is return a response with the content "Hello World".
 
-We are using Eynnyds built in :ref:`ResponseBuilder <response>`.
+We are using Eynnyds built in :ref:`ResponseBuilder <response_builder>`.
 to construct a response.  It is possible to build responses yourself, but the :code:`ResponseBuilder` is a convenient
 tool for doing it succinctly.
 
