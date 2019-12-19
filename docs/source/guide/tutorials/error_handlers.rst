@@ -3,12 +3,12 @@
 Tutorial: Error Handlers
 ========================
 
-Error handlers are code that should execute if an exception is raised somewhere in the web application.  Eynnyd
+:term:`Error Handler`\s are code that should execute if an exception is raised somewhere in the web application.  Eynnyd
 provides you with a way to associate an Exception type with a function to execute if that exception is raised.
 
 An error handling function takes two forms: pre_response and post_response.  More on this below.
 
-This tutorial builds on the prior one on :ref:`response interceptors <tutorial_response_interceptors>, so if
+This tutorial builds on the prior one on :ref:`response interceptors <tutorial_response_interceptors>`, so if
 there is a piece you don't understand here it was likely covered there.
 
 First we will show you the code and then we will explain the *relevant* parts (AKA the parts not in the prior
@@ -102,7 +102,7 @@ Raising an Exception
 --------------------
 
 Now that we have an exception we need somewhere to raise it.  For this tutorial we are going to do that in
-a new request :ref:`Interceptor`.
+a new request :term:`Interceptor`.
 
 .. code:: python
 
@@ -111,11 +111,11 @@ a new request :ref:`Interceptor`.
             raise UnAuthorizedAccessAttemptException("Must have an auth header to be granted access.")
         return request
 
-Our new request :ref:`Interceptor` checks if there is a header keyed on "auth". If not it raises our named exception.
+Our new request :term:`Interceptor` checks if there is a header keyed on "auth". If not it raises our named exception.
 Of course we probably want to do more validation on this header to confirm that even if it is present it is
-valid, but we can leave that to other :ref:`Interceptor`s (and out of this tutorial for simplicity).
+valid, but we can leave that to other :term:`Interceptor`\s (and out of this tutorial for simplicity).
 
-The other thing we need to do, as expected is to register this request :ref:`Interceptor` into our :ref:`Route`s:
+The other thing we need to do, as expected is to register this request :term:`Interceptor` into our :term:`Route`\s:
 
 .. code:: python
 
@@ -127,7 +127,7 @@ The other thing we need to do, as expected is to register this request :ref:`Int
             .add_response_interceptor("/hello", log_response)\
             .build()
 
-As you can see, this :ref:`Interceptor` should run for all requests by using the root path "/".
+As you can see, this :term:`Interceptor` should run for all requests by using the root path "/".
 
 Writing a Error Handling Method
 -------------------------------
@@ -145,10 +145,10 @@ Next we need code that we want to run if this error is thrown.  That looks like:
 
 This function is built to handle errors thrown prior to having a response object (which is why it only takes
 parameters for the :code:`error_thrown` and the :code:`request`.  If we threw our error from a :term:`Handler` this
-code would look exactly the same. However, if we threw an error from a response :ref:`Interceptor` then this code
+code would look exactly the same. However, if we threw an error from a response :term:`Interceptor` then this code
 would be different (the function would take a third parameter for the response).
 
-:ref:`Error Handler`s return responses. In this case the response we are going to return is an :code:`UNAUTHORIZED`
+:term:`Error Handler`\s return responses. In this case the response we are going to return is an :code:`UNAUTHORIZED`
 status with a body of text describing the errors message.
 
 Associating an Error Type with An Error Handler
@@ -166,14 +166,14 @@ thrown.  We do this using the Eynnyd :code:`ErrorHandlersBuilder` class:
 
 You can see we are associating our new handler :code:`handle_unauthorized_error` to the named exception
 :code:`UnAuthorizedAccessAttemptException` by calling :code:`add_pre_response_error_handler`.  It should be
-obvious that this method only works for errors raised from a pre response location (request :ref:`Interceptor`s and
-handlers).  Once there is a response (in response :ref:`Interceptor`s) you would want to associate your exception
+obvious that this method only works for errors raised from a pre response location (request :term:`Interceptor`\s and
+handlers).  Once there is a response (in response :term:`Interceptor`\s) you would want to associate your exception
 with the code to call using a similar method called: :code:`add_post_response_error_handler`.
 
 Adding Error Handlers To The Web App
 ------------------------------------
 
-Finally we can add our :ref:`Error Handler`s to the Eynnyd webapp using the :code:`EynnydWebappBuilder`:
+Finally we can add our :term:`Error Handler`\s to the Eynnyd webapp using the :code:`EynnydWebappBuilder`:
 
 .. code:: python
 

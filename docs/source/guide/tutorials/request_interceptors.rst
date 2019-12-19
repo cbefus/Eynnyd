@@ -48,7 +48,7 @@ Only minor changes to the hello world tutorial are added here.
 The Request Interceptor Code
 ----------------------------
 
-Our request :ref:`Interceptor` is called :code:`log_request` and it looks like:
+Our request :term:`Interceptor` is called :code:`log_request` and it looks like:
 
 .. code:: python
 
@@ -56,7 +56,7 @@ Our request :ref:`Interceptor` is called :code:`log_request` and it looks like:
         LOG.info("Got Request: {r}".format(r=request))
         return request
 
-As you can see our :ref:`Interceptor` is a function which takes a request and returns a request.  In this case we
+As you can see our :term:`Interceptor` is a function which takes a request and returns a request.  In this case we
 are returning the same request we were given.  All we are doing here is logging the string representation
 of the request to an info level log line.  However, if we had mutated the request here (or better yet, created
 a new request with slightly updated values), **the request we return is the request which will be passed on
@@ -67,7 +67,7 @@ you could do that here and all following code would be given that new request ob
 Routing Requests Through The Request Interceptor
 ------------------------------------------------
 
-The other relevant piece of code here is the registering of the :ref:`Interceptor` to specific :ref:`Route`s. It looks like:
+The other relevant piece of code here is the registering of the :term:`Interceptor` to specific :term:`Route`\s. It looks like:
 
 .. code:: python
 
@@ -77,13 +77,13 @@ The other relevant piece of code here is the registering of the :ref:`Intercepto
             .add_handler("GET", "/hello", hello_world)\
             .build()
 
-As you can see, we are adding a request :ref:`Interceptor` which should run for any request on the path :code:`/hello`.
-This includes :ref:`Route`s like :code:`/hello/more/path/parts`.
+As you can see, we are adding a request :term:`Interceptor` which should run for any request on the path :code:`/hello`.
+This includes :term:`Route`\s like :code:`/hello/more/path/parts`.
 
-The request :ref:`Interceptor`s will run before a matching :term:`Handler` is run. You can register many request :ref:`Interceptor`s,
-even at the same path level.  This allows you to have small, single purpose :ref:`Interceptor`s, that are easy to test
-and maintain. Other frameworks only allow you to have a single :ref:`Interceptor` for all requests which leads to messy
+The request :term:`Interceptor`\s will run before a matching :term:`Handler` is run. You can register many request :term:`Interceptor`\s,
+even at the same path level.  This allows you to have small, single purpose :term:`Interceptor`\s, that are easy to test
+and maintain. Other frameworks only allow you to have a single :term:`Interceptor` for all requests which leads to messy
 implementations.
 
-Request :ref:`Interceptor`s run in priority of outside in (so :ref:`Interceptor`s at the base path will run before :ref:`Interceptor`s
+Request :term:`Interceptor`\s run in priority of outside in (so :term:`Interceptor`\s at the base path will run before :term:`Interceptor`\s
 at a more specific path) and then first in first out (the order added to the RoutesBuilder).

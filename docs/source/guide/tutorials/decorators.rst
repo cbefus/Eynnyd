@@ -3,14 +3,14 @@
 Tutorial: Decorators
 ====================
 
-In the previous tutorial on :ref:`tutorial_error_handlers` we saw the use of request :ref:`Interceptor`s to do
+In the previous tutorial on :ref:`tutorial_error_handlers` we saw the use of request :term:`Interceptor`\s to do
 simple authorization.  The truth is throwing exceptions like this may be pythonic but it it's a violation
 of *using exceptions for control flow*.  Having requests which are not authorized isn't really exceptional
 behaviour.
 
-In this Tutorial we will build out an authorization validator using both request :ref:`Interceptor`s and python
+In this Tutorial we will build out an authorization validator using both request :term:`Interceptor`\s and python
 decorators.  Some frameworks implement their own versions of decorators (often calling them hooks or muddying
-them with their :ref:`Interceptor`s) but this is needless because python decorators are pretty awesome.
+them with their :term:`Interceptor`\s) but this is needless because python decorators are pretty awesome.
 
 Building out a proper authorization cycle also requires talking to a database.  For this tutorial we won't
 show the database code as it isn't relevant to the point.
@@ -108,18 +108,18 @@ parts piece by piece to explain them further.
 
     application = build_application()
 
-So what we have is an application with a single :ref:`Route` which returns a list of messages from our database
-given a :code:`user_id`.  This :ref:`Route` is secured by an authorization header.  We use the request :ref:`Interceptor`
+So what we have is an application with a single :term:`Route` which returns a list of messages from our database
+given a :code:`user_id`.  This :term:`Route` is secured by an authorization header.  We use the request :term:`Interceptor`
 :code:`request_session_building_interceptor.load_session_onto_request` to load a valid session onto the
 request object and then use the :code:`@request_secured_by_session` decorator to make the decision what to
 do if it isn't there.  The value here is that we can now wrap any :term:`Handler` we want to be secured using the
 :code:`@request_secured_by_session` but if we have a non secured endpoint (for example a register endpoint)
 then we can simply leave off the decorator and it is not secured.  The information about the endpoint being
-secured is at the definition site of the function, where it should be.  Because the :ref:`Interceptor` is built
+secured is at the definition site of the function, where it should be.  Because the :term:`Interceptor` is built
 ahead of time, database access can be injected into it (where as this would involve something hackish to
 do inside the decorator).
 
-Now the :ref:`Interceptor` has one job: loading the session onto the request. The decorator has one job: returning
+Now the :term:`Interceptor` has one job: loading the session onto the request. The decorator has one job: returning
 an error response if the valid session does not exist. The :term:`Handler` method has one job: getting the messages
 for the user id.
 
@@ -169,7 +169,7 @@ called :code:`get_messages_for_user_id` that takes a :code:`user_id` and returns
 The Interceptor
 ---------------
 
-The next piece of code to look at is the class holding our :ref:`Interceptor`:
+The next piece of code to look at is the class holding our :term:`Interceptor`:
 
 .. code:: python
 
@@ -197,15 +197,15 @@ You can quickly see that all this method does is either load a session onto the 
 or it sets the value to None.  We actually wouldn't use :code:`None` for this generally, but rather
 optionals, but we figured this tutorial was not the platform to discuss that.
 
-As should be expected, this :ref:`Interceptor` has nothing to do with getting a response back to the user, it
+As should be expected, this :term:`Interceptor` has nothing to do with getting a response back to the user, it
 simply mutates the request, loading new values onto it.  We have removed the unnecessary exception
-raising from our :ref:`Interceptor` and saved ourselves one less violation of exceptions as control flow.
+raising from our :term:`Interceptor` and saved ourselves one less violation of exceptions as control flow.
 
 
 The Decorator
 -------------
 
-Instead of throwing exceptions and using :ref:`Error Handler`s to return a bad response we instead have a
+Instead of throwing exceptions and using :term:`Error Handler`\s to return a bad response we instead have a
 python decorator wrap our :term:`Handler` function.  The code for this decorator looks like:
 
 .. code:: python
@@ -221,14 +221,14 @@ python decorator wrap our :term:`Handler` function.  The code for this decorator
             return decorated_function
         return decorator
 
-All this decorator does is check if the :ref:`Interceptor` put a valid session onto the request.  If it didn't we
+All this decorator does is check if the :term:`Interceptor` put a valid session onto the request.  If it didn't we
 return an UNAUTHORIZED status response. If a valid session is present we call through to the wrapped function.
 
 Wiring Up Dependencies
 ----------------------
 
 Another change you might have seen in this tutorial is that we build up a series of objects before we
-start building our :ref:`Route`s.  These objects are our dependency chain.  The code looks like:
+start building our :term:`Route`\s.  These objects are our dependency chain.  The code looks like:
 
 .. code:: python
 
@@ -252,7 +252,7 @@ a DAO.  In a statically typed language we would be using an interface on the lef
 life is easier.  Note that into the DAOs we inject our database pool. These DAOs dont care about the specifics
 of our MySQL driver, only that they can execute sql commands against a database.
 
-Now that we have our DAOs we can build our :ref:`Interceptor`s and :term:`Handler`s.  For this tutorial we just have the one
+Now that we have our DAOs we can build our :term:`Interceptor`\s and :term:`Handler`\s.  For this tutorial we just have the one
 of each.  Into each of these we inject our built DAOs.
 
 This kind of dependency build up allows code to be easy to read, debug, extend, and maintain. In fact, in his
@@ -264,7 +264,7 @@ OO gave us.  Several other WSGI frameworks prevent this kind of dependency injec
 Setting Up The Routes
 ---------------------
 
-Finally we have code which should look pretty familiar at this point throughout the tutorials.  We build our :ref:`Route`s:
+Finally we have code which should look pretty familiar at this point throughout the tutorials.  We build our :term:`Route`\s:
 
 .. code:: python
 
@@ -275,5 +275,5 @@ Finally we have code which should look pretty familiar at this point throughout 
             .build()
 
 The only reason to call attention to it here is so that you see how the function assignment works with
-:ref:`Interceptor`s and :term:`Handler`s which have been encapsulated into classes.
+:term:`Interceptor`\s and :term:`Handler`\s which have been encapsulated into classes.
 

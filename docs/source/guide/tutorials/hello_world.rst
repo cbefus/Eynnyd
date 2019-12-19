@@ -47,7 +47,7 @@ Our request :term:`Handler` is called **hello_world**. It looks like:
             .build()
 
 It's simply a function which takes a :ref:`request <request>` and returns a :ref:`response <response>`.  Many
-other frameworks provide you with both a request and response as inputs to your :term:`Handler`s.  This is exploiting
+other frameworks provide you with both a request and response as inputs to your :term:`Handler`\s.  This is exploiting
 output parameters and is generally a violation of Clean Code.  We prefer to use returns for outputs and reserve
 parameters for inputs.  For the purposes of this :term:`Handler`, we don't care anything about the request, all we want
 to do is return a response with the content "Hello World".
@@ -74,9 +74,9 @@ Clean Code Philosophy that objects should do one thing.
 
 Building Routes
 ---------------
-Organizing and wiring up your :ref:`Route`s to the code they execute is a single responsibility.  This is why we don't
-like then :ref:`Route`s are defined at the definition site (in some frameworks) or as part of the building of the
-webapp itself (in other frameworks).  In our code above, building the :ref:`Route`s looks like:
+Organizing and wiring up your :term:`Route`\s to the code they execute is a single responsibility.  This is why we don't
+like then :term:`Route`\s are defined at the definition site (in some frameworks) or as part of the building of the
+webapp itself (in other frameworks).  In our code above, building the :term:`Route`\s looks like:
 
 .. code:: python
 
@@ -102,7 +102,7 @@ Next we have to build the actual Web Application itself.  We do this with code t
                 .set_routes(routes)\
                 .build()
 
-Here we use the :code:`set_routes` method to pass our built :ref:`Route`s from above to the webapp so that it can
+Here we use the :code:`set_routes` method to pass our built :term:`Route`\s from above to the webapp so that it can
 direct requests to the right place.
 
 After this we call the :code:`build()` method and return a fully ready to use Web Application.

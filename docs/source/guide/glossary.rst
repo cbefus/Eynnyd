@@ -25,6 +25,6 @@ have compiled this glossary:
     Error Handler
         An Error Handler is code that gets executed when an associated exception is thrown.  There are two types of
         pre response error handlers and post response error handler. Pre response error handlers which execute when
-        an exception is thrown from a request :ref:`Interceptor` or a :ref:`Handler`. Post response error handlers
-        execute when an exception is thrown during response :ref:`Interceptor`s.
+        an exception is thrown from a request :term:`Interceptor` or a :term:`Handler`. Post response error handlers
+        execute when an exception is thrown during response :term:`Interceptor`\s.
 
