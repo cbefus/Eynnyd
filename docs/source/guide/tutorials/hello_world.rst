@@ -36,7 +36,7 @@ Simple right?  Lets look at the various parts.
 
 Simple Request Handler
 ----------------------
-Our request handler is called **hello_world**. It looks like:
+Our request :term:`Handler` is called **hello_world**. It looks like:
 
 .. code:: python
 
@@ -47,9 +47,9 @@ Our request handler is called **hello_world**. It looks like:
             .build()
 
 It's simply a function which takes a :ref:`request <request>` and returns a :ref:`response <response>`.  Many
-other frameworks provide you with both a request and response as inputs to your handlers.  This is exploiting
+other frameworks provide you with both a request and response as inputs to your :term:`Handler`s.  This is exploiting
 output parameters and is generally a violation of Clean Code.  We prefer to use returns for outputs and reserve
-parameters for inputs.  For the purposes of this handler, we don't care anything about the request, all we want
+parameters for inputs.  For the purposes of this :term:`Handler`, we don't care anything about the request, all we want
 to do is return a response with the content "Hello World".
 
 We are using Eynnyds built in :ref:`ResponseBuilder <response>`.
@@ -74,9 +74,9 @@ Clean Code Philosophy that objects should do one thing.
 
 Building Routes
 ---------------
-Organizing and wiring up your routes to the code they execute is a single responsibility.  This is why we don't
-like then routes are defined at the definition site (in some frameworks) or as part of the building of the
-webapp itself (in other frameworks).  In our code above, building the routes looks like:
+Organizing and wiring up your :ref:`Route`s to the code they execute is a single responsibility.  This is why we don't
+like then :ref:`Route`s are defined at the definition site (in some frameworks) or as part of the building of the
+webapp itself (in other frameworks).  In our code above, building the :ref:`Route`s looks like:
 
 .. code:: python
 
@@ -85,8 +85,8 @@ webapp itself (in other frameworks).  In our code above, building the routes loo
                 .add_handler("GET", "/hello", hello_world)\
                 .build()
 
-The key here is that we have added a handler for any request using the HTTP method :code:`GET` on
-path :code:`/hello` will execute the handler code inside our :code:`hello_world` method.
+The key here is that we have added a :term:`Handler` for any request using the HTTP method :code:`GET` on
+path :code:`/hello` will execute the :term:`Handler` code inside our :code:`hello_world` method.
 
 After this we call the :code:`build()` method and our :code:`routes` variable now is assigned to a built
 routing system.
@@ -102,7 +102,7 @@ Next we have to build the actual Web Application itself.  We do this with code t
                 .set_routes(routes)\
                 .build()
 
-Here we use the :code:`set_routes` method to pass our built routes from above to the webapp so that it can
+Here we use the :code:`set_routes` method to pass our built :ref:`Route`s from above to the webapp so that it can
 direct requests to the right place.
 
 After this we call the :code:`build()` method and return a fully ready to use Web Application.

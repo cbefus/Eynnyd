@@ -6,6 +6,7 @@ User's Guide
 
    install
    deploy
+   glossary
    tutorials/index
    contributing
    faq

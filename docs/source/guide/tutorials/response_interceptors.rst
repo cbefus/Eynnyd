@@ -48,12 +48,12 @@ will show you the code and then we will explain the *relevant* parts (AKA the pa
 
     application = build_application()
 
-Only minor changes are made from the request interceptor tutorial, in particular the response interceptor method
-and the routing connection of the response interceptor.
+Only minor changes are made from the request :ref:`Interceptor` tutorial, in particular the response :ref:`Interceptor` method
+and the routing connection of the response :ref:`Interceptor`.
 
 The Response Interceptor Code
 -----------------------------
-Our response interceptor is called :code:`log_response` and it looks like:
+Our response :ref:`Interceptor` is called :code:`log_response` and it looks like:
 
 .. code:: python
 
@@ -61,11 +61,11 @@ Our response interceptor is called :code:`log_response` and it looks like:
         LOG.info("Built Response: {s} for Request: {r}".format(s=response, r=request))
         return response
 
-Response interceptors are passed both the request (modified by any request interceptors it has passed through) and
-the response (either from the handler which created it or any prior response interceptors who may have changed
+Response :ref:`Interceptor`s are passed both the request (modified by any request :ref:`Interceptor`s it has passed through) and
+the response (either from the :term:`Handler` which created it or any prior response :ref:`Interceptor`s who may have changed
 it). It returns a response and this case we are simply returning the response we were passed.
 
-The response returned is the response that will be passed to any follow up response interceptors or, if this is the
+The response returned is the response that will be passed to any follow up response :ref:`Interceptor`s or, if this is the
 final one, sent to the client. You can use this to either modify the response you are given (Ideally through building
 a clone) or return a completely different response.
 
@@ -73,7 +73,7 @@ a clone) or return a completely different response.
 Routing Responses Through The Response Interceptor
 --------------------------------------------------
 
-The other relevant change to prior tutorials is the adding of the response interceptors route to
+The other relevant change to prior tutorials is the adding of the response :ref:`Interceptor`s :ref:`Route` to
 :code:`RoutesBuilder`.
 
 .. code:: python
@@ -85,14 +85,14 @@ The other relevant change to prior tutorials is the adding of the response inter
             .add_response_interceptor("/hello", log_response) \
             .build()
 
-Here we have set it up so that any response from a route down the :code:`/hello` path would be logged.  This includes
-routes like :code:`/hello/more/path/parts`.
+Here we have set it up so that any response from a :ref:`Route` down the :code:`/hello` path would be logged.  This includes
+:ref:`Route`s like :code:`/hello/more/path/parts`.
 
-The response interceptors run after a handler has created a response from the request. You can have as many
-response interceptors as you please, even at the same level. This allows you to have small, single purpose,
-interceptors that are easy to test and maintain.
+The response :ref:`Interceptor`s run after a :term:`Handler` has created a response from the request. You can have as many
+response :ref:`Interceptor`s as you please, even at the same level. This allows you to have small, single purpose,
+:ref:`Interceptor`s that are easy to test and maintain.
 
-Response interceptors run in priority of inside out (more specific first to less specific) and first in first
+Response :ref:`Interceptor`s run in priority of inside out (more specific first to less specific) and first in first
 out (the order they are registered with the builder).
 
 
