@@ -63,7 +63,7 @@ parts piece by piece to explain them further.
 
         def load_session_onto_request(self, request):
             request.session = None
-            if "auth" not in request.headers:
+            if "AUTH" not in request.headers:
                 return request
 
             if not request.headers["auth"]:
