@@ -1,7 +1,7 @@
 import unittest
 
-from src.internal.plan_execution.error_handlers import ErrorHandlers
-from src.exceptions import NoGenericErrorHandlerException
+from eynnyd.internal.plan_execution.error_handlers import ErrorHandlers
+from eynnyd.exceptions import NoGenericErrorHandlerException
 
 
 class TestErrorHandlers(unittest.TestCase):

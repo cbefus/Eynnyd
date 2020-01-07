@@ -138,6 +138,6 @@ python -m unittest discover tests
 ## Checking coverage
 After installing the requirements run:
 ```bash
-coverage run --source src/ -m unittest discover tests/
+coverage run --source eynnyd/ -m unittest discover tests/
 coverage report
 ```

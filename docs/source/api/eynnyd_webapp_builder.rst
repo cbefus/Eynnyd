@@ -3,5 +3,5 @@
 Eynnyd Webapp Builder
 =====================
 
-.. autoclass:: src.eynnyd_webapp_builder.EynnydWebappBuilder
+.. autoclass:: eynnyd.eynnyd_webapp_builder.EynnydWebappBuilder
     :members:

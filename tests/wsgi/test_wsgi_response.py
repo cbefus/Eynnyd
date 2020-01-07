@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.internal.wsgi.wsgi_response import WSGIResponse
+from eynnyd.internal.wsgi.wsgi_response import WSGIResponse
 
 
 class TestWSGIResponse(TestCase):

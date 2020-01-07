@@ -3,5 +3,5 @@
 Response
 ========
 
-.. autoclass:: src.abstract_response.AbstractResponse
+.. autoclass:: eynnyd.abstract_response.AbstractResponse
     :members:

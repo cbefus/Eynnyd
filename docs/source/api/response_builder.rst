@@ -3,5 +3,5 @@
 Response Builder
 ================
 
-.. autoclass:: src.response_builder.ResponseBuilder
+.. autoclass:: eynnyd.response_builder.ResponseBuilder
     :members:

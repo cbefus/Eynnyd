@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.internal.wsgi.closeable_stream_iterator import CloseableStreamIterator
+from eynnyd.internal.wsgi.closeable_stream_iterator import CloseableStreamIterator
 
 
 class TestCloseableStreamIterator(TestCase):

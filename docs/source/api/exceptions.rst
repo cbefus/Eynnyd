@@ -3,5 +3,5 @@
 Exceptions
 ==========
 
-.. automodule:: src.exceptions
+.. automodule:: eynnyd.exceptions
     :members:

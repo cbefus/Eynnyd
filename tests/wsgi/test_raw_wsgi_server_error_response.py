@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.internal.wsgi.raw_wsgi_server_error_response import RawWSGIServerErrorResponse
+from eynnyd.internal.wsgi.raw_wsgi_server_error_response import RawWSGIServerErrorResponse
 
 
 class TestRawWSGIServerErrorResponse(TestCase):

@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from src.exceptions import RouteBuildException, NonCallableInterceptor, \
+from eynnyd.exceptions import RouteBuildException, NonCallableInterceptor, \
     NonCallableHandler, CallbackIncorrectNumberOfParametersException
-from src.routes_builder import RoutesBuilder
+from eynnyd.routes_builder import RoutesBuilder
 
 
 class TestRoutesBuilder(TestCase):

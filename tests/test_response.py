@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.internal.response import Response
+from eynnyd.internal.response import Response
 
 
 class TestResponse(TestCase):

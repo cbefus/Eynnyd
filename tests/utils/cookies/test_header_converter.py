@@ -1,10 +1,10 @@
 import unittest
 import arrow
 
-from src.internal.utils.cookies.request_cookie import RequestCookie
-from src.response_cookie_builder import ResponseCookieBuilder
-from src.internal.utils.cookies.header_converter import CookieHeaderConverter
-from src.exceptions import InvalidCookieHeaderException
+from eynnyd.internal.utils.cookies.request_cookie import RequestCookie
+from eynnyd.response_cookie_builder import ResponseCookieBuilder
+from eynnyd.internal.utils.cookies.header_converter import CookieHeaderConverter
+from eynnyd.exceptions import InvalidCookieHeaderException
 
 
 class TestHeaderConverter(unittest.TestCase):

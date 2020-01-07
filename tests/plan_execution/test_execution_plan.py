@@ -1,7 +1,7 @@
 import unittest
 
-from src.internal.plan_execution.execution_plan_builder import ExecutionPlanBuilder
-from src.exceptions import ExecutionPlanBuildException
+from eynnyd.internal.plan_execution.execution_plan_builder import ExecutionPlanBuilder
+from eynnyd.exceptions import ExecutionPlanBuildException
 
 
 class TestExecutionPlanBuilder(unittest.TestCase):

@@ -1,12 +1,12 @@
 from unittest import TestCase
 from http import HTTPStatus as HTTPLibHTTPStatus
 
-from src.exceptions import SettingNonTypedStatusWithContentTypeException, SettingNonBodyStatusWithBodyException, \
+from eynnyd.exceptions import SettingNonTypedStatusWithContentTypeException, SettingNonBodyStatusWithBodyException, \
     SettingBodyWithNonBodyStatusException, InvalidBodyTypeException, InvalidHeaderException, \
     SettingContentTypeWithNonTypedStatusException, InvalidResponseCookieException
-from src.response_builder import ResponseBuilder
-from src.internal.response_body_type import ResponseBodyType
-from src.response_cookie_builder import ResponseCookieBuilder
+from eynnyd.response_builder import ResponseBuilder
+from eynnyd.internal.response_body_type import ResponseBodyType
+from eynnyd.response_cookie_builder import ResponseCookieBuilder
 
 
 class TestResponseBuilder(TestCase):

@@ -1,14 +1,14 @@
 from unittest import TestCase
 
-from src.internal.response_body import ResponseBody
-from src.internal.response_body_type import ResponseBodyType
-from src.internal.wsgi.wsgi_response_body_factory import WSGIResponseBodyFactory
-from src.internal.wsgi.empty_response_body import EmptyResponseBody
-from src.internal.wsgi.utf8_response_body import UTF8ResponseBody
-from src.internal.wsgi.stream_response_body import StreamResponseBody
-from src.internal.wsgi.byte_response_body import ByteResponseBody
-from src.internal.wsgi.iterable_response_body import IterableResponseBody
-from src.exceptions import UnknownResponseBodyTypeException
+from eynnyd.internal.response_body import ResponseBody
+from eynnyd.internal.response_body_type import ResponseBodyType
+from eynnyd.internal.wsgi.wsgi_response_body_factory import WSGIResponseBodyFactory
+from eynnyd.internal.wsgi.empty_response_body import EmptyResponseBody
+from eynnyd.internal.wsgi.utf8_response_body import UTF8ResponseBody
+from eynnyd.internal.wsgi.stream_response_body import StreamResponseBody
+from eynnyd.internal.wsgi.byte_response_body import ByteResponseBody
+from eynnyd.internal.wsgi.iterable_response_body import IterableResponseBody
+from eynnyd.exceptions import UnknownResponseBodyTypeException
 
 
 class TestWSGIResponseBodyFactory(TestCase):

@@ -34,7 +34,7 @@ installed the test requirements (as above) you can run a coverage report via:
 
 .. code:: bash:
 
-    coverage run --source src/ -m unittest discover tests/
+    coverage run --source eynnyd/ -m unittest discover tests/
     coverage report
 
 

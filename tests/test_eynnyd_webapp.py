@@ -1,14 +1,14 @@
 import unittest
 from http import HTTPStatus
 
-from src.routes_builder import RoutesBuilder
-from src.error_handlers_builder import ErrorHandlersBuilder
-from src.internal.utils.request_uri import RequestURI
-from src.eynnyd_webapp_builder import EynnydWebappBuilder
-from src.abstract_request import AbstractRequest
-from src.response_builder import ResponseBuilder
-from src.exceptions import RouteNotFoundException
-from src.internal.response_body import ResponseBody
+from eynnyd.routes_builder import RoutesBuilder
+from eynnyd.error_handlers_builder import ErrorHandlersBuilder
+from eynnyd.internal.utils.request_uri import RequestURI
+from eynnyd.eynnyd_webapp_builder import EynnydWebappBuilder
+from eynnyd.abstract_request import AbstractRequest
+from eynnyd.response_builder import ResponseBuilder
+from eynnyd.exceptions import RouteNotFoundException
+from eynnyd.internal.response_body import ResponseBody
 
 
 class TestEynnydWebappHandlers(unittest.TestCase):

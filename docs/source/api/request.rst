@@ -3,5 +3,5 @@
 Request
 =======
 
-.. autoclass:: src.abstract_request.AbstractRequest
+.. autoclass:: eynnyd.abstract_request.AbstractRequest
     :members:

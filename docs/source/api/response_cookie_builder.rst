@@ -3,5 +3,5 @@
 Response Cookie Builder
 =======================
 
-.. autoclass:: src.response_cookie_builder.ResponseCookieBuilder
+.. autoclass:: eynnyd.response_cookie_builder.ResponseCookieBuilder
     :members:

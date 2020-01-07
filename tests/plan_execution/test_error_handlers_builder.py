@@ -1,11 +1,11 @@
 import unittest
 from http import HTTPStatus
 
-from src.response_builder import ResponseBuilder
-from src.exceptions import ErrorHandlingBuilderException, RouteNotFoundException, \
+from eynnyd.response_builder import ResponseBuilder
+from eynnyd.exceptions import ErrorHandlingBuilderException, RouteNotFoundException, \
     CallbackIncorrectNumberOfParametersException, NonCallableExceptionHandlerException, \
     InvalidCookieHeaderException
-from src.error_handlers_builder import ErrorHandlersBuilder
+from eynnyd.error_handlers_builder import ErrorHandlersBuilder
 
 
 class TestExceptionHandlersRegistry(unittest.TestCase):

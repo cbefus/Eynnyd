@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.internal.wsgi.byte_response_body import ByteResponseBody
+from eynnyd.internal.wsgi.byte_response_body import ByteResponseBody
 
 
 class TestByteResponseBody(TestCase):

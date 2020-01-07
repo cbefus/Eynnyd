@@ -1,9 +1,9 @@
 from unittest import TestCase
 from http import HTTPStatus as HTTPLibStatus
 
-from src.exceptions import InvalidHTTPStatusException
-from src.internal.utils.http_status import HTTPStatus
-from src.internal.utils.http_status_factory import HTTPStatusFactory
+from eynnyd.exceptions import InvalidHTTPStatusException
+from eynnyd.internal.utils.http_status import HTTPStatus
+from eynnyd.internal.utils.http_status_factory import HTTPStatusFactory
 
 class TestHTTPStatusFactory(TestCase):
 

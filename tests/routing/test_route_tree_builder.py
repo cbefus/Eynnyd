@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from src.exceptions import DuplicateHandlerRoutesException
-from src.internal.routing.route_tree_builder import RouteTeeBuilder
+from eynnyd.exceptions import DuplicateHandlerRoutesException
+from eynnyd.internal.routing.route_tree_builder import RouteTeeBuilder
 
 
 class TestRouteTeeBuilder(TestCase):

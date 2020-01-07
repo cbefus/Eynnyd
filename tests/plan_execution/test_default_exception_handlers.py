@@ -1,7 +1,7 @@
 import unittest
 from http import HTTPStatus
 
-from src.internal.plan_execution.default_error_handlers import default_invalid_cookie_header_error_handler, \
+from eynnyd.internal.plan_execution.default_error_handlers import default_invalid_cookie_header_error_handler, \
     default_internal_server_error_error_handler_only_request, default_internal_server_error_error_handler, \
     default_route_not_found_error_handler
 

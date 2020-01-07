@@ -3,5 +3,5 @@
 Error Handlers Builder
 ======================
 
-.. autoclass:: src.error_handlers_builder.ErrorHandlersBuilder
+.. autoclass:: eynnyd.error_handlers_builder.ErrorHandlersBuilder
     :members:

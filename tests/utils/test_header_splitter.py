@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.internal.utils.header_helpers import HeaderSplitter
+from eynnyd.internal.utils.header_helpers import HeaderSplitter
 
 
 class TestHeaderSplitter(TestCase):

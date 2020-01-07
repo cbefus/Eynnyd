@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='eynnyd',
-    version='0.1.0',
+    version='0.2.0',
     description='A light-weight wsgi web framework',
     long_description=readme,
     long_description_content_type='text/markdown',

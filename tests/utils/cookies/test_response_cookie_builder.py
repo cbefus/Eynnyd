@@ -1,8 +1,8 @@
 import unittest
 import arrow
 
-from src.response_cookie_builder import ResponseCookieBuilder
-from src.exceptions import InvalidCookieBuildException
+from eynnyd.response_cookie_builder import ResponseCookieBuilder
+from eynnyd.exceptions import InvalidCookieBuildException
 
 
 class TestResponseCookieBuilder(unittest.TestCase):

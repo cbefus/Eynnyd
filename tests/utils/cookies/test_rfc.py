@@ -1,7 +1,7 @@
 import unittest
 import re
 
-from src.internal.utils.cookies import rfc
+from eynnyd.internal.utils.cookies import rfc
 
 
 class TestGeneral(unittest.TestCase):

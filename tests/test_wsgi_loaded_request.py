@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from src.internal.wsgi_loaded_request import WSGILoadedRequest
-from src.internal.utils.cookies.request_cookie import RequestCookie
+from eynnyd.internal.wsgi_loaded_request import WSGILoadedRequest
+from eynnyd.internal.utils.cookies.request_cookie import RequestCookie
 
 
 class TestWSGILoadedRequest(TestCase):

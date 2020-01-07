@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.internal.utils.request_uri import RequestURI
+from eynnyd.internal.utils.request_uri import RequestURI
 
 
 class TestRequestURI(TestCase):

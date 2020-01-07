@@ -1,7 +1,7 @@
 import unittest
 
-from src.internal.utils.uri_components_converter import URIComponentsConverter
-from src.exceptions import InvalidURIException
+from eynnyd.internal.utils.uri_components_converter import URIComponentsConverter
+from eynnyd.exceptions import InvalidURIException
 
 
 class TestURIComponentsConverter(unittest.TestCase):

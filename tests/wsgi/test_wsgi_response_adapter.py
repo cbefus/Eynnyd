@@ -1,8 +1,8 @@
 from unittest import TestCase
 from http import HTTPStatus
 
-from src.internal.wsgi.wsgi_response_adapter import WSGIResponseAdapter
-from src.response_builder import ResponseBuilder
+from eynnyd.internal.wsgi.wsgi_response_adapter import WSGIResponseAdapter
+from eynnyd.response_builder import ResponseBuilder
 
 
 class TestWSGIResponseAdapter(TestCase):

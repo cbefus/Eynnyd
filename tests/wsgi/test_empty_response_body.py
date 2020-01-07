@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.internal.wsgi.empty_response_body import EmptyResponseBody
+from eynnyd.internal.wsgi.empty_response_body import EmptyResponseBody
 
 
 class TestEmptyResponseBody(TestCase):

@@ -1,14 +1,14 @@
 import unittest
 import logging
 
-from src.internal.plan_execution.execution_plan import ExecutionPlan
-from src.internal.plan_execution.plan_executor import PlanExecutor
-from src.exceptions import RequestInterceptorReturnedNonRequestException, HandlerReturnedNonResponseException, \
+from eynnyd.internal.plan_execution.execution_plan import ExecutionPlan
+from eynnyd.internal.plan_execution.plan_executor import PlanExecutor
+from eynnyd.exceptions import RequestInterceptorReturnedNonRequestException, HandlerReturnedNonResponseException, \
     ResponseInterceptorReturnedNonResponseException
-from src.abstract_request import AbstractRequest
-from src.response_builder import ResponseBuilder
+from eynnyd.abstract_request import AbstractRequest
+from eynnyd.response_builder import ResponseBuilder
 from http import HTTPStatus
-from src.error_handlers_builder import ErrorHandlersBuilder
+from eynnyd.error_handlers_builder import ErrorHandlersBuilder
 
 LOG = logging.getLogger("test_plan_executor")
 
