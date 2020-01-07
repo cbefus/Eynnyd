@@ -38,3 +38,4 @@ Use the framework the way you prefer, who are we to judge?
    response_interceptors
    error_handlers
    decorators
+   adding_to_requests
