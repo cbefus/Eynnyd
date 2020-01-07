@@ -45,13 +45,13 @@ tutorials).
         pass
 
     def raise_unauth_for_missing_header(request):
-        if "auth" not in request.headers:
+        if "AUTH" not in request.headers:
             raise UnAuthorizedAccessAttemptException("Must have an auth header to be granted access.")
         return request
 
     def handle_unauthorized_error(error_thrown, request):
         LOG.warn("Unauthorized attempt on url: {u}".format(u=request.request_uri))
-        return RoutesBuilder() \
+        return ResponseBuilder() \
             .set_status(HTTPStatus.UNAUTHORIZED) \
             .set_utf8_body("Authorization failed with error: {e}".format(e=str(error_thrown))) \
             .build()
@@ -107,7 +107,7 @@ a new request :term:`Interceptor`.
 .. code:: python
 
     def raise_unauth_for_missing_header(request):
-        if "auth" not in request.headers:
+        if "AUTH" not in request.headers:
             raise UnAuthorizedAccessAttemptException("Must have an auth header to be granted access.")
         return request
 
@@ -138,7 +138,7 @@ Next we need code that we want to run if this error is thrown.  That looks like:
 
     def handle_unauthorized_error(error_thrown, request):
         LOG.warn("Unauthorized attempt on url: {u}".format(u=request.request_uri))
-        return RoutesBuilder() \
+        return ResponseBuilder() \
             .set_status(HTTPStatus.UNAUTHORIZED) \
             .set_utf8_body("Authorization failed with error: {e}".format(e=str(error_thrown))) \
             .build()
