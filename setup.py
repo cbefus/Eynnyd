@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='eynnyd',
-    version='0.2.0',
+    version='0.3.0',
     description='A light-weight wsgi web framework',
     long_description=readme,
     long_description_content_type='text/markdown',
@@ -13,7 +13,7 @@ setup(
     author_email='crbefus@gmail.com',
     url='https://eynnyd.readthedocs.io/en/latest/',
     license='MIT License',
-    install_requies=[
+    install_requires=[
         'arrow==0.14.4',
         'optional.py==1.0.0'
     ],
