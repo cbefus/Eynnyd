@@ -83,6 +83,32 @@ class RoutesBuilder:
                 e)
         return self
 
+    def add_global_method_handler(self, http_method, handler):
+        """
+        Adds a handler to be run (after request interceptors and before response interceptors) given a http method
+        for when to execute it.  If there is no exact match handler for method and route, and there is a handler
+        for the method, then it will run.
+
+        :param http_method: the method to match to execute this handler against a request
+        :param handler: A function taking a request and returning a response
+        :return: This handler to allow for fluent design
+        """
+        if not hasattr(handler, '__call__'):
+            raise NonCallableHandler(
+                "Global Handler for method {m} is not callable.".format(m=http_method))
+        if 1 != len(inspect.signature(handler).parameters):
+            raise CallbackIncorrectNumberOfParametersException(
+                "Global Handler {n} for method {m} on does not take exactly 1 argument (the request)"
+                    .format(n=handler.__name__, m=http_method))
+        try:
+            self._route_tree_builder.add_global_method_handler(http_method, handler)
+        except DuplicateHandlerRoutesException as e:
+            raise RouteBuildException(
+                "Error while trying to add global handler to method: {m}".format(m=http_method),
+                e)
+        return self
+
+
     def build(self):
         """
         Builds out the route tree for processing requests into responses.
