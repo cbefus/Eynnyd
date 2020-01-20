@@ -159,7 +159,7 @@ class ResponseBuilder:
         if self._status.code in NON_TYPED_STATUSES and ascii_lowered_name == 'content-type':
             raise SettingContentTypeWithNonTypedStatusException(
                 "Cannot set content-type header on response with status {s}".format(s=self._status))
-        self._headers[ascii_lowered_name] = str(value).lower()
+        self._headers[ascii_lowered_name] = str(value)
         return self
 
     def remove_header(self, name):

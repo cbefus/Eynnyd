@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='eynnyd',
-    version='0.3.0',
+    version='0.4.0',
     description='A light-weight wsgi web framework',
     long_description=readme,
     long_description_content_type='text/markdown',
@@ -19,7 +19,7 @@ setup(
     ],
     packages=find_packages(exclude=('test')),
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
