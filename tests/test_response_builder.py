@@ -115,7 +115,7 @@ class TestResponseBuilder(TestCase):
         response = ResponseBuilder().add_header("FOObar", "FizzBuzz").build()
         self.assertDictEqual(
             {
-                "foobar": "fizzbuzz"
+                "foobar": "FizzBuzz"
             },
             response.headers)
 
