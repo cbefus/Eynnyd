@@ -14,8 +14,8 @@ setup(
     url='https://eynnyd.readthedocs.io/en/latest/',
     license='MIT License',
     install_requires=[
-        'arrow==0.14.4',
-        'optional.py==1.0.0'
+        'arrow>=0.14.4,<=1.0.0',
+        'optional.py>=1.0.0,<=2.0.0'
     ],
     packages=find_packages(exclude=('test')),
     classifiers=[
